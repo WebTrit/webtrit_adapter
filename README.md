@@ -1,0 +1,1 @@
+# webtrit_adapter
