@@ -12,6 +12,8 @@ defmodule WebtritAdapter.Application do
       WebtritAdapterWeb.Telemetry,
       # Start the PubSub system
       {Phoenix.PubSub, name: WebtritAdapter.PubSub},
+      # Start the Finch
+      {Finch, name: WebtritAdapter.Finch},
       # Start the Endpoint (http/https)
       WebtritAdapterWeb.Endpoint
       # Start a worker by calling: WebtritAdapter.Worker.start_link(arg)
