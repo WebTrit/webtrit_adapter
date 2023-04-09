@@ -5,8 +5,10 @@ defmodule WebtritAdapterWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/api", WebtritAdapterWeb do
+  scope "/api", WebtritAdapterWeb.Api do
     pipe_through :api
+
+    get "/health-check", HealthCheckController, :index
   end
 
   # Enable LiveDashboard in development
