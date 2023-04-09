@@ -42,8 +42,8 @@ config :webtrit_adapter, WebtritAdapterWeb.Endpoint,
 # Enable dev routes for dashboard and mailbox
 config :webtrit_adapter, dev_routes: true
 
-# Do not include metadata nor timestamps in development logs
-config :logger, :console, format: "[$level] $message\n"
+# Print all messages in development
+config :logger, level: :all
 
 # Set a higher stacktrace during development. Avoid configuring such
 # in production as building large stacktraces may be expensive.
