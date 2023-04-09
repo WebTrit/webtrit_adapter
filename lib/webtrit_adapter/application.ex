@@ -5,8 +5,33 @@ defmodule WebtritAdapter.Application do
 
   use Application
 
+  import Config.Portabilling
+
+  alias Portabilling.AdministratorSessionManager
+  alias Portabilling.AccountSessionManager
+  alias Portabilling.DemoAccountManager
+
   @impl true
   def start(_type, _args) do
+    administrator_config = %AdministratorSessionManager.Config{
+      administrator_url: administrator_url(),
+      login: administrator_login(),
+      token: administrator_token(),
+      session_regenerate_period: administrator_session_regenerate_period()
+    }
+
+    account_config = %AccountSessionManager.Config{
+      administrator_url: administrator_url(),
+      account_url: account_url(),
+      session_regenerate_period: account_session_regenerate_period()
+    }
+
+    demo_config = %DemoAccountManager.Config{
+      administrator_url: administrator_url(),
+      demo_i_customer: demo_i_customer(),
+      demo_i_custom_field: demo_i_custom_field()
+    }
+
     children = [
       # Start the Telemetry supervisor
       WebtritAdapterWeb.Telemetry,
@@ -14,6 +39,12 @@ defmodule WebtritAdapter.Application do
       {Phoenix.PubSub, name: WebtritAdapter.PubSub},
       # Start the Finch
       {Finch, name: WebtritAdapter.Finch},
+      # Start the Portabilling AdministratorSessionManager
+      {AdministratorSessionManager, administrator_config},
+      # Start the Portabilling AccountSessionManager
+      {AccountSessionManager, account_config},
+      # Start the Portabilling DemoAccountManager if enabled
+      {DemoAccountManager, demo_config},
       # Start the Endpoint (http/https)
       WebtritAdapterWeb.Endpoint
       # Start a worker by calling: WebtritAdapter.Worker.start_link(arg)

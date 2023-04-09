@@ -80,3 +80,119 @@ if config_env() == :prod do
   #
   # Check `Plug.SSL` for all available options in `force_ssl`.
 end
+
+if config_env() != :test do
+  case RuntimeConfig.get_env!("PORTABILLING_ADMINISTRATOR_URL", "https://demo.portaone.com/rest") do
+    portabilling_administrator_url ->
+      config :webtrit_adapter, Config.Portabilling.AdministratorUrl, portabilling_administrator_url
+  end
+
+  case RuntimeConfig.get_env!("PORTABILLING_ADMINISTRATOR_LOGIN", "webtrit") do
+    portabilling_administrator_login ->
+      config :webtrit_adapter, Config.Portabilling.AdministratorLogin, portabilling_administrator_login
+  end
+
+  case RuntimeConfig.get_env!("PORTABILLING_ADMINISTRATOR_TOKEN", "00000000-0000-0000-0000-000000000000") do
+    portabilling_administrator_token ->
+      config :webtrit_adapter, Config.Portabilling.AdministratorToken, portabilling_administrator_token
+  end
+
+  case RuntimeConfig.get_env_as_non_neg_integer!("PORTABILLING_ADMINISTRATOR_SESSION_REGENERATE_PERIOD", "43200000") do
+    portabilling_administrator_session_regenerate_period ->
+      config :webtrit_adapter,
+             Config.Portabilling.AdministratorSessionRegeneratePeriod,
+             portabilling_administrator_session_regenerate_period
+  end
+
+  case RuntimeConfig.get_env!("PORTABILLING_ACCOUNT_URL", "https://demo.portaone.com:8445/rest") do
+    portabilling_account_url ->
+      config :webtrit_adapter, Config.Portabilling.AccountUrl, portabilling_account_url
+  end
+
+  case RuntimeConfig.get_env_as_non_neg_integer!("PORTABILLING_ACCOUNT_SESSION_REGENERATE_PERIOD", "43200000") do
+    portabilling_account_session_regenerate_period ->
+      config :webtrit_adapter,
+             Config.Portabilling.AccountSessionRegeneratePeriod,
+             portabilling_account_session_regenerate_period
+  end
+
+  case RuntimeConfig.get_env_from_allowed_values!("PORTABILLING_SIGNIN_CREDENTIALS", ["self-care", "sip"]) do
+    signin_credentials ->
+      config :webtrit_adapter,
+             Config.Portabilling.SigninCredentials,
+             signin_credentials |> String.replace("-", "_") |> String.to_atom()
+  end
+
+  case RuntimeConfig.ensure_get_all_or_none_envs_as_integer!([
+         "PORTABILLING_DEMO_I_CUSTOMER",
+         "PORTABILLING_DEMO_I_CUSTOM_FIELD"
+       ]) do
+    nil ->
+      nil
+
+    [portabilling_demo_i_customer, portabilling_demo_i_custom_field] ->
+      config :webtrit_adapter,
+             Config.Portabilling.DemoICustomer,
+             portabilling_demo_i_customer
+
+      config :webtrit_adapter,
+             Config.Portabilling.DemoICustomField,
+             portabilling_demo_i_custom_field
+  end
+
+  case RuntimeConfig.get_env!("PORTASIP_HOST", "sip.webtrit.com") do
+    portasip_host ->
+      config :webtrit_adapter,
+             Config.Portasip.Host,
+             portasip_host
+  end
+
+  case RuntimeConfig.get_env_as_non_neg_integer("PORTASIP_PORT") do
+    portasip_port ->
+      config :webtrit_adapter,
+             Config.Portasip.Port,
+             portasip_port
+  end
+
+  case RuntimeConfig.get_env_as_boolean("JANUSSIP_SIPS") do
+    janussip_sips ->
+      config :webtrit_adapter,
+             Config.Janussip.Sips,
+             janussip_sips
+  end
+
+  case RuntimeConfig.get_env_as_boolean("JANUSSIP_FORCE_TCP") do
+    janussip_force_tcp ->
+      config :webtrit_adapter,
+             Config.Janussip.ForceTcp,
+             janussip_force_tcp
+  end
+
+  case RuntimeConfig.get_env_as_non_neg_integer!("OTP_TIMEOUT") do
+    otp_timeout ->
+      config :webtrit_adapter,
+             Config.Otp.Timeout,
+             otp_timeout
+  end
+
+  case RuntimeConfig.get_env_as_non_neg_integer!("OTP_VERIFICATION_ATTEMPT_LIMIT") do
+    otp_verification_attempt_limit ->
+      config :webtrit_adapter,
+             Config.Otp.VerificationAttemptLimit,
+             otp_verification_attempt_limit
+  end
+
+  case RuntimeConfig.get_env("OTP_IGNORE_ACCOUNTS") do
+    nil ->
+      config :webtrit_adapter,
+             Config.Otp.IgnoreAccounts,
+             []
+
+    otp_ignore_accounts ->
+      otp_ignore_accounts_list = otp_ignore_accounts |> String.split(~r/[,;]/, trim: true) |> Enum.map(&String.trim/1)
+
+      config :webtrit_adapter,
+             Config.Otp.IgnoreAccounts,
+             otp_ignore_accounts_list
+  end
+end
