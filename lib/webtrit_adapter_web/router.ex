@@ -1,14 +1,30 @@
 defmodule WebtritAdapterWeb.Router do
   use WebtritAdapterWeb, :router
 
+  pipeline :swagger do
+    plug :accepts, ["html"]
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
+
+    plug OpenApiSpex.Plug.PutApiSpec, module: WebtritAdapterWeb.Api.V1.ApiSpec
+  end
+
+  scope "/", WebtritAdapterhWeb do
+    pipe_through :swagger
+
+    get "/swagger", OpenApiSpex.Plug.SwaggerUI, [path: "/api/v1/openapi"], alias: false
   end
 
   scope "/api", WebtritAdapterWeb.Api do
     pipe_through :api
 
     get "/health-check", HealthCheckController, :index
+
+    scope "/v1", V1 do
+      get "/openapi", OpenApiSpex.Plug.RenderSpec, [], alias: false
+    end
   end
 
   # Enable LiveDashboard in development
