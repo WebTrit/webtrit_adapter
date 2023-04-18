@@ -35,6 +35,8 @@ defmodule WebtritAdapter.Application do
     children = [
       # Start the Telemetry supervisor
       WebtritAdapterWeb.Telemetry,
+      # Start the Ecto repository
+      WebtritAdapter.Repo,
       # Start the PubSub system
       {Phoenix.PubSub, name: WebtritAdapter.PubSub},
       # Start the Finch

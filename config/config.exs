@@ -7,6 +7,9 @@
 # General application configuration
 import Config
 
+config :webtrit_adapter,
+  ecto_repos: [WebtritAdapter.Repo]
+
 # Configures the endpoint
 config :webtrit_adapter, WebtritAdapterWeb.Endpoint,
   url: [host: "localhost"],
