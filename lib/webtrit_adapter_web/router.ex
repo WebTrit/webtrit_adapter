@@ -7,8 +7,14 @@ defmodule WebtritAdapterWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+  end
 
+  pipeline :api_v1 do
     plug OpenApiSpex.Plug.PutApiSpec, module: WebtritAdapterWeb.Api.V1.ApiSpec
+  end
+
+  pipeline :api_v1_auth do
+    plug WebtritAdapterWeb.Api.V1.Plug.Auth
   end
 
   scope "/", WebtritAdapterhWeb do
@@ -23,7 +29,14 @@ defmodule WebtritAdapterWeb.Router do
     get "/health-check", HealthCheckController, :index
 
     scope "/v1", V1 do
+      pipe_through [:api_v1]
+
       get "/openapi", OpenApiSpex.Plug.RenderSpec, [], alias: false
+    end
+
+    scope "/v1", V1 do
+      pipe_through [:api_v1, :api_v1_auth]
+
     end
   end
 
