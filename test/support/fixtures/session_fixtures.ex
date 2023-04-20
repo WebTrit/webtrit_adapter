@@ -11,9 +11,7 @@ defmodule WebtritAdapter.SessionFixtures do
     {:ok, otp} =
       attrs
       |> Enum.into(%{
-        user_id: "some user_id",
-        attempt_count: 42,
-        verified: true,
+        i_account: 1,
         demo: true,
         ignore: true
       })

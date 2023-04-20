@@ -37,6 +37,25 @@ defmodule WebtritAdapter.Session do
   """
   def get_otp!(id), do: Repo.get!(Otp, id)
 
+  def inc_attempt_count_and_get_otp!(id) do
+    autoupdate_fields =
+      Enum.map(Otp.__schema__(:autoupdate), fn {fields, {module, function, args}} ->
+        Enum.map(fields, fn field ->
+          {field, apply(module, function, args)}
+        end)
+      end)
+      |> List.flatten()
+
+    queryable =
+      from(otp in Otp, where: otp.id == ^id, update: [set: ^autoupdate_fields, inc: [attempt_count: 1]], select: otp)
+
+    with {1, [otp]} <- Repo.update_all(queryable, []) do
+      otp
+    else
+      _ -> raise Ecto.NoResultsError, queryable: queryable
+    end
+  end
+
   @doc """
   Creates a otp.
 
@@ -51,7 +70,7 @@ defmodule WebtritAdapter.Session do
   """
   def create_otp(attrs \\ %{}) do
     %Otp{}
-    |> Otp.changeset(attrs)
+    |> Otp.create_changeset(attrs)
     |> Repo.insert()
   end
 
@@ -69,7 +88,7 @@ defmodule WebtritAdapter.Session do
   """
   def update_otp(%Otp{} = otp, attrs) do
     otp
-    |> Otp.changeset(attrs)
+    |> Otp.update_changeset(attrs)
     |> Repo.update()
   end
 
@@ -87,18 +106,5 @@ defmodule WebtritAdapter.Session do
   """
   def delete_otp(%Otp{} = otp) do
     Repo.delete(otp)
-  end
-
-  @doc """
-  Returns an `%Ecto.Changeset{}` for tracking otp changes.
-
-  ## Examples
-
-      iex> change_otp(otp)
-      %Ecto.Changeset{data: %Otp{}}
-
-  """
-  def change_otp(%Otp{} = otp, attrs \\ %{}) do
-    Otp.changeset(otp, attrs)
   end
 end
