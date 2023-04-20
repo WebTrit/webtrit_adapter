@@ -39,6 +39,7 @@ defmodule WebtritAdapter.SessionTest do
     end
 
     test "create_otp/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Session.create_otp()
       assert {:error, %Ecto.Changeset{}} = Session.create_otp(%{i_account: nil})
       assert {:error, %Ecto.Changeset{}} = Session.create_otp(%{i_account: "some string"})
     end
@@ -71,6 +72,66 @@ defmodule WebtritAdapter.SessionTest do
       otp = otp_fixture()
       assert {:ok, %Otp{}} = Session.delete_otp(otp)
       assert_raise Ecto.NoResultsError, fn -> Session.get_otp!(otp.id) end
+    end
+  end
+
+  describe "refresh_tokens" do
+    alias WebtritAdapter.Session.RefreshToken
+
+    import WebtritAdapter.SessionFixtures
+
+    test "list_refresh_tokens/0 returns all refresh_tokens" do
+      refresh_token = refresh_token_fixture()
+      assert Session.list_refresh_tokens() == [refresh_token]
+    end
+
+    test "get_refresh_token!/1 returns the refresh_token with given id" do
+      refresh_token = refresh_token_fixture()
+      assert Session.get_refresh_token!(refresh_token.id) == refresh_token
+    end
+
+    test "inc_usage_count_and_get_refresh_token/1 increment usage_counter by 1" do
+      refresh_token = refresh_token_fixture()
+      assert refresh_token.usage_counter == 0
+      refresh_token = Session.inc_usage_count_and_get_refresh_token!(refresh_token.id)
+      assert refresh_token.usage_counter == 1
+      refresh_token = Session.inc_usage_count_and_get_refresh_token!(refresh_token.id)
+      assert refresh_token.usage_counter == 2
+    end
+
+    test "create_refresh_token/1 with valid data creates a refresh_token" do
+      valid_attrs = %{i_account: 123}
+
+      assert {:ok, %RefreshToken{} = refresh_token} = Session.create_refresh_token(valid_attrs)
+      assert refresh_token.i_account == 123
+      assert refresh_token.usage_counter == 0
+    end
+
+    test "create_refresh_token/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Session.create_refresh_token()
+      assert {:error, %Ecto.Changeset{}} = Session.create_refresh_token(%{i_account: nil})
+      assert {:error, %Ecto.Changeset{}} = Session.create_refresh_token(%{i_account: "some string"})
+    end
+
+    test "update_refresh_token/2 with valid data updates the refresh_token" do
+      refresh_token = refresh_token_fixture()
+      update_attrs = %{usage_counter: 100}
+
+      assert {:ok, %RefreshToken{} = refresh_token} = Session.update_refresh_token(refresh_token, update_attrs)
+      assert refresh_token.i_account == 1
+      assert refresh_token.usage_counter == 100
+    end
+
+    test "update_refresh_token/2 with invalid data returns error changeset" do
+      refresh_token = refresh_token_fixture()
+      assert {:error, %Ecto.Changeset{}} = Session.update_refresh_token(refresh_token, %{usage_counter: nil})
+      assert refresh_token == Session.get_refresh_token!(refresh_token.id)
+    end
+
+    test "delete_refresh_token/1 deletes the refresh_token" do
+      refresh_token = refresh_token_fixture()
+      assert {:ok, %RefreshToken{}} = Session.delete_refresh_token(refresh_token)
+      assert_raise Ecto.NoResultsError, fn -> Session.get_refresh_token!(refresh_token.id) end
     end
   end
 end

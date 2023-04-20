@@ -19,4 +19,18 @@ defmodule WebtritAdapter.SessionFixtures do
 
     otp
   end
+
+  @doc """
+  Generate a refresh_token.
+  """
+  def refresh_token_fixture(attrs \\ %{}) do
+    {:ok, refresh_token} =
+      attrs
+      |> Enum.into(%{
+        i_account: 1
+      })
+      |> WebtritAdapter.Session.create_refresh_token()
+
+    refresh_token
+  end
 end
