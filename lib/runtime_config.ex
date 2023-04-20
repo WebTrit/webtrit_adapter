@@ -174,4 +174,24 @@ defmodule RuntimeConfig do
         end)
     end
   end
+
+  defmacro config_env_try(get_env_code) do
+    quote do
+      try do
+        unquote(get_env_code)
+      rescue
+        e ->
+          case config_env() do
+            :dev = env ->
+              IO.puts([to_string(env), ": ", Exception.message(e)])
+
+            :test ->
+              nil
+
+            _ ->
+              reraise e, __STACKTRACE__
+          end
+      end
+    end
+  end
 end
