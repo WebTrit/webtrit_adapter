@@ -205,4 +205,9 @@ defmodule WebtritAdapter.Session do
   def delete_refresh_token(%RefreshToken{} = refresh_token) do
     Repo.delete(refresh_token)
   end
+
+  def delete_refresh_token(refresh_token_id) do
+    %RefreshToken{id: refresh_token_id}
+    |> Repo.delete()
+  end
 end

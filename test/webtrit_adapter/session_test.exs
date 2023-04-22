@@ -133,5 +133,11 @@ defmodule WebtritAdapter.SessionTest do
       assert {:ok, %RefreshToken{}} = Session.delete_refresh_token(refresh_token)
       assert_raise Ecto.NoResultsError, fn -> Session.get_refresh_token!(refresh_token.id) end
     end
+
+    test "delete_refresh_token/1 deletes the refresh_token by id" do
+      refresh_token = refresh_token_fixture()
+      assert {:ok, %RefreshToken{}} = Session.delete_refresh_token(refresh_token.id)
+      assert_raise Ecto.NoResultsError, fn -> Session.get_refresh_token!(refresh_token.id) end
+    end
   end
 end
