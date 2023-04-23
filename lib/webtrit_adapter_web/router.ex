@@ -40,11 +40,26 @@ defmodule WebtritAdapterWeb.Router do
       pipe_through [:api_v1]
 
       get "/openapi", OpenApiSpex.Plug.RenderSpec, [], alias: false
+
+      resources "/system-info", SystemInfoController, only: [:show], singleton: true
+
+      resources "/session", SessionController, only: [:create, :update], singleton: true do
+        post "/otp-create", SessionController, :otp_create
+        post "/otp-verify", SessionController, :otp_verify
+      end
     end
 
     scope "/v1", V1 do
       pipe_through [:api_v1, :api_v1_auth]
 
+      resources "/session", SessionController, only: [:delete], singleton: true
+
+      scope "/user", User do
+        resources "/", InfoController, only: [:show], singleton: true
+        resources "/contacts", ContactController, only: [:index]
+        resources "/history", HistoryController, only: [:index]
+        resources "/recordings", RecordingController, only: [:show], param: "recording_id"
+      end
     end
   end
 
