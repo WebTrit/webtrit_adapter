@@ -21,8 +21,21 @@ defmodule WebtritAdapterWeb.Api.V1.ApiSpec do
     %Info{
       title: "WebTrit Adapter",
       description: """
-      Adapter that translates API requests from WebTrit Core to hosted PBX system,
-      which enables users to authenticate, obtain their SIP credentials, and more.
+      The **Adapter** translates API requests from **WebTrit Core** to the target hosted PBX system or BSS,
+      which will be referred to as the **Adaptee**. This translation enables users to authenticate,
+      obtain their SIP credentials, and retrieve other necessary information.
+
+      ## Terminology
+
+      * **Adapter** - the current system
+      * **Adaptee** - the target hosted PBX system or BSS
+      * **OTP** (One-Time Password) - a unique, temporary password sent to the user via a predefined delivery method,
+        such as email, SMS, etc.
+      * **CDR** (Call Detail Record) - a record of a call, including the caller, callee, duration, etc.
+
+      ## References
+
+      * [Adapter pattern](https://en.wikipedia.org/wiki/Adapter_pattern)
       """,
       contact: %Contact{
         name: "WebTrit Dev",
