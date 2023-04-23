@@ -194,13 +194,6 @@ case RuntimeConfig.get_env_as_non_neg_integer("PORTASIP_PORT") do
            portasip_port
 end
 
-case RuntimeConfig.get_env_as_boolean("JANUSSIP_SIPS") do
-  janussip_sips ->
-    config :webtrit_adapter,
-           Config.Janussip.Sips,
-           janussip_sips
-end
-
 case RuntimeConfig.get_env_as_boolean("JANUSSIP_FORCE_TCP") do
   janussip_force_tcp ->
     config :webtrit_adapter,
