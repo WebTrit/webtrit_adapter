@@ -137,12 +137,13 @@ defmodule WebtritAdapter.Session do
   """
   def get_refresh_token!(id), do: Repo.get!(RefreshToken, id)
 
-  def inc_usage_count_and_get_refresh_token!(id) do
+  def inc_exact_usage_counter_and_get_refresh_token!(id, usage_counter) do
     field_value_list = Utils.Schema.prepare_autoupdate_field_value_list(RefreshToken)
 
     queryable =
       from(rt in RefreshToken,
         where: rt.id == ^id,
+        where: rt.usage_counter == ^usage_counter,
         update: [set: ^field_value_list, inc: [usage_counter: 1]],
         select: rt
       )

@@ -90,13 +90,21 @@ defmodule WebtritAdapter.SessionTest do
       assert Session.get_refresh_token!(refresh_token.id) == refresh_token
     end
 
-    test "inc_usage_count_and_get_refresh_token/1 increment usage_counter by 1" do
+    test "inc_exact_usage_counter_and_get_refresh_token/1 increment usage_counter by 1" do
       refresh_token = refresh_token_fixture()
       assert refresh_token.usage_counter == 0
-      refresh_token = Session.inc_usage_count_and_get_refresh_token!(refresh_token.id)
+      refresh_token = Session.inc_exact_usage_counter_and_get_refresh_token!(refresh_token.id, 0)
       assert refresh_token.usage_counter == 1
-      refresh_token = Session.inc_usage_count_and_get_refresh_token!(refresh_token.id)
+      refresh_token = Session.inc_exact_usage_counter_and_get_refresh_token!(refresh_token.id, 1)
       assert refresh_token.usage_counter == 2
+    end
+
+    test "inc_exact_usage_counter_and_get_refresh_token/1 raise on not exact usage_counter" do
+      refresh_token = refresh_token_fixture()
+
+      assert_raise Ecto.NoResultsError, fn ->
+        Session.inc_exact_usage_counter_and_get_refresh_token!(refresh_token.id, refresh_token.usage_counter + 1)
+      end
     end
 
     test "create_refresh_token/1 with valid data creates a refresh_token" do
