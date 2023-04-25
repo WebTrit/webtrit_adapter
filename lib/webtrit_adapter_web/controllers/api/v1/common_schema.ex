@@ -7,24 +7,39 @@ defmodule WebtritAdapterWeb.Api.V1.CommonSchema do
     OpenApiSpex.schema(%{
       type: :object,
       properties: %{
+        message: %Schema{
+          type: :string,
+          description: "Description of the error."
+        },
         code: %Schema{
           type: :string,
-          description: "Error code."
+          description: "Unique error code identifier."
         },
         details: %Schema{
           type: :array,
           description: """
-          Specific details related to the error code. Dependent on the error code.
-
-          Mainly used for the `validation_error` error code, providing detailed
-          information for the failed field.
+          Additional details related to the error code, which depend on the specific error.
           """,
           items: %Schema{
-            type: :object,
-            properties: %{
-              path: %Schema{type: :string},
-              reason: %Schema{type: :string}
-            }
+            oneOf: [
+              %Schema{
+                type: :object,
+                description: """
+                Provided for the `validation_error` error code, containing detailed
+                information about the invalid field.
+                """,
+                properties: %{
+                  path: %Schema{type: :string},
+                  reason: %Schema{type: :string}
+                }
+              },
+              %Schema{
+                type: :object,
+                description: """
+                Any other error-related data.
+                """
+              }
+            ]
           }
         }
       },
