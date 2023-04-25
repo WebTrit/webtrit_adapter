@@ -1,7 +1,7 @@
 defmodule WebtritAdapterWeb.Api.V1.ApiSpec do
   @behaviour OpenApiSpex.OpenApi
 
-  alias OpenApiSpex.{Info, Contact, Server, Paths, Components, SecurityScheme}
+  alias OpenApiSpex.{Info, Contact, Parameter, Schema, Server, Paths, Components, SecurityScheme}
   alias WebtritAdapterWeb.Router
 
   @api_v1_prefix "/api/v1"
@@ -66,6 +66,19 @@ defmodule WebtritAdapterWeb.Api.V1.ApiSpec do
         "bearerAuth" => %SecurityScheme{
           type: "http",
           scheme: "bearer"
+        }
+      },
+      parameters: %{
+        "UserFiltering" => %Parameter{
+          name: :"X-WebTrit-Tenant-ID",
+          in: :header,
+          description: """
+          Optional user filtering.
+
+          This parameter is rarely used and serves for additional filtering in specific cases.
+          Note that not all adapter implementations may support this functionality.
+          """,
+          schema: %Schema{type: :string}
         }
       }
     }

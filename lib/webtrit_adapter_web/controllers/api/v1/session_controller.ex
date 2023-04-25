@@ -34,6 +34,9 @@ defmodule WebtritAdapterWeb.Api.V1.SessionController do
     This request can be used to sign in an existing user or sign up a new user,
     if the functionality is supported by the **Adaptee**.
     """,
+    parameters: [
+      "$ref": "#/components/parameters/UserFiltering"
+    ],
     request_body: {
       """
       Identification of the user for whom an OTP will be generated and sent.
@@ -242,6 +245,9 @@ defmodule WebtritAdapterWeb.Api.V1.SessionController do
     The absence of OTP support is indicated when the `#{:otpSignin}` value is not present
     in the `supported` property of the `GeneralSystemInfoResponse`.
     """,
+    parameters: [
+      "$ref": "#/components/parameters/UserFiltering"
+    ],
     request_body: {
       "User credentials.",
       "application/json",
