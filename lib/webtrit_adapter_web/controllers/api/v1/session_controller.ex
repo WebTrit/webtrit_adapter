@@ -255,9 +255,7 @@ defmodule WebtritAdapterWeb.Api.V1.SessionController do
       required: true
     },
     responses: [
-      CommonResponse.unprocessable([
-        :credentials_incorrect
-      ]),
+      CommonResponse.unprocessable(),
       CommonResponse.external_api_issue(),
       ok: {
         """
@@ -265,6 +263,15 @@ defmodule WebtritAdapterWeb.Api.V1.SessionController do
         """,
         "application/json",
         SessionSchema.Response
+      },
+      unauthorized: {
+        """
+        Unauthorized: Incorrect `login` and/or `password`.
+        """,
+        "application/json",
+        CommonSchema.error_response([
+          :invalid_credentials
+        ])
       }
     ]
   )
@@ -289,7 +296,7 @@ defmodule WebtritAdapterWeb.Api.V1.SessionController do
         render_session_responce(conn, refresh_token)
 
       {200, %{}} ->
-        {:error, :unprocessable_entity, :credentials_incorrect}
+        {:error, :unauthorized, :credentials_incorrect}
 
       _ ->
         {:error, :internal_server_error, :external_api_issue}
