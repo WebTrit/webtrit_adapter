@@ -41,6 +41,7 @@ defmodule WebtritAdapter.MixProject do
       {:telemetry_poller, "~> 1.0"},
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
+      {:tz, "~> 0.26.1"},
       {:open_api_spex, "~> 3.16"},
       {:finch, "~> 0.15.0"},
       {:tesla, "~> 1.6"}

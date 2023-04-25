@@ -61,24 +61,41 @@ defmodule WebtritAdapterWeb.Api.V1.User.HistoryController do
   )
 
   def index(conn, params, i_account) do
-    case Api.Account.Account.get_xdr_list(
+    case Api.Account.Account.get_account_info(
            conn.assigns.account_client,
            i_account,
-           %{
-             "limit" => params[:items_per_page],
-             "offset" => (params[:page] - 1) * params[:items_per_page],
-             "from_date" => strftime(params[:time_from]),
-             "to_date" => strftime(params[:time_to])
-           }
-           |> Utils.Map.deep_filter_blank_values()
+           %{i_account: i_account}
          ) do
-      {200, %{"xdr_list" => xdr_list, "total" => total}} ->
-        render(conn,
-          xdr_list: xdr_list,
-          page: params.page,
-          items_per_page: params.items_per_page,
-          items_total: total
-        )
+      {200, %{"account_info" => %{"time_zone_name" => time_zone}}} ->
+        case Api.Account.Account.get_xdr_list(
+               conn.assigns.account_client,
+               i_account,
+               %{
+                 "limit" => params[:items_per_page],
+                 "offset" => (params[:page] - 1) * params[:items_per_page],
+                 "from_date" => to_naive!(params[:time_from], time_zone),
+                 "to_date" => to_naive!(params[:time_to], time_zone)
+               }
+               |> Utils.Map.deep_filter_blank_values()
+             ) do
+          {200, %{"xdr_list" => xdr_list, "total" => total}} ->
+            render(conn,
+              xdr_list: xdr_list,
+              time_zone: time_zone,
+              page: params.page,
+              items_per_page: params.items_per_page,
+              items_total: total
+            )
+
+          {:error, :missing_session_id} ->
+            {:error, :not_found, :session_not_found}
+
+          _ ->
+            {:error, :internal_server_error, :external_api_issue}
+        end
+
+      {200, %{}} ->
+        {:error, :not_found, :user_not_found}
 
       {:error, :missing_session_id} ->
         {:error, :not_found, :session_not_found}
@@ -88,6 +105,11 @@ defmodule WebtritAdapterWeb.Api.V1.User.HistoryController do
     end
   end
 
-  defp strftime(nil), do: nil
-  defp strftime(date_or_time_or_datetime), do: Calendar.strftime(date_or_time_or_datetime, "%c")
+  defp to_naive!(nil, _) do
+    nil
+  end
+
+  defp to_naive!(datetime, time_zone) do
+    datetime |> DateTime.shift_zone!(time_zone) |> DateTime.to_naive() |> NaiveDateTime.to_string()
+  end
 end

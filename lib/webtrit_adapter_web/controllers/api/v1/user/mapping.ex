@@ -115,10 +115,7 @@ defmodule WebtritAdapterWeb.Api.V1.User.Mapping do
   defp xdr_to_call_status(false, 16, _), do: :declined
   defp xdr_to_call_status(_, _, _), do: :error
 
-  def connect_time(xdr) do
-    # TODO: clarify correct time zone
-    time_zone = "Etc/UTC"
-
+  def connect_time(xdr, time_zone) do
     xdr["connect_time"] |> NaiveDateTime.from_iso8601!() |> DateTime.from_naive!(time_zone)
   end
 end

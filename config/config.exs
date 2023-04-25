@@ -7,6 +7,8 @@
 # General application configuration
 import Config
 
+config :elixir, :time_zone_database, Tz.TimeZoneDatabase
+
 config :webtrit_adapter,
   ecto_repos: [WebtritAdapter.Repo]
 

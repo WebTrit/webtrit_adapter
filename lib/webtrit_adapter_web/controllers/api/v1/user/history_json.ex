@@ -3,12 +3,13 @@ defmodule WebtritAdapterWeb.Api.V1.User.HistoryJSON do
 
   def index(%{
         xdr_list: xdr_list,
+        time_zone: time_zone,
         page: page,
         items_per_page: items_per_page,
         items_total: items_total
       }) do
     %{
-      items: for(xdr <- xdr_list, do: data(xdr)),
+      items: for(xdr <- xdr_list, do: data(xdr, time_zone)),
       pagination: %{
         page: page,
         items_per_page: items_per_page,
@@ -17,14 +18,14 @@ defmodule WebtritAdapterWeb.Api.V1.User.HistoryJSON do
     }
   end
 
-  defp data(xdr) do
+  defp data(xdr, time_zone) do
     %{
       callee: xdr["CLD"],
       caller: xdr["CLI"],
       direction: Mapping.direction(xdr),
       status: Mapping.call_status(xdr),
       disconnected_reason: xdr["disconnect_reason"],
-      connect_time: Mapping.connect_time(xdr),
+      connect_time: Mapping.connect_time(xdr, time_zone),
       duration: xdr["charged_quantity"],
       recording_id: if(Mapping.call_recording_exist(xdr), do: xdr["i_xdr"], else: nil)
     }
