@@ -4,6 +4,7 @@ defmodule WebtritAdapterWeb.Api.V1.FallbackController do
   def call(conn, {:error, status, code, details}) do
     conn
     |> put_status(status)
+    |> put_format(:json)
     |> put_view(json: WebtritAdapterWeb.Api.V1.ErrorJSON)
     |> render(:error, code: code, details: details)
   end
