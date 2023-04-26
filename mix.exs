@@ -59,7 +59,10 @@ defmodule WebtritAdapter.MixProject do
       setup: ["deps.get", "ecto.setup"],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
-      test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"]
+      test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
+      "gen.openapi.spec.v1": [
+        "openapi.spec.json --spec WebtritAdapterWeb.Api.V1.ApiSpec --pretty=true --vendor-extensions=false _openapi_spec/webtrit_adapter_v1.json"
+      ]
     ]
   end
 end
