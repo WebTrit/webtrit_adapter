@@ -43,7 +43,9 @@ defmodule WebtritAdapterWeb.Router do
 
       resources "/system-info", SystemInfoController, only: [:show], singleton: true
 
-      resources "/session", SessionController, only: [:create, :update], singleton: true do
+      scope "/session" do
+        post "/", SessionController, :create
+        patch "/", SessionController, :update
         post "/otp-create", SessionController, :otp_create
         post "/otp-verify", SessionController, :otp_verify
       end
