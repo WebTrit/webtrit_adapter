@@ -49,6 +49,8 @@ defmodule WebtritAdapterWeb.Router do
         post "/otp-create", SessionController, :otp_create
         post "/otp-verify", SessionController, :otp_verify
       end
+
+      resources "/user", UserController, only: [:create], singleton: true
     end
 
     scope "/v1", V1 do

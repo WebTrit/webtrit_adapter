@@ -87,39 +87,6 @@ defmodule WebtritAdapterWeb.Api.V1.SessionController do
     ]
   )
 
-  def otp_create(conn, _params, %{user_email: email} = _body_params) do
-    unless Portabilling.DemoAccountManager.enabled?() do
-      {:error, :method_not_allowed, :signup_disabled}
-    else
-      case Portabilling.DemoAccountManager.retrieve(email) do
-        {:ok, i_account} ->
-          case Api.Administrator.AccessControl.create_otp(
-                 conn.assigns.administrator_client,
-                 %{"id" => i_account}
-               ) do
-            {200, %{"success" => 1}} ->
-              {:ok, otp} = Session.create_otp(%{i_account: i_account, demo: true})
-
-              email = ApiHelpers.Administrator.get_env_email(conn.assigns.administrator_client)
-
-              render(conn, otp: otp, email: email)
-
-            {500, %{"faultcode" => "Server.AccessControl.empty_rec_and_bcc"}} ->
-              {:error, :unprocessable_entity, :delivery_channel_unspecified}
-
-            _ ->
-              {:error, :internal_server_error, :external_api_issue}
-          end
-
-        {:error, :demo_accounts_limit_reached} ->
-          {:error, :unprocessable_entity, :signup_limit_reached}
-
-        _ ->
-          {:error, :internal_server_error, :external_api_issue}
-      end
-    end
-  end
-
   def otp_create(conn, _params, %{user_ref: user_ref} = _body_params) do
     case Api.Administrator.Account.get_account_info(
            conn.assigns.administrator_client,
@@ -353,8 +320,7 @@ defmodule WebtritAdapterWeb.Api.V1.SessionController do
       ) do
     case WebtritAdatperToken.decrypt(:refresh, refresh_token) do
       {:ok, {:v1, refresh_token_id, usage_counter}} ->
-        refresh_token =
-          Session.inc_exact_usage_counter_and_get_refresh_token!(refresh_token_id, usage_counter)
+        refresh_token = Session.inc_exact_usage_counter_and_get_refresh_token!(refresh_token_id, usage_counter)
 
         render(conn, :create_or_update, refresh_token: refresh_token)
 

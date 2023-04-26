@@ -103,21 +103,6 @@ defmodule WebtritAdapterWeb.Api.V1.CommonSchema do
     })
   end
 
-  defmodule UserEmail do
-    OpenApiSpex.schema(%{
-      type: :string,
-      format: :email,
-      description: """
-      The email address of the user on the **Adaptee**.
-
-      The email can be used as an alternative reference for the user. When the
-      same user is accessed using different references, it is crucial to ensure
-      that the same `UserId` is assigned to this user.
-      """,
-      example: "example@example.com"
-    })
-  end
-
   defmodule OtpId do
     OpenApiSpex.schema(%{
       type: :string,

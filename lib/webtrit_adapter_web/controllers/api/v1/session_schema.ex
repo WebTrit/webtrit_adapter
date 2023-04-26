@@ -5,7 +5,7 @@ defmodule WebtritAdapterWeb.Api.V1.SessionSchema do
   alias OpenApiSpex.Schema
   alias WebtritAdapterWeb.Api.V1.CommonSchema
 
-  defmodule OtpCreateUserRefRequest do
+  defmodule OtpCreateRequest do
     OpenApiSpexExt.schema(%{
       type: :object,
       properties: %{
@@ -15,35 +15,6 @@ defmodule WebtritAdapterWeb.Api.V1.SessionSchema do
       description: """
       This request generates an OTP using the provided reference.
       """
-    })
-  end
-
-  defmodule OtpCreateUserEmailRequest do
-    OpenApiSpexExt.schema(%{
-      type: :object,
-      properties: %{
-        user_email: CommonSchema.UserEmail
-      },
-      required: [:user_email],
-      description: """
-      This request generates an OTP using the provided email address.
-
-      It enables the possibility to implement of sign-in and sign-up functionalities with the **Adaptee**.
-
-      If the **Adaptee** supports user creation or initialization,
-      a new user can be created if they do not exist yet. The availability of
-      the sign-up functionality is indicated by the `#{:signup}` value in the
-      `supported` property of the `GeneralSystemInfoResponse`.
-      """
-    })
-  end
-
-  defmodule OtpCreateRequest do
-    OpenApiSpexExt.schema(%{
-      oneOf: [
-        OtpCreateUserRefRequest,
-        OtpCreateUserEmailRequest
-      ]
     })
   end
 
