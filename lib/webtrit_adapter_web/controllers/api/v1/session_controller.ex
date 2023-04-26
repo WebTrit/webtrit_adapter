@@ -2,15 +2,13 @@ defmodule WebtritAdapterWeb.Api.V1.SessionController do
   use WebtritAdapterWeb, :controller
   use OpenApiSpex.ControllerSpecs
 
-  import WebtritAdapter.Mapper, only: [i_account_to_user_id: 1]
-
   require Logger
   require OpenApiSpexExt
 
   alias Portabilling.Api
+  alias WebtritAdapter.ApiHelpers
   alias WebtritAdapter.Session
   alias WebtritAdapter.Session.Otp
-  alias WebtritAdapter.Session.RefreshToken
   alias WebtritAdapterWeb.Api.V1.CastAndValidateRenderError
   alias WebtritAdapterWeb.Api.V1.FallbackController
   alias WebtritAdapterWeb.Api.V1.CommonResponse
@@ -102,7 +100,9 @@ defmodule WebtritAdapterWeb.Api.V1.SessionController do
             {200, %{"success" => 1}} ->
               {:ok, otp} = Session.create_otp(%{i_account: i_account, demo: true})
 
-              render_otp_create_responce(conn, otp)
+              email = ApiHelpers.Administrator.get_env_email(conn.assigns.administrator_client)
+
+              render(conn, otp: otp, email: email)
 
             {500, %{"faultcode" => "Server.AccessControl.empty_rec_and_bcc"}} ->
               {:error, :unprocessable_entity, :delivery_channel_unspecified}
@@ -136,7 +136,9 @@ defmodule WebtritAdapterWeb.Api.V1.SessionController do
           {200, %{"success" => 1}} ->
             {:ok, otp} = Session.create_otp(%{i_account: i_account, ignore: ignore})
 
-            render_otp_create_responce(conn, otp)
+            email = ApiHelpers.Administrator.get_env_email(conn.assigns.administrator_client)
+
+            render(conn, otp: otp, email: email)
 
           {500, %{"faultcode" => "Server.AccessControl.empty_rec_and_bcc"}} ->
             {:error, :unprocessable_entity, :delivery_channel_unspecified}
@@ -220,7 +222,7 @@ defmodule WebtritAdapterWeb.Api.V1.SessionController do
 
                 {:ok, refresh_token} = Session.create_refresh_token(%{i_account: i_account})
 
-                render_session_responce(conn, refresh_token)
+                render(conn, :create_or_update, refresh_token: refresh_token)
 
               _ ->
                 {:error, :internal_server_error, :external_api_issue}
@@ -293,7 +295,7 @@ defmodule WebtritAdapterWeb.Api.V1.SessionController do
       {200, %{"account_info" => %{^password_key => ^password, "i_account" => i_account}}} ->
         {:ok, refresh_token} = Session.create_refresh_token(%{i_account: i_account})
 
-        render_session_responce(conn, refresh_token)
+        render(conn, :create_or_update, refresh_token: refresh_token)
 
       {200, %{}} ->
         {:error, :unauthorized, :credentials_incorrect}
@@ -349,11 +351,12 @@ defmodule WebtritAdapterWeb.Api.V1.SessionController do
         _params,
         %{refresh_token: refresh_token} = _body_params
       ) do
-    case refresh_token_decrypt(refresh_token) do
+    case WebtritAdatperToken.decrypt(:refresh, refresh_token) do
       {:ok, {:v1, refresh_token_id, usage_counter}} ->
-        refresh_token = Session.inc_exact_usage_counter_and_get_refresh_token!(refresh_token_id, usage_counter)
+        refresh_token =
+          Session.inc_exact_usage_counter_and_get_refresh_token!(refresh_token_id, usage_counter)
 
-        render_session_responce(conn, refresh_token)
+        render(conn, :create_or_update, refresh_token: refresh_token)
 
       {:error, :invalid} ->
         {:error, :unprocessable_entity, :refresh_token_invalid}
@@ -394,16 +397,6 @@ defmodule WebtritAdapterWeb.Api.V1.SessionController do
 
   # Helpers
 
-  defp api_administrator_get_env_email(client) do
-    case Api.Administrator.Env.get_env_info(client) do
-      {200, %{"env_info" => %{"email" => email}}} ->
-        email
-
-      _ ->
-        nil
-    end
-  end
-
   defp skip_create_otp(true) do
     {200, %{"success" => 1}}
   end
@@ -418,47 +411,5 @@ defmodule WebtritAdapterWeb.Api.V1.SessionController do
 
   defp skip_verify_otp(false) do
     nil
-  end
-
-  defp access_token_encrypt(data, signed_at),
-    do: WebtritAdatperToken.encrypt(:access, data, signed_at)
-
-  defp refresh_token_encrypt(data, signed_at),
-    do: WebtritAdatperToken.encrypt(:refresh, data, signed_at)
-
-  defp refresh_token_decrypt(token), do: WebtritAdatperToken.decrypt(:refresh, token)
-
-  defp render_otp_create_responce(conn, %Otp{id: otp_id}) do
-    email = api_administrator_get_env_email(conn.assigns.administrator_client)
-
-    conn
-    |> json(%{
-      otp_id: otp_id,
-      delivery_channel: "email",
-      delivery_from: email
-    })
-  end
-
-  defp render_session_responce(conn, %RefreshToken{
-         id: refresh_token_id,
-         i_account: i_account,
-         usage_counter: usage_counter
-       }) do
-    current_time_seconds = System.system_time(:second)
-
-    conn
-    |> json(%{
-      user_id: i_account_to_user_id(i_account),
-      access_token:
-        access_token_encrypt(
-          {:v1, refresh_token_id, i_account},
-          current_time_seconds
-        ),
-      refresh_token:
-        refresh_token_encrypt(
-          {:v1, refresh_token_id, usage_counter},
-          current_time_seconds
-        )
-    })
   end
 end
