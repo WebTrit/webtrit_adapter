@@ -5,6 +5,7 @@ defmodule WebtritAdapter.Application do
 
   use Application
 
+  import Config.Adapter
   import Config.Portabilling
 
   alias Portabilling.AdministratorSessionManager
@@ -13,6 +14,10 @@ defmodule WebtritAdapter.Application do
 
   @impl true
   def start(_type, _args) do
+    unless skip_migrate_on_startup?() do
+      WebtritAdapter.Release.migrate()
+    end
+
     administrator_config = %AdministratorSessionManager.Config{
       administrator_url: administrator_url(),
       login: administrator_login(),

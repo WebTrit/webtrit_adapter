@@ -98,6 +98,16 @@ end
 
 require RuntimeConfig
 
+case RuntimeConfig.get_env_as_boolean("SKIP_MIGRATE_ON_STARTUP") do
+  nil ->
+    nil
+
+  skip_migrate_on_startup ->
+    config :webtrit_adapter,
+           Config.Adapter.SkipMigrateOnStartup,
+           skip_migrate_on_startup
+end
+
 RuntimeConfig.config_env_try do
   case RuntimeConfig.get_env!("PORTABILLING_ADMINISTRATOR_URL", "https://demo.portaone.com/rest") do
     portabilling_administrator_url ->
