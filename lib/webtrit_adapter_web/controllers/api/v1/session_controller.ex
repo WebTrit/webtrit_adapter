@@ -160,6 +160,7 @@ defmodule WebtritAdapterWeb.Api.V1.SessionController do
           :validation_error,
           :otp_id_verified,
           :otp_id_verification_attempts_exceeded,
+          :otp_id_timeout,
           :code_incorrect
         ])
       }
@@ -176,30 +177,34 @@ defmodule WebtritAdapterWeb.Api.V1.SessionController do
       %Otp{attempt_count: attempt_count} when attempt_count > attempt_limit ->
         {:error, :unprocessable_entity, :otp_id_verification_attempt_exceeded}
 
-      %Otp{i_account: i_account, ignore: ignore, demo: demo} = otp ->
-        case skip_verify_otp(ignore) ||
-               Api.Administrator.AccessControl.verify_otp(
-                 conn.assigns.administrator_client,
-                 %{"one_time_password" => code}
-               ) do
-          {200, %{"success" => 1}} ->
-            case (demo && Portabilling.DemoAccountManager.confirm_activation(i_account)) || :ok do
-              :ok ->
-                {:ok, _} = Session.update_otp(otp, %{verified: true})
+      %Otp{i_account: i_account, ignore: ignore, demo: demo, inserted_at: inserted_at} = otp ->
+        if otp_id_timeout?(inserted_at) do
+          {:error, :unprocessable_entity, :otp_id_timeout}
+        else
+          case skip_verify_otp(ignore) ||
+                 Api.Administrator.AccessControl.verify_otp(
+                   conn.assigns.administrator_client,
+                   %{"one_time_password" => code}
+                 ) do
+            {200, %{"success" => 1}} ->
+              case (demo && Portabilling.DemoAccountManager.confirm_activation(i_account)) || :ok do
+                :ok ->
+                  {:ok, _} = Session.update_otp(otp, %{verified: true})
 
-                {:ok, refresh_token} = Session.create_refresh_token(%{i_account: i_account})
+                  {:ok, refresh_token} = Session.create_refresh_token(%{i_account: i_account})
 
-                render(conn, :create_or_update, refresh_token: refresh_token)
+                  render(conn, :create_or_update, refresh_token: refresh_token)
 
-              _ ->
-                {:error, :internal_server_error, :external_api_issue}
-            end
+                _ ->
+                  {:error, :internal_server_error, :external_api_issue}
+              end
 
-          {200, %{"success" => 0}} ->
-            {:error, :unprocessable_entity, :code_incorrect}
+            {200, %{"success" => 0}} ->
+              {:error, :unprocessable_entity, :code_incorrect}
 
-          _ ->
-            {:error, :internal_server_error, :external_api_issue}
+            _ ->
+              {:error, :internal_server_error, :external_api_issue}
+          end
         end
     end
   rescue
@@ -377,5 +382,10 @@ defmodule WebtritAdapterWeb.Api.V1.SessionController do
 
   defp skip_verify_otp(false) do
     nil
+  end
+
+  defp otp_id_timeout?(inserted_at, now \\ NaiveDateTime.utc_now()) do
+    valid_until = NaiveDateTime.add(inserted_at, Config.Otp.timeout(), :millisecond)
+    NaiveDateTime.compare(valid_until, now) == :lt
   end
 end
