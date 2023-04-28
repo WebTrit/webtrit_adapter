@@ -1,4 +1,4 @@
-defmodule WebtritAdatperToken do
+defmodule WebtritAdapterToken do
   @access_token_max_age_seconds 24 * 60 * 60
   @refresh_token_max_age_seconds 14 * 24 * 60 * 60
   @access_token_secret "access_token_salt"

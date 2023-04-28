@@ -53,6 +53,6 @@ defmodule WebtritAdapterWeb.Api.V1.Plug.Auth do
   end
 
   defp decrypt_access_token(token) do
-    WebtritAdatperToken.decrypt(:access, token)
+    WebtritAdapterToken.decrypt(:access, token)
   end
 end

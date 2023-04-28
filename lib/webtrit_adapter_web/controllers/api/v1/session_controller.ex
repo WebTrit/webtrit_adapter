@@ -323,7 +323,7 @@ defmodule WebtritAdapterWeb.Api.V1.SessionController do
         _params,
         %{refresh_token: refresh_token} = _body_params
       ) do
-    case WebtritAdatperToken.decrypt(:refresh, refresh_token) do
+    case WebtritAdapterToken.decrypt(:refresh, refresh_token) do
       {:ok, {:v1, refresh_token_id, usage_counter}} ->
         refresh_token = Session.inc_exact_usage_counter_and_get_refresh_token!(refresh_token_id, usage_counter)
 

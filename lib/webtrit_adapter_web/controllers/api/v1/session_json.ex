@@ -22,13 +22,13 @@ defmodule WebtritAdapterWeb.Api.V1.SessionJSON do
     %{
       user_id: Mapper.i_account_to_user_id(i_account),
       access_token:
-        WebtritAdatperToken.encrypt(
+        WebtritAdapterToken.encrypt(
           :access,
           {:v1, refresh_token_id, i_account},
           current_time_seconds
         ),
       refresh_token:
-        WebtritAdatperToken.encrypt(
+        WebtritAdapterToken.encrypt(
           :refresh,
           {:v1, refresh_token_id, usage_counter},
           current_time_seconds
