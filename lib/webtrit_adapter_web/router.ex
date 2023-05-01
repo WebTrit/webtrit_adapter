@@ -21,7 +21,7 @@ defmodule WebtritAdapterWeb.Router do
   scope "/", WebtritAdapterhWeb do
     pipe_through :swagger
 
-    get "/swagger",
+    get "/swagger-ui",
         OpenApiSpex.Plug.SwaggerUI,
         [
           path: "/api/v1/openapi",
