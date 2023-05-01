@@ -11,6 +11,9 @@ defmodule RuntimeConfig do
         nil ->
           message
 
+        value when is_binary(value) ->
+          message <> " - #{value}"
+
         value ->
           message <> " - #{inspect(value)}"
       end
