@@ -1,0 +1,59 @@
+name: Generate and deploy WebTrit Adapter OpenAPI Specification with Swagger UI
+
+on:
+  workflow_run:
+    workflows: [Create and publish WebTrit Adapter docker image]
+    types: [completed]
+    branches:
+      - main
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    permissions:
+      contents: read
+      packages: read
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository (required to mount the Github Workspace to a volume)
+        uses: actions/checkout@v3
+
+      - name: Generate Swagger UI
+        uses: Legion2/swagger-ui-action@v1
+        with:
+          output: _site
+          swagger-config-file: swagger-config.json
+
+      - name: Generate OpenAPI specification
+        uses: addnab/docker-run-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          image: ghcr.io/webtrit/webtrit_adapter:main
+          options: -v ${{ github.workspace }}/_site/openapi_spec:/_openapi_spec -u root:root --env-file env-stub.list
+          run: /app/bin/gen_openapi_spec > /_openapi_spec/webtrit_adapter_v1.json
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+
+  deploy:
+    needs: build
+
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
