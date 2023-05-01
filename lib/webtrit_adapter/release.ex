@@ -5,6 +5,22 @@ defmodule WebtritAdapter.Release do
   """
   @app :webtrit_adapter
 
+  def gen_openapi_spec do
+    load_app()
+
+    WebtritAdapterWeb.Api.V1.ApiSpec.spec()
+    |> OpenApiSpex.OpenApi.to_map(vendor_extensions: false)
+    |> OpenApiSpex.OpenApi.json_encoder().encode(pretty: true)
+    |> case do
+      {:ok, json} ->
+        IO.puts(:stdio, json)
+
+      {:error, error} ->
+        IO.puts(:stderr, "could not encode OpenAPI Specification, error: #{inspect(error)}")
+        exit({:shutdown, 123})
+    end
+  end
+
   def migrate do
     load_app()
 
