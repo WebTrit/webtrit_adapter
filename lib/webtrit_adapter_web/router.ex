@@ -25,6 +25,7 @@ defmodule WebtritAdapterWeb.Router do
         OpenApiSpex.Plug.SwaggerUI,
         [
           path: "/api/v1/openapi",
+          layout: "BaseLayout",
           display_operation_id: true,
           default_model_expand_depth: 3
         ],
