@@ -1,16 +1,18 @@
 defmodule WebtritAdapterWeb.Api.V1.ApiSpec do
   @behaviour OpenApiSpex.OpenApi
 
-  alias OpenApiSpex.{Info, Contact, Parameter, Schema, Server, Paths, Components, SecurityScheme}
+  alias OpenApiSpex.{Components, Contact, Info, Parameter, Paths, Schema, SecurityScheme, Server, ServerVariable}
   alias WebtritAdapterWeb.Router
 
   @api_v1_prefix "/api/v1"
 
   @impl true
-  def spec do
+  def spec(opts \\ []) do
+    servers_mode = Keyword.get(opts, :servers_mode, :relative)
+
     %OpenApiSpex.OpenApi{
       info: info(),
-      servers: servers(),
+      servers: servers(servers_mode),
       paths: api_v1_paths(),
       components: components()
     }
@@ -46,9 +48,23 @@ defmodule WebtritAdapterWeb.Api.V1.ApiSpec do
     }
   end
 
-  defp servers do
+  defp servers(:relative) do
     [
       %Server{url: @api_v1_prefix}
+    ]
+  end
+
+  defp servers(:absolute) do
+    [
+      %Server{
+        url: "https://{host}" <> @api_v1_prefix,
+        variables: %{
+          "host" => %ServerVariable{
+            description: "Adapter server host",
+            default: "adapter.demo.webtrit.com"
+          }
+        }
+      }
     ]
   end
 

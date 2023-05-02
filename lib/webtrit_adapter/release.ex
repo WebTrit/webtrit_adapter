@@ -8,7 +8,7 @@ defmodule WebtritAdapter.Release do
   def gen_openapi_spec do
     load_app()
 
-    WebtritAdapterWeb.Api.V1.ApiSpec.spec()
+    WebtritAdapterWeb.Api.V1.ApiSpec.spec(servers_mode: :absolute)
     |> OpenApiSpex.OpenApi.to_map(vendor_extensions: false)
     |> OpenApiSpex.OpenApi.json_encoder().encode(pretty: true)
     |> case do
