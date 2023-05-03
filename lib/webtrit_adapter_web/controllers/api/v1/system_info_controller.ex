@@ -11,11 +11,11 @@ defmodule WebtritAdapterWeb.Api.V1.SystemInfoController do
   alias WebtritAdapterWeb.Api.V1.GeneralSchema
   alias WebtritAdapterWeb.Api.V1.SupportedFunctionality
 
-  plug(OpenApiSpex.Plug.CastAndValidate, render_error: CastAndValidateRenderError)
+  plug OpenApiSpex.Plug.CastAndValidate, render_error: CastAndValidateRenderError
 
-  action_fallback(FallbackController)
+  action_fallback FallbackController
 
-  tags(["general"])
+  tags ["general"]
 
   OpenApiSpexExt.operation(:show,
     summary: "Retrieve system and Adaptee information",

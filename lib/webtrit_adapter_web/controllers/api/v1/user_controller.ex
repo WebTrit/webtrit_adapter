@@ -14,11 +14,11 @@ defmodule WebtritAdapterWeb.Api.V1.UserController do
   alias WebtritAdapterWeb.Api.V1.{CommonSchema, UserSchema}
   alias WebtritAdapterWeb.Api.V1.SessionJSON
 
-  plug(OpenApiSpex.Plug.CastAndValidate, render_error: CastAndValidateRenderError)
+  plug OpenApiSpex.Plug.CastAndValidate, render_error: CastAndValidateRenderError
 
-  action_fallback(FallbackController)
+  action_fallback FallbackController
 
-  tags(["user"])
+  tags ["user"]
 
   def action(conn, _) do
     apply(__MODULE__, action_name(conn), [conn, conn.params, conn.body_params])

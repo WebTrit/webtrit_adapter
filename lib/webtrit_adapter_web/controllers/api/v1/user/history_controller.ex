@@ -13,10 +13,10 @@ defmodule WebtritAdapterWeb.Api.V1.User.HistoryController do
 
   plug OpenApiSpex.Plug.CastAndValidate, render_error: CastAndValidateRenderError
 
-  action_fallback(FallbackController)
+  action_fallback FallbackController
 
-  tags(["user"])
-  security([%{"bearerAuth" => []}])
+  tags ["user"]
+  security [%{"bearerAuth" => []}]
 
   def action(%{assigns: %{i_account: i_account}} = conn, _) do
     apply(__MODULE__, action_name(conn), [conn, conn.params, i_account])
