@@ -1,7 +1,7 @@
 defmodule WebtritAdapterWeb.Api.V1.ApiSpec do
   @behaviour OpenApiSpex.OpenApi
 
-  alias OpenApiSpex.{Components, Contact, Info, Parameter, Paths, Schema, SecurityScheme, Server, ServerVariable}
+  alias OpenApiSpex.{Components, Contact, Info, Parameter, Paths, Schema, SecurityScheme, Server, ServerVariable, Tag}
   alias WebtritAdapterWeb.Router
 
   @api_v1_prefix "/api/v1"
@@ -14,7 +14,8 @@ defmodule WebtritAdapterWeb.Api.V1.ApiSpec do
       info: info(),
       servers: servers(servers_mode),
       paths: api_v1_paths(),
-      components: components()
+      components: components(),
+      tags: tags()
     }
     |> OpenApiSpex.resolve_schema_modules()
   end
@@ -98,5 +99,28 @@ defmodule WebtritAdapterWeb.Api.V1.ApiSpec do
         }
       }
     }
+  end
+
+  defp tags() do
+    [
+      %Tag{
+        name: "system",
+        description: """
+        Retrieve information about the features and capabilities of the **Adapter** and **Adaptee**
+        """
+      },
+      %Tag{
+        name: "session",
+        description: """
+        Authenticate users within the **Adaptee**
+        """
+      },
+      %Tag{
+        name: "user",
+        description: """
+        Access user information within the **Adaptee**
+        """
+      }
+    ]
   end
 end
