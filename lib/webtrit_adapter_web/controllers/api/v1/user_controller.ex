@@ -38,6 +38,9 @@ defmodule WebtritAdapterWeb.Api.V1.UserController do
       required: true
     },
     responses: [
+      CommonResponse.unprocessable([
+        :signup_limit_reached
+      ]),
       CommonResponse.external_api_issue(),
       ok: {
         """
@@ -68,16 +71,6 @@ defmodule WebtritAdapterWeb.Api.V1.UserController do
         "application/json",
         CommonSchema.error_response([
           :signup_disabled
-        ])
-      },
-      unprocessable_entity: {
-        """
-        Unprocessable Entity.
-        """,
-        "application/json",
-        CommonSchema.error_response([
-          :validation_error,
-          :signup_limit_reached
         ])
       }
     ]

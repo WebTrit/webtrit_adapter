@@ -44,6 +44,10 @@ defmodule WebtritAdapterWeb.Api.V1.SessionController do
       required: true
     },
     responses: [
+      CommonResponse.unprocessable([
+        :delivery_channel_unspecified,
+        :signup_limit_reached
+      ]),
       CommonResponse.external_api_issue(),
       ok: {
         """
@@ -71,17 +75,6 @@ defmodule WebtritAdapterWeb.Api.V1.SessionController do
         "application/json",
         CommonSchema.error_response([
           :signup_disabled
-        ])
-      },
-      unprocessable_entity: {
-        """
-        Unprocessable Entity.
-        """,
-        "application/json",
-        CommonSchema.error_response([
-          :validation_error,
-          :delivery_channel_unspecified,
-          :signup_limit_reached
         ])
       }
     ]
@@ -134,6 +127,12 @@ defmodule WebtritAdapterWeb.Api.V1.SessionController do
       required: true
     },
     responses: [
+      CommonResponse.unprocessable([
+        :otp_id_verified,
+        :otp_id_verification_attempts_exceeded,
+        :otp_id_timeout,
+        :code_incorrect
+      ]),
       CommonResponse.external_api_issue(),
       ok: {
         """
@@ -149,19 +148,6 @@ defmodule WebtritAdapterWeb.Api.V1.SessionController do
         "application/json",
         CommonSchema.error_response([
           :otp_id_not_found
-        ])
-      },
-      unprocessable_entity: {
-        """
-        Unprocessable Entity.
-        """,
-        "application/json",
-        CommonSchema.error_response([
-          :validation_error,
-          :otp_id_verified,
-          :otp_id_verification_attempts_exceeded,
-          :otp_id_timeout,
-          :code_incorrect
         ])
       }
     ]
@@ -295,6 +281,11 @@ defmodule WebtritAdapterWeb.Api.V1.SessionController do
     },
     responses: [
       CommonResponse.session_not_found(),
+      CommonResponse.unprocessable([
+        :refresh_token_invalid,
+        :refresh_token_expired,
+        :unknown
+      ]),
       CommonResponse.external_api_issue(),
       ok: {
         """
@@ -302,18 +293,6 @@ defmodule WebtritAdapterWeb.Api.V1.SessionController do
         """,
         "application/json",
         SessionSchema.Response
-      },
-      unprocessable_entity: {
-        """
-        Unprocessable Entity.
-        """,
-        "application/json",
-        CommonSchema.error_response([
-          :validation_error,
-          :refresh_token_invalid,
-          :refresh_token_expired,
-          :unknown
-        ])
       }
     ]
   )
