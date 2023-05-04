@@ -42,7 +42,7 @@ defmodule WebtritAdapterWeb.Router do
 
       get "/openapi", OpenApiSpex.Plug.RenderSpec, [], alias: false
 
-      resources "/system-info", SystemInfoController, only: [:show], singleton: true
+      resources "/system-info", System.InfoController, only: [:show], singleton: true
 
       scope "/session" do
         post "/", SessionController, :create

@@ -1,4 +1,4 @@
-defmodule WebtritAdapterWeb.Api.V1.SystemInfoController do
+defmodule WebtritAdapterWeb.Api.V1.System.InfoController do
   use WebtritAdapterWeb, :controller
   use OpenApiSpex.ControllerSpecs
 
@@ -8,14 +8,14 @@ defmodule WebtritAdapterWeb.Api.V1.SystemInfoController do
   alias WebtritAdapterWeb.Api.V1.CastAndValidateRenderError
   alias WebtritAdapterWeb.Api.V1.FallbackController
   alias WebtritAdapterWeb.Api.V1.CommonResponse
-  alias WebtritAdapterWeb.Api.V1.GeneralSchema
+  alias WebtritAdapterWeb.Api.V1.System.InfoSchema
   alias WebtritAdapterWeb.Api.V1.SupportedFunctionality
 
   plug OpenApiSpex.Plug.CastAndValidate, render_error: CastAndValidateRenderError
 
   action_fallback FallbackController
 
-  tags ["general"]
+  tags ["system"]
 
   OpenApiSpexExt.operation(:show,
     summary: "Retrieve system and Adaptee information",
@@ -31,7 +31,7 @@ defmodule WebtritAdapterWeb.Api.V1.SystemInfoController do
         Provides information about the **Adapter** and the connected **Adaptee**, including their supported functionalities and capabilities.
         """,
         "application/json",
-        GeneralSchema.SystemInfoResponse
+        InfoSchema.ShowResponse
       }
     ]
   )

@@ -1,11 +1,11 @@
-defmodule WebtritAdapterWeb.Api.V1.GeneralSchema do
+defmodule WebtritAdapterWeb.Api.V1.System.InfoSchema do
   require OpenApiSpex
   require OpenApiSpexExt
 
   alias OpenApiSpex.Schema
   alias WebtritAdapterWeb.Api.V1.SupportedFunctionality
 
-  defmodule SystemInfoResponse do
+  defmodule ShowResponse do
     OpenApiSpexExt.schema(%{
       type: :object,
       properties: %{
