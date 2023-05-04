@@ -57,7 +57,9 @@ defmodule WebtritAdapterWeb.Router do
     scope "/v1", V1 do
       pipe_through [:api_v1, :api_v1_auth]
 
-      resources "/session", SessionController, only: [:delete], singleton: true
+      scope "/session" do
+        delete "/", SessionController, :delete
+      end
 
       scope "/user", User do
         resources "/", InfoController, only: [:show], singleton: true
