@@ -54,8 +54,6 @@ defmodule WebtritAdapter.Application do
       {DemoAccountManager, demo_config},
       # Start the Endpoint (http/https)
       WebtritAdapterWeb.Endpoint
-      # Start a worker by calling: WebtritAdapter.Worker.start_link(arg)
-      # {WebtritAdapter.Worker, arg}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
