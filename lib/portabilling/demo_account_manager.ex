@@ -11,7 +11,7 @@ defmodule Portabilling.DemoAccountManager do
 
   defmodule Config do
     @type t :: %__MODULE__{
-            administrator_url: String.t() | nil,
+            administrator_url: URI.t() | nil,
             demo_i_customer: integer(),
             demo_i_custom_field: integer()
           }

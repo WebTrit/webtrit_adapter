@@ -4,8 +4,10 @@ defmodule Portabilling.Api do
 
   @json_library Phoenix.json_library()
 
-  @spec client(String.t()) :: Tesla.Client.t()
-  def client(base_url) do
+  @spec client(URI.t() | String.t() | nil) :: Tesla.Client.t()
+  def client(portabilling_url) do
+    base_url = portabilling_url |> to_string()
+
     middleware = [
       {Tesla.Middleware.BaseUrl, base_url},
       Tesla.Middleware.FormUrlencoded,

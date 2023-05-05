@@ -1,5 +1,5 @@
 defmodule Config.Portabilling do
-  @spec administrator_url :: String.t() | nil
+  @spec administrator_url :: URI.t() | nil
   def administrator_url do
     Application.get_env(:webtrit_adapter, Config.Portabilling.AdministratorUrl)
   end
@@ -22,7 +22,7 @@ defmodule Config.Portabilling do
     )
   end
 
-  @spec account_url :: String.t() | nil
+  @spec account_url :: URI.t() | nil
   def account_url do
     Application.get_env(:webtrit_adapter, Config.Portabilling.AccountUrl)
   end

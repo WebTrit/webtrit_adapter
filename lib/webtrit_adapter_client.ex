@@ -18,9 +18,12 @@ defmodule WebtritAdapterClient do
     end
   end
 
-  def new(adapter_base_url, access_token \\ nil) do
+  @spec new(URI.t() | String.t(), String.t() | nil) :: Tesla.Client.t()
+  def new(adapter_url, access_token \\ nil) do
+    base_url = URI.merge(URI.parse(adapter_url), "/api/v1") |> to_string()
+
     middleware = [
-      {Tesla.Middleware.BaseUrl, "#{adapter_base_url}/api/v1"},
+      {Tesla.Middleware.BaseUrl, base_url},
       {Middleware.BearerAuth, access_token: access_token},
       {Tesla.Middleware.JSON, engine: Phoenix.json_library()},
       Tesla.Middleware.Logger

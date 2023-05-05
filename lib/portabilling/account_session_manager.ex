@@ -7,8 +7,8 @@ defmodule Portabilling.AccountSessionManager do
 
   defmodule Config do
     @type t :: %__MODULE__{
-            administrator_url: String.t() | nil,
-            account_url: String.t() | nil,
+            administrator_url: URI.t() | nil,
+            account_url: URI.t() | nil,
             session_regenerate_period: non_neg_integer() | nil
           }
     defstruct administrator_url: nil,
@@ -136,7 +136,9 @@ defmodule Portabilling.AccountSessionManager do
 
   @impl true
   def terminate(reason, %State{session_ids: session_ids}) do
-    Logger.debug("terminate with reason [#{inspect(reason)}] and with session ids [#{inspect(session_ids)}]")
+    Logger.debug(
+      "terminate with reason [#{inspect(reason)}] and with session ids [#{inspect(session_ids)}]"
+    )
 
     :ok
   end

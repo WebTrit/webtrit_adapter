@@ -79,6 +79,17 @@ defmodule RuntimeConfig do
     end
   end
 
+  @spec get_env_as_uri(String.t()) :: nil | URI.t()
+  def get_env_as_uri(name) do
+    case get_env(name) do
+      nil ->
+        nil
+
+      value ->
+        URI.parse(value)
+    end
+  end
+
   defmodule EnvError do
     @enforce_keys [:name]
     defexception [:name, :example]
@@ -137,6 +148,29 @@ defmodule RuntimeConfig do
     def message(%{names: names}) do
       "environment variables #{inspect(names)} must be set and be not empty simultaneously"
     end
+  end
+
+  @spec get_env_as_uri!(String.t(), String.t() | nil, [String.t()] | nil) :: URI.t()
+  def get_env_as_uri!(name, example \\ nil, allowed_schemes \\ nil) do
+    uri = get_env_as_uri(name) || raise EnvError, name: name, example: example
+
+    if allowed_schemes == nil || uri.scheme in allowed_schemes do
+      uri
+    else
+      raise EnvValueError,
+        name: name,
+        explanation: "expected one of schemes #{inspect(allowed_schemes)}, got #{inspect(uri.scheme)}"
+    end
+  end
+
+  @spec get_env_as_http_uri!(String.t(), String.t() | nil) :: URI.t()
+  def get_env_as_http_uri!(name, example \\ nil) do
+    get_env_as_uri!(name, example, ["http", "https"])
+  end
+
+  @spec get_env_as_ws_uri!(String.t(), String.t() | nil) :: URI.t()
+  def get_env_as_ws_uri!(name, example \\ nil) do
+    get_env_as_uri!(name, example, ["ws", "wss"])
   end
 
   @spec ensure_get_all_or_none_envs!([String.t()]) :: nil | [String.t()]

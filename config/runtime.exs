@@ -109,7 +109,7 @@ case RuntimeConfig.get_env_as_boolean("SKIP_MIGRATE_ON_STARTUP") do
 end
 
 RuntimeConfig.config_env_try do
-  case RuntimeConfig.get_env!("PORTABILLING_ADMINISTRATOR_URL", "https://demo.portaone.com/rest") do
+  case RuntimeConfig.get_env_as_http_uri!("PORTABILLING_ADMINISTRATOR_URL", "https://demo.portaone.com/rest") do
     portabilling_administrator_url ->
       config :webtrit_adapter,
              Config.Portabilling.AdministratorUrl,
@@ -145,7 +145,7 @@ RuntimeConfig.config_env_try do
 end
 
 RuntimeConfig.config_env_try do
-  case RuntimeConfig.get_env!("PORTABILLING_ACCOUNT_URL", "https://demo.portaone.com:8445/rest") do
+  case RuntimeConfig.get_env_as_http_uri!("PORTABILLING_ACCOUNT_URL", "https://demo.portaone.com:8445/rest") do
     portabilling_account_url ->
       config :webtrit_adapter, Config.Portabilling.AccountUrl, portabilling_account_url
   end

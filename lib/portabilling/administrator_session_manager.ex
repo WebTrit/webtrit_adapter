@@ -7,7 +7,7 @@ defmodule Portabilling.AdministratorSessionManager do
 
   defmodule Config do
     @type t :: %__MODULE__{
-            administrator_url: String.t() | nil,
+            administrator_url: URI.t() | nil,
             login: String.t() | nil,
             token: String.t() | nil,
             session_regenerate_period: non_neg_integer() | nil
