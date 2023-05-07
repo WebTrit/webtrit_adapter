@@ -1,4 +1,6 @@
 defmodule WebtritAdapterClient do
+  @type result() :: {Tesla.Env.status(), Tesla.Env.body()} | {:error, any()}
+
   defmodule Middleware.BearerAuth do
     @behaviour Tesla.Middleware
 
@@ -32,7 +34,7 @@ defmodule WebtritAdapterClient do
     Tesla.client(middleware)
   end
 
-  @spec get_system_info(Tesla.Client.t()) :: {:error | Tesla.Env.status(), map()}
+  @spec get_system_info(Tesla.Client.t()) :: result()
   def get_system_info(client) do
     options = [
       method: :get,
@@ -42,8 +44,7 @@ defmodule WebtritAdapterClient do
     request(client, options)
   end
 
-  @spec create_session_otp(Tesla.Client.t(), String.t(), String.t() | nil) ::
-          {:error | Tesla.Env.status(), map()}
+  @spec create_session_otp(Tesla.Client.t(), String.t(), String.t() | nil) :: result()
   def create_session_otp(client, user_ref, tenant_id \\ nil) do
     options = [
       method: :post,
@@ -58,8 +59,7 @@ defmodule WebtritAdapterClient do
     request(client, options)
   end
 
-  @spec verify_session_otp(Tesla.Client.t(), String.t(), String.t()) ::
-          {:error | Tesla.Env.status(), map()}
+  @spec verify_session_otp(Tesla.Client.t(), String.t(), String.t()) :: result()
   def verify_session_otp(client, otp_id, code) do
     options = [
       method: :post,
@@ -73,8 +73,7 @@ defmodule WebtritAdapterClient do
     request(client, options)
   end
 
-  @spec create_session(Tesla.Client.t(), String.t(), String.t(), String.t() | nil) ::
-          {:error | Tesla.Env.status(), map()}
+  @spec create_session(Tesla.Client.t(), String.t(), String.t(), String.t() | nil) :: result()
   def create_session(client, login, password, tenant_id \\ nil) do
     options = [
       method: :post,
@@ -90,7 +89,7 @@ defmodule WebtritAdapterClient do
     request(client, options)
   end
 
-  @spec update_session(Tesla.Client.t(), String.t()) :: {:error | Tesla.Env.status(), map()}
+  @spec update_session(Tesla.Client.t(), String.t()) :: result()
   def update_session(client, refresh_token) do
     options = [
       method: :patch,
@@ -103,7 +102,7 @@ defmodule WebtritAdapterClient do
     request(client, options)
   end
 
-  @spec delete_session(Tesla.Client.t()) :: {:error | Tesla.Env.status(), any()}
+  @spec delete_session(Tesla.Client.t()) :: result()
   def delete_session(client) do
     options = [
       method: :delete,
@@ -113,7 +112,7 @@ defmodule WebtritAdapterClient do
     request(client, options)
   end
 
-  @spec create_user(Tesla.Client.t(), map()) :: {:error | Tesla.Env.status(), map()}
+  @spec create_user(Tesla.Client.t(), map()) :: result()
   def create_user(client, data) do
     options = [
       method: :post,
@@ -124,7 +123,7 @@ defmodule WebtritAdapterClient do
     request(client, options)
   end
 
-  @spec get_user_info(Tesla.Client.t()) :: {:error | Tesla.Env.status(), map()}
+  @spec get_user_info(Tesla.Client.t()) :: result()
   def get_user_info(client) do
     options = [
       method: :get,
@@ -134,7 +133,7 @@ defmodule WebtritAdapterClient do
     request(client, options)
   end
 
-  @spec get_user_contact_list(Tesla.Client.t()) :: {:error | Tesla.Env.status(), map()}
+  @spec get_user_contact_list(Tesla.Client.t()) :: result()
   def get_user_contact_list(client) do
     options = [
       method: :get,
@@ -144,8 +143,7 @@ defmodule WebtritAdapterClient do
     request(client, options)
   end
 
-  @spec get_user_history_list(Tesla.Client.t(), Tesla.Env.query() | nil) ::
-          {:error | Tesla.Env.status(), map()}
+  @spec get_user_history_list(Tesla.Client.t(), Tesla.Env.query() | nil) :: result()
   def get_user_history_list(client, query \\ []) do
     options = [
       method: :get,
@@ -156,8 +154,7 @@ defmodule WebtritAdapterClient do
     request(client, options)
   end
 
-  @spec get_user_recording(Tesla.Client.t(), String.t()) ::
-          {:error | Tesla.Env.status(), binary()}
+  @spec get_user_recording(Tesla.Client.t(), String.t()) :: result()
   def get_user_recording(client, recording_id) do
     options = [
       method: :get,
