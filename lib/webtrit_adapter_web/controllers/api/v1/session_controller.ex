@@ -67,15 +67,6 @@ defmodule WebtritAdapterWeb.Api.V1.SessionController do
         CommonSchema.error_response([
           :user_not_found
         ])
-      },
-      method_not_allowed: {
-        """
-        Method Not Allowed. Signup behavior disabled.
-        """,
-        "application/json",
-        CommonSchema.error_response([
-          :signup_disabled
-        ])
       }
     ]
   )
