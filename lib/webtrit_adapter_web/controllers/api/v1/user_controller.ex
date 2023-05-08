@@ -96,7 +96,7 @@ defmodule WebtritAdapterWeb.Api.V1.UserController do
               |> render(:otp_create, otp: otp, email: email)
 
             {500, %{"faultcode" => "Server.AccessControl.empty_rec_and_bcc"}} ->
-              {:error, :unprocessable_entity, :delivery_channel_unspecified}
+              {:error, :unprocessable_entity, :validation_error}
 
             _ ->
               {:error, :internal_server_error, :external_api_issue}
