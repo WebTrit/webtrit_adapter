@@ -98,14 +98,7 @@ defmodule WebtritAdapterWeb.Api.V1.SessionSchema do
       type: :object,
       properties: %{
         user_id: CommonSchema.UserId,
-        access_token: %Schema{
-          type: :string,
-          description: """
-          The `access_token` to be used in subsequent API
-          requests on behalf of the `user` (by default it is
-          placed in the bearer auth HTTP header).
-          """
-        },
+        access_token: CommonSchema.AccessToken,
         refresh_token: CommonSchema.RefreshToken
       },
       required: [:user_id, :access_token, :expires_at]
