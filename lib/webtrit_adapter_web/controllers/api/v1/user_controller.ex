@@ -18,7 +18,7 @@ defmodule WebtritAdapterWeb.Api.V1.UserController do
 
   action_fallback FallbackController
 
-  tags ["user"]
+  tags ["user", "session"]
 
   def action(conn, _) do
     apply(__MODULE__, action_name(conn), [conn, conn.params, conn.body_params])
