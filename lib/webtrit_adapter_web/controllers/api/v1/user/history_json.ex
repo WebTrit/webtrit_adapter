@@ -26,6 +26,7 @@ defmodule WebtritAdapterWeb.Api.V1.User.HistoryJSON do
       status: Mapping.call_status(xdr),
       disconnected_reason: xdr["disconnect_reason"],
       connect_time: Mapping.connect_time(xdr, time_zone),
+      disconnect_time: Mapping.disconnect_time(xdr, time_zone),
       duration: xdr["charged_quantity"],
       recording_id: if(Mapping.call_recording_exist(xdr), do: xdr["i_xdr"], else: nil)
     }

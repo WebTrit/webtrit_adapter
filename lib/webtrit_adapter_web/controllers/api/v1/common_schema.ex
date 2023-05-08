@@ -200,6 +200,12 @@ defmodule WebtritAdapterWeb.Api.V1.CommonSchema do
           description: "Datetime of the call connection in ISO format.",
           example: "2023-01-01T09:00:00Z"
         },
+        disconnect_time: %Schema{
+          type: :string,
+          format: :"date-time",
+          description: "Datetime of the call disconnection in ISO format.",
+          example: "2023-01-01T09:01:00Z"
+        },
         duration: %Schema{
           type: :integer,
           description: "Call duration (in seconds), 0 for failed calls.",

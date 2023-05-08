@@ -116,6 +116,14 @@ defmodule WebtritAdapterWeb.Api.V1.User.Mapping do
   defp xdr_to_call_status(_, _, _), do: :error
 
   def connect_time(xdr, time_zone) do
-    xdr["connect_time"] |> NaiveDateTime.from_iso8601!() |> DateTime.from_naive!(time_zone)
+    xdr["connect_time"] |> xdr_time_to_datetime!(time_zone)
+  end
+
+  def disconnect_time(xdr, time_zone) do
+    xdr["disconnect_time"] |> xdr_time_to_datetime!(time_zone)
+  end
+
+  defp xdr_time_to_datetime!(xdr_time, time_zone) do
+    xdr_time |> NaiveDateTime.from_iso8601!() |> DateTime.from_naive!(time_zone)
   end
 end
