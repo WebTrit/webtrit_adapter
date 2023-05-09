@@ -35,7 +35,7 @@ config :tesla,
        :adapter,
        {Tesla.Adapter.Finch, name: WebtritAdapter.Finch, pool_timeout: 60_000, receive_timeout: 15_000}
 
-config :webtrit_adapter, Config.Adapter.SkipMigrateOnStartup, true
+config :webtrit_adapter, :skip_migrate_on_startup, true
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

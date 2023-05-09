@@ -104,7 +104,7 @@ case RuntimeConfig.get_env_as_boolean("SKIP_MIGRATE_ON_STARTUP") do
 
   skip_migrate_on_startup ->
     config :webtrit_adapter,
-           Config.Adapter.SkipMigrateOnStartup,
+           :skip_migrate_on_startup,
            skip_migrate_on_startup
 end
 
@@ -112,7 +112,7 @@ RuntimeConfig.config_env_try do
   case RuntimeConfig.get_env_as_http_uri!("PORTABILLING_ADMINISTRATOR_URL", "https://demo.portaone.com/rest") do
     portabilling_administrator_url ->
       config :webtrit_adapter,
-             Config.Portabilling.AdministratorUrl,
+             :portabilling_administrator_url,
              portabilling_administrator_url
   end
 end
@@ -121,7 +121,7 @@ RuntimeConfig.config_env_try do
   case RuntimeConfig.get_env!("PORTABILLING_ADMINISTRATOR_LOGIN", "webtrit") do
     portabilling_administrator_login ->
       config :webtrit_adapter,
-             Config.Portabilling.AdministratorLogin,
+             :portabilling_administrator_login,
              portabilling_administrator_login
   end
 end
@@ -130,7 +130,7 @@ RuntimeConfig.config_env_try do
   case RuntimeConfig.get_env!("PORTABILLING_ADMINISTRATOR_TOKEN", "00000000-0000-0000-0000-000000000000") do
     portabilling_administrator_token ->
       config :webtrit_adapter,
-             Config.Portabilling.AdministratorToken,
+             :portabilling_administrator_token,
              portabilling_administrator_token
   end
 end
@@ -139,7 +139,7 @@ RuntimeConfig.config_env_try do
   case RuntimeConfig.get_env_as_non_neg_integer!("PORTABILLING_ADMINISTRATOR_SESSION_REGENERATE_PERIOD", "43200000") do
     portabilling_administrator_session_regenerate_period ->
       config :webtrit_adapter,
-             Config.Portabilling.AdministratorSessionRegeneratePeriod,
+             :portabilling_administrator_session_regenerate_period,
              portabilling_administrator_session_regenerate_period
   end
 end
@@ -147,7 +147,7 @@ end
 RuntimeConfig.config_env_try do
   case RuntimeConfig.get_env_as_http_uri!("PORTABILLING_ACCOUNT_URL", "https://demo.portaone.com:8445/rest") do
     portabilling_account_url ->
-      config :webtrit_adapter, Config.Portabilling.AccountUrl, portabilling_account_url
+      config :webtrit_adapter, :portabilling_account_url, portabilling_account_url
   end
 end
 
@@ -155,7 +155,7 @@ RuntimeConfig.config_env_try do
   case RuntimeConfig.get_env_as_non_neg_integer!("PORTABILLING_ACCOUNT_SESSION_REGENERATE_PERIOD", "43200000") do
     portabilling_account_session_regenerate_period ->
       config :webtrit_adapter,
-             Config.Portabilling.AccountSessionRegeneratePeriod,
+             :portabilling_account_session_regenerate_period,
              portabilling_account_session_regenerate_period
   end
 end
@@ -164,7 +164,7 @@ RuntimeConfig.config_env_try do
   case RuntimeConfig.get_env_from_allowed_values!("PORTABILLING_SIGNIN_CREDENTIALS", ["self-care", "sip"]) do
     signin_credentials ->
       config :webtrit_adapter,
-             Config.Portabilling.SigninCredentials,
+             :portabilling_signin_credentials,
              signin_credentials |> String.replace("-", "_") |> String.to_atom()
   end
 end
@@ -179,11 +179,11 @@ RuntimeConfig.config_env_try do
 
     [portabilling_demo_i_customer, portabilling_demo_i_custom_field] ->
       config :webtrit_adapter,
-             Config.Portabilling.DemoICustomer,
+             :portabilling_demo_i_customer,
              portabilling_demo_i_customer
 
       config :webtrit_adapter,
-             Config.Portabilling.DemoICustomField,
+             :portabilling_demo_i_custom_field,
              portabilling_demo_i_custom_field
   end
 end
@@ -192,7 +192,7 @@ RuntimeConfig.config_env_try do
   case RuntimeConfig.get_env!("PORTASIP_HOST", "sip.webtrit.com") do
     portasip_host ->
       config :webtrit_adapter,
-             Config.Portasip.Host,
+             :portasip_host,
              portasip_host
   end
 end
@@ -200,22 +200,22 @@ end
 case RuntimeConfig.get_env_as_non_neg_integer("PORTASIP_PORT") do
   portasip_port ->
     config :webtrit_adapter,
-           Config.Portasip.Port,
+           :portasip_port,
            portasip_port
 end
 
-case RuntimeConfig.get_env_as_boolean("JANUSSIP_FORCE_TCP") do
-  janussip_force_tcp ->
+case RuntimeConfig.get_env_as_boolean("JANUS_SIP_FORCE_TCP") do
+  janus_sip_force_tcp ->
     config :webtrit_adapter,
-           Config.Janussip.ForceTcp,
-           janussip_force_tcp
+           :janus_sip_force_tcp,
+           janus_sip_force_tcp
 end
 
 RuntimeConfig.config_env_try do
   case RuntimeConfig.get_env_as_non_neg_integer!("OTP_TIMEOUT") do
     otp_timeout ->
       config :webtrit_adapter,
-             Config.Otp.Timeout,
+             :otp_timeout,
              otp_timeout
   end
 end
@@ -224,7 +224,7 @@ RuntimeConfig.config_env_try do
   case RuntimeConfig.get_env_as_non_neg_integer!("OTP_VERIFICATION_ATTEMPT_LIMIT") do
     otp_verification_attempt_limit ->
       config :webtrit_adapter,
-             Config.Otp.VerificationAttemptLimit,
+             :otp_verification_attempt_limit,
              otp_verification_attempt_limit
   end
 end
@@ -232,13 +232,13 @@ end
 case RuntimeConfig.get_env("OTP_IGNORE_ACCOUNTS") do
   nil ->
     config :webtrit_adapter,
-           Config.Otp.IgnoreAccounts,
+           :otp_ignore_accounts,
            []
 
   otp_ignore_accounts ->
     otp_ignore_accounts_list = otp_ignore_accounts |> String.split(~r/[,;]/, trim: true) |> Enum.map(&String.trim/1)
 
     config :webtrit_adapter,
-           Config.Otp.IgnoreAccounts,
+           :otp_ignore_accounts,
            otp_ignore_accounts_list
 end

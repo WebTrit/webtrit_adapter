@@ -5,36 +5,33 @@ defmodule WebtritAdapter.Application do
 
   use Application
 
-  import Config.Adapter
-  import Config.Portabilling
-
   alias Portabilling.AdministratorSessionManager
   alias Portabilling.AccountSessionManager
   alias Portabilling.DemoAccountManager
 
   @impl true
   def start(_type, _args) do
-    unless skip_migrate_on_startup?() do
+    unless WebtritAdapterConfig.skip_migrate_on_startup?() do
       WebtritAdapter.Release.migrate()
     end
 
     administrator_config = %AdministratorSessionManager.Config{
-      administrator_url: administrator_url(),
-      login: administrator_login(),
-      token: administrator_token(),
-      session_regenerate_period: administrator_session_regenerate_period()
+      administrator_url: WebtritAdapterConfig.portabilling_administrator_url(),
+      login: WebtritAdapterConfig.portabilling_administrator_login(),
+      token: WebtritAdapterConfig.portabilling_administrator_token(),
+      session_regenerate_period: WebtritAdapterConfig.portabilling_administrator_session_regenerate_period()
     }
 
     account_config = %AccountSessionManager.Config{
-      administrator_url: administrator_url(),
-      account_url: account_url(),
-      session_regenerate_period: account_session_regenerate_period()
+      administrator_url: WebtritAdapterConfig.portabilling_administrator_url(),
+      account_url: WebtritAdapterConfig.portabilling_account_url(),
+      session_regenerate_period: WebtritAdapterConfig.portabilling_account_session_regenerate_period()
     }
 
     demo_config = %DemoAccountManager.Config{
-      administrator_url: administrator_url(),
-      demo_i_customer: demo_i_customer(),
-      demo_i_custom_field: demo_i_custom_field()
+      administrator_url: WebtritAdapterConfig.portabilling_administrator_url(),
+      demo_i_customer: WebtritAdapterConfig.portabilling_demo_i_customer(),
+      demo_i_custom_field: WebtritAdapterConfig.portabilling_demo_i_custom_field()
     }
 
     children = [

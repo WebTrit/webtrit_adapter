@@ -1,7 +1,4 @@
 defmodule WebtritAdapterWeb.Api.V1.User.InfoJSON do
-  import Config.Portasip
-  import Config.Janussip
-
   alias WebtritAdapterWeb.Api.V1.User.Mapping
 
   def show(%{account_info: account_info, alias_list: alias_list}) do
@@ -10,9 +7,9 @@ defmodule WebtritAdapterWeb.Api.V1.User.InfoJSON do
         login: account_info["id"],
         password: account_info["h323_password"],
         sip_server: %{
-          host: host(),
-          port: port(),
-          force_tcp: force_tcp()
+          host: WebtritAdapterConfig.portasip_host(),
+          port: WebtritAdapterConfig.portasip_port(),
+          force_tcp: WebtritAdapterConfig.janus_sip_force_tcp()
         },
         registration_server: nil,
         display_name: Mapping.display_name(account_info)

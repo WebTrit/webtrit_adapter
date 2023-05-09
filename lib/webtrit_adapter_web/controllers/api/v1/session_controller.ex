@@ -77,7 +77,7 @@ defmodule WebtritAdapterWeb.Api.V1.SessionController do
            %{"id" => user_ref}
          ) do
       {200, %{"account_info" => %{"i_account" => i_account}}} ->
-        ignore = Config.Otp.ignore_account?(user_ref)
+        ignore = WebtritAdapterConfig.otp_ignore_account?(user_ref)
 
         case skip_create_otp(ignore) ||
                Api.Administrator.AccessControl.create_otp(
@@ -145,7 +145,7 @@ defmodule WebtritAdapterWeb.Api.V1.SessionController do
   )
 
   def otp_verify(conn, _params, %{otp_id: otp_id, code: code} = _body_params) do
-    attempt_limit = Config.Otp.verification_attempt_limit()
+    attempt_limit = WebtritAdapterConfig.otp_verification_attempt_limit()
 
     case Session.inc_attempt_count_and_get_otp!(otp_id) do
       %Otp{verified: true} ->
@@ -229,7 +229,7 @@ defmodule WebtritAdapterWeb.Api.V1.SessionController do
 
   def create(conn, _params, %{login: login, password: password} = _body_params) do
     {login_key, password_key} =
-      case Config.Portabilling.signin_credentials() do
+      case WebtritAdapterConfig.portabilling_signin_credentials() do
         :self_care ->
           {"login", "password"}
 
@@ -355,7 +355,7 @@ defmodule WebtritAdapterWeb.Api.V1.SessionController do
   end
 
   defp otp_id_timeout?(inserted_at, now \\ NaiveDateTime.utc_now()) do
-    valid_until = NaiveDateTime.add(inserted_at, Config.Otp.timeout(), :millisecond)
+    valid_until = NaiveDateTime.add(inserted_at, WebtritAdapterConfig.otp_timeout(), :millisecond)
     NaiveDateTime.compare(valid_until, now) == :lt
   end
 end

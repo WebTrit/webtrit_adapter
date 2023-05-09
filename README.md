@@ -38,7 +38,7 @@ Environment variables descriptions:
     with `0` default value) (optional, can be defined only with `PORTABILLING_DEMO_I_CUSTOMER`)
   * `PORTASIP_HOST` - PortaSIP host
   * `PORTASIP_PORT` - PortaSIP port (optional)
-  * `JANUSSIP_FORCE_TCP` - forces TCP for the SIP messaging (optional, default value is `true`)
+  * `JANUS_SIP_FORCE_TCP` - forces TCP for the SIP messaging (optional, default value is `true`)
   * `OTP_TIMEOUT` - timeout for OTP verification in milliseconds
   * `OTP_VERIFICATION_ATTEMPT_LIMIT` - maximum attempts to enter a valid OTP verification code
   * `OTP_IGNORE_ACCOUNTS` - a list of account's phone (aka account `id`) which can use any
