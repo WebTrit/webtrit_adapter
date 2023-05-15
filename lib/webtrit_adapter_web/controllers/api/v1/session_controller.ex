@@ -145,14 +145,14 @@ defmodule WebtritAdapterWeb.Api.V1.SessionController do
   )
 
   def otp_verify(conn, _params, %{otp_id: otp_id, code: code} = _body_params) do
-    attempt_limit = WebtritAdapterConfig.otp_verification_attempt_limit()
+    attempts_limit = WebtritAdapterConfig.otp_verification_attempts_limit()
 
-    case Session.inc_attempt_count_and_get_otp!(otp_id) do
+    case Session.inc_attempts_count_and_get_otp!(otp_id) do
       %Otp{verified: true} ->
         {:error, :unprocessable_entity, :otp_id_verified}
 
-      %Otp{attempt_count: attempt_count} when attempt_count > attempt_limit ->
-        {:error, :unprocessable_entity, :otp_id_verification_attempt_exceeded}
+      %Otp{attempts_count: attempts_count} when attempts_count > attempts_limit ->
+        {:error, :unprocessable_entity, :otp_id_verification_attempts_exceeded}
 
       %Otp{i_account: i_account, ignore: ignore, demo: demo, inserted_at: inserted_at} = otp ->
         if otp_id_timeout?(inserted_at) do

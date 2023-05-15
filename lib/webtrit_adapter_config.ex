@@ -71,9 +71,9 @@ defmodule WebtritAdapterConfig do
     Application.get_env(:webtrit_adapter, :otp_timeout)
   end
 
-  @spec otp_verification_attempt_limit :: non_neg_integer()
-  def otp_verification_attempt_limit do
-    Application.get_env(:webtrit_adapter, :otp_verification_attempt_limit)
+  @spec otp_verification_attempts_limit :: non_neg_integer()
+  def otp_verification_attempts_limit do
+    Application.get_env(:webtrit_adapter, :otp_verification_attempts_limit)
   end
 
   @spec otp_ignore_accounts :: [String.t()]

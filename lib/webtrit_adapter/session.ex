@@ -37,13 +37,13 @@ defmodule WebtritAdapter.Session do
   """
   def get_otp!(id), do: Repo.get!(Otp, id)
 
-  def inc_attempt_count_and_get_otp!(id) do
+  def inc_attempts_count_and_get_otp!(id) do
     field_value_list = Utils.Schema.prepare_autoupdate_field_value_list(Otp)
 
     queryable =
       from(otp in Otp,
         where: otp.id == ^id,
-        update: [set: ^field_value_list, inc: [attempt_count: 1]],
+        update: [set: ^field_value_list, inc: [attempts_count: 1]],
         select: otp
       )
 

@@ -221,11 +221,11 @@ RuntimeConfig.config_env_try do
 end
 
 RuntimeConfig.config_env_try do
-  case RuntimeConfig.get_env_as_non_neg_integer!("OTP_VERIFICATION_ATTEMPT_LIMIT") do
-    otp_verification_attempt_limit ->
+  case RuntimeConfig.get_env_as_non_neg_integer!("OTP_VERIFICATION_ATTEMPTS_LIMIT") do
+    otp_verification_attempts_limit ->
       config :webtrit_adapter,
-             :otp_verification_attempt_limit,
-             otp_verification_attempt_limit
+             :otp_verification_attempts_limit,
+             otp_verification_attempts_limit
   end
 end
 

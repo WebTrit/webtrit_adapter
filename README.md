@@ -38,7 +38,7 @@ Environment variables descriptions:
   * `PORTASIP_PORT` - PortaSIP port (optional)
   * `JANUS_SIP_FORCE_TCP` - forces TCP for the SIP messaging (optional, default value is `true`)
   * `OTP_TIMEOUT` - timeout for OTP verification in milliseconds
-  * `OTP_VERIFICATION_ATTEMPT_LIMIT` - maximum attempts to enter a valid OTP verification code
+  * `OTP_VERIFICATION_ATTEMPTS_LIMIT` - maximum attempts to enter a valid OTP verification code
   * `OTP_IGNORE_ACCOUNTS` - a list of account's phone (aka account `id`) which can use any
     OTP verification code for authentication - usually used for demo purpose;
     accounts are delimited by *commas* or *semicolumn*, for example: `"12345,67890"`

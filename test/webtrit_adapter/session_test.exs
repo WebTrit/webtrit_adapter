@@ -18,13 +18,13 @@ defmodule WebtritAdapter.SessionTest do
       assert Session.get_otp!(otp.id) == otp
     end
 
-    test "inc_attempt_count_and_get_otp/1 increment attempt_count by 1" do
+    test "inc_attempts_count_and_get_otp/1 increment attempts_count by 1" do
       otp = otp_fixture()
-      assert otp.attempt_count == 0
-      otp = Session.inc_attempt_count_and_get_otp!(otp.id)
-      assert otp.attempt_count == 1
-      otp = Session.inc_attempt_count_and_get_otp!(otp.id)
-      assert otp.attempt_count == 2
+      assert otp.attempts_count == 0
+      otp = Session.inc_attempts_count_and_get_otp!(otp.id)
+      assert otp.attempts_count == 1
+      otp = Session.inc_attempts_count_and_get_otp!(otp.id)
+      assert otp.attempts_count == 2
     end
 
     test "create_otp/1 with valid data creates a otp" do
@@ -32,7 +32,7 @@ defmodule WebtritAdapter.SessionTest do
 
       assert {:ok, %Otp{} = otp} = Session.create_otp(valid_attrs)
       assert otp.i_account == 123
-      assert otp.attempt_count == 0
+      assert otp.attempts_count == 0
       assert otp.verified == false
       assert otp.demo == true
       assert otp.ignore == true
@@ -47,16 +47,16 @@ defmodule WebtritAdapter.SessionTest do
     test "update_otp/2 with valid data updates the otp" do
       otp = otp_fixture()
 
-      assert {:ok, %Otp{} = otp} = Session.update_otp(otp, %{attempt_count: 100})
+      assert {:ok, %Otp{} = otp} = Session.update_otp(otp, %{attempts_count: 100})
       assert otp.i_account == 1
-      assert otp.attempt_count == 100
+      assert otp.attempts_count == 100
       assert otp.verified == false
       assert otp.demo == true
       assert otp.ignore == true
 
       assert {:ok, %Otp{} = otp} = Session.update_otp(otp, %{verified: true})
       assert otp.i_account == 1
-      assert otp.attempt_count == 100
+      assert otp.attempts_count == 100
       assert otp.verified == true
       assert otp.demo == true
       assert otp.ignore == true
@@ -64,7 +64,7 @@ defmodule WebtritAdapter.SessionTest do
 
     test "update_otp/2 with invalid data returns error changeset" do
       otp = otp_fixture()
-      assert {:error, %Ecto.Changeset{}} = Session.update_otp(otp, %{attempt_count: -1})
+      assert {:error, %Ecto.Changeset{}} = Session.update_otp(otp, %{attempts_count: -1})
       assert otp == Session.get_otp!(otp.id)
     end
 
