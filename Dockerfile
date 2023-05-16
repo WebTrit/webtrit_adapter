@@ -67,8 +67,7 @@ COPY --from=builder --chown=nobody:root /app/_build/${MIX_ENV}/rel/webtrit_adapt
 
 USER nobody
 
-ENTRYPOINT ["/app/bin/server"]
-CMD ["start"]
+CMD ["/app/bin/server"]
 
 HEALTHCHECK --interval=1m --timeout=5s --start-period=30s \
   CMD curl -f http://localhost:4001/api/health-check || exit 1
