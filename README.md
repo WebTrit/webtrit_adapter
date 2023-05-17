@@ -10,6 +10,9 @@ Now you can visit [`localhost:4001`](http://localhost:4001) from your browser.
 ## Configuration
 
 Environment variables descriptions:
+  * `LOGGER_LEVEL` - the initial logger level, can be one of the following values:
+    `emergency`, `alert`, `critical`, `error`, `warning`, `notice`, `info`, `debug`
+    (optional, default value is `info`)
   * `SKIP_MIGRATE_ON_STARTUP` - skips running migrations on application startup
     (optional, default value is `false` for *prod* and `true` for *all other env*)
   * `DATABASE_URL` - [Ecto.Repo](https://hexdocs.pm/ecto/Ecto.Repo.html) URL;

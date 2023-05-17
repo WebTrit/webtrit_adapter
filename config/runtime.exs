@@ -98,6 +98,14 @@ end
 
 require RuntimeConfig
 
+case RuntimeConfig.get_env_as_logger_level("LOGGER_LEVEL") do
+  nil ->
+    nil
+
+  logger_level ->
+    config :logger, level: logger_level
+end
+
 case RuntimeConfig.get_env_as_boolean("SKIP_MIGRATE_ON_STARTUP") do
   nil ->
     nil
