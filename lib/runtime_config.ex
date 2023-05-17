@@ -31,6 +31,23 @@ defmodule RuntimeConfig do
     end
   end
 
+  @spec get_env_from_allowed_values(String.t(), [String.t()]) :: nil | String.t()
+  def get_env_from_allowed_values(name, allowed_values) do
+    case get_env(name) do
+      nil ->
+        nil
+
+      value ->
+        if value in allowed_values do
+          value
+        else
+          raise EnvValueError,
+            name: name,
+            explanation: "expected one of #{inspect(allowed_values)}, got #{inspect(value)}"
+        end
+    end
+  end
+
   @spec get_env_as_integer(String.t()) :: nil | integer()
   def get_env_as_integer(name) do
     case get_env(name) do
@@ -90,6 +107,26 @@ defmodule RuntimeConfig do
     end
   end
 
+  @spec get_env_as_logger_level(String.t()) :: nil | Logger.level()
+  def get_env_as_logger_level(name) do
+    case get_env_from_allowed_values(name, [
+           "emergency",
+           "alert",
+           "critical",
+           "error",
+           "warning",
+           "notice",
+           "info",
+           "debug"
+         ]) do
+      nil ->
+        nil
+
+      value ->
+        String.to_atom(value)
+    end
+  end
+
   defmodule EnvError do
     @enforce_keys [:name]
     defexception [:name, :example]
@@ -115,19 +152,7 @@ defmodule RuntimeConfig do
 
   @spec get_env_from_allowed_values!(String.t(), [String.t()]) :: String.t()
   def get_env_from_allowed_values!(name, allowed_values) do
-    case get_env(name) do
-      nil ->
-        raise EnvError, name: name
-
-      value ->
-        if value in allowed_values do
-          value
-        else
-          raise EnvValueError,
-            name: name,
-            explanation: "expected one of #{inspect(allowed_values)}, got #{inspect(value)}"
-        end
-    end
+    get_env_from_allowed_values(name, allowed_values) || raise EnvError, name: name
   end
 
   @spec get_env_as_integer!(String.t(), String.t() | nil) :: integer()
