@@ -3,6 +3,7 @@ defmodule WebtritAdapterWeb.Api.V1.User.InfoJSON do
 
   def show(%{account_info: account_info, alias_list: alias_list}) do
     %{
+      status: Mapping.status(account_info),
       sip: %{
         login: account_info["id"],
         password: account_info["h323_password"],

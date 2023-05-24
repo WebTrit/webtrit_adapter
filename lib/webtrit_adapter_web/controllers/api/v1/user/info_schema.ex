@@ -9,6 +9,31 @@ defmodule WebtritAdapterWeb.Api.V1.User.InfoSchema do
     OpenApiSpexExt.schema(%{
       type: :object,
       properties: %{
+        status: %Schema{
+          type: :string,
+          description: """
+          The user's account status.
+
+          * `active`, the user is in an active state and has full access to all functionality
+            (this is the default value and will be assumed if this property is not specified)
+          * `limited`, indicates a condition of restricted functionality access
+            (while sign-in and API calls may be allowed, call capabilities could
+            be partially or fully restricted)
+          * `blocked`, denotes a state in which the user is blocked, and as a result,
+            client applications won't be able to sign in and will be signed out if
+            previously signed in
+            (API calls might be partially available, but call capabilities are fully
+            restricted)
+
+          Note that the number of possible values may be expanded in the future.
+          """,
+          enum: [
+            :active,
+            :limited,
+            :blocked
+          ],
+          default: :active
+        },
         sip: CommonSchema.SipInfo,
         balance: CommonSchema.Balance,
         numbers: CommonSchema.Numbers,

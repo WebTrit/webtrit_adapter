@@ -1,6 +1,19 @@
 defmodule WebtritAdapterWeb.Api.V1.User.Mapping do
   import Bitwise
 
+  def status(account_info) do
+    account_info_to_status(
+      String.downcase(account_info["blocked"]),
+      String.downcase(account_info["bill_status"])
+    )
+  end
+
+  defp account_info_to_status("y", _), do: :blocked
+  defp account_info_to_status(_, "o"), do: :active
+  defp account_info_to_status(_, "i"), do: :limited
+  defp account_info_to_status(_, "s"), do: :limited
+  defp account_info_to_status(_, _), do: :blocked
+
   def display_name(account_info) do
     cond do
       account_info["extension_name"] ->
