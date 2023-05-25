@@ -47,9 +47,9 @@ defmodule WebtritAdapter.MixProject do
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
       {:tz, "~> 0.26"},
-      {:open_api_spex, "~> 3.16"},
+      {:open_api_spex, "~> 3.17"},
       {:finch, "~> 0.16"},
-      {:tesla, "~> 1.6"}
+      {:tesla, "~> 1.7"}
     ]
   end
 
