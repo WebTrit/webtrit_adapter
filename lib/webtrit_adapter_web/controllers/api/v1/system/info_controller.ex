@@ -1,8 +1,7 @@
 defmodule WebtritAdapterWeb.Api.V1.System.InfoController do
   use WebtritAdapterWeb, :controller
   use OpenApiSpex.ControllerSpecs
-
-  require OpenApiSpexExt
+  use OpenApiSpexExt
 
   alias Portabilling.Api
   alias WebtritAdapterWeb.Api.V1.CastAndValidateRenderError
@@ -16,6 +15,7 @@ defmodule WebtritAdapterWeb.Api.V1.System.InfoController do
   action_fallback FallbackController
 
   tags ["system"]
+  OpenApiSpexExt.parameters("$ref": "#/components/parameters/TenantID")
 
   OpenApiSpexExt.operation(:show,
     summary: "Retrieve system and Adaptee information",

@@ -1,9 +1,9 @@
 defmodule WebtritAdapterWeb.Api.V1.SessionController do
   use WebtritAdapterWeb, :controller
   use OpenApiSpex.ControllerSpecs
+  use OpenApiSpexExt
 
   require Logger
-  require OpenApiSpexExt
 
   alias Portabilling.Api
   alias WebtritAdapter.ApiHelpers
@@ -19,6 +19,7 @@ defmodule WebtritAdapterWeb.Api.V1.SessionController do
   action_fallback FallbackController
 
   tags ["session"]
+  OpenApiSpexExt.parameters("$ref": "#/components/parameters/TenantID")
 
   def action(conn, _) do
     apply(__MODULE__, action_name(conn), [conn, conn.params, conn.body_params])
@@ -32,9 +33,6 @@ defmodule WebtritAdapterWeb.Api.V1.SessionController do
     This request can be used to sign in an existing user or sign up a new user,
     if the functionality is supported by the **Adaptee**.
     """,
-    parameters: [
-      "$ref": "#/components/parameters/UserFiltering"
-    ],
     request_body: {
       """
       Identification of the user for whom an OTP will be generated and sent.
@@ -196,9 +194,6 @@ defmodule WebtritAdapterWeb.Api.V1.SessionController do
     The absence of OTP support is indicated when the `#{:otpSignin}` value is not present
     in the `supported` property of the `GeneralSystemInfoResponse`.
     """,
-    parameters: [
-      "$ref": "#/components/parameters/UserFiltering"
-    ],
     request_body: {
       "User credentials.",
       "application/json",

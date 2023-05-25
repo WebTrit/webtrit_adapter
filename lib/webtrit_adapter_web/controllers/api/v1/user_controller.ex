@@ -1,9 +1,9 @@
 defmodule WebtritAdapterWeb.Api.V1.UserController do
   use WebtritAdapterWeb, :controller
   use OpenApiSpex.ControllerSpecs
+  use OpenApiSpexExt
 
   require Logger
-  require OpenApiSpexExt
 
   alias Portabilling.Api
   alias WebtritAdapter.ApiHelpers
@@ -19,6 +19,7 @@ defmodule WebtritAdapterWeb.Api.V1.UserController do
   action_fallback FallbackController
 
   tags ["user", "session"]
+  OpenApiSpexExt.parameters("$ref": "#/components/parameters/TenantID")
 
   def action(conn, _) do
     apply(__MODULE__, action_name(conn), [conn, conn.params, conn.body_params])

@@ -1,4 +1,24 @@
 defmodule OpenApiSpexExt do
+  defmacro __using__(_opts) do
+    quote do
+      Module.register_attribute(__MODULE__, :shared_parameters, accumulate: true)
+
+      @before_compile OpenApiSpexExt
+    end
+  end
+
+  defmacro __before_compile__(_env) do
+    quote do
+      def shared_parameters, do: @shared_parameters
+    end
+  end
+
+  defmacro parameters(parameters) do
+    quote do
+      @shared_parameters unquote(parameters)
+    end
+  end
+
   defmacro schema(body, opts \\ []) do
     quote do
       title =
@@ -19,11 +39,19 @@ defmodule OpenApiSpexExt do
 
       spec =
         spec
+        |> OpenApiSpexExt.concatenated_shared_parameters_with_parameters(__MODULE__)
         |> OpenApiSpexExt.put_new_operation_id_in_operation(unquote(action), __MODULE__)
         |> OpenApiSpexExt.put_new_title_to_error_responses_in_operation(unquote(action), __MODULE__)
 
       OpenApiSpex.ControllerSpecs.operation(unquote(action), spec)
     end
+  end
+
+  def concatenated_shared_parameters_with_parameters(spec, module) do
+    shared_parameters = Module.get_attribute(module, :shared_parameters, []) |> List.flatten()
+    concatenated_parameters = shared_parameters ++ Map.get(spec, :parameters, [])
+
+    Map.put(spec, :parameters, concatenated_parameters)
   end
 
   def api_module_name_parts(module) do

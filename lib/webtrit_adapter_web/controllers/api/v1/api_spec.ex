@@ -104,11 +104,11 @@ defmodule WebtritAdapterWeb.Api.V1.ApiSpec do
         }
       },
       parameters: %{
-        "UserFiltering" => %Parameter{
+        "TenantID" => %Parameter{
           name: :"X-WebTrit-Tenant-ID",
           in: :header,
           description: """
-          Optional user filtering.
+          Optional filtering.
 
           This parameter is rarely used and serves for additional filtering in specific cases.
           Note that not all adapter implementations may support this functionality.

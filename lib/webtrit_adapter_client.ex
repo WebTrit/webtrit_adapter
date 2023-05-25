@@ -1,35 +1,23 @@
 defmodule WebtritAdapterClient do
   @type result() :: {Tesla.Env.status(), Tesla.Env.body()} | {:error, any()}
 
-  defmodule Middleware.BearerAuth do
-    @behaviour Tesla.Middleware
-
-    @impl Tesla.Middleware
-    def call(env, next, opts \\ []) do
-      access_token = Keyword.get(opts, :access_token)
-
-      env
-      |> put_header_auth_bearer(access_token)
-      |> Tesla.run(next)
-    end
-
-    defp put_header_auth_bearer(env, nil), do: env
-
-    defp put_header_auth_bearer(env, access_token) do
-      Tesla.put_headers(env, [{"authorization", "Bearer #{access_token}"}])
-    end
-  end
-
-  @spec new(URI.t() | String.t(), String.t() | nil) :: Tesla.Client.t()
-  def new(adapter_url, access_token \\ nil) do
+  @spec new(URI.t() | String.t(), String.t() | nil, String.t() | nil) :: Tesla.Client.t()
+  def new(adapter_url, tenant_id \\ nil, access_token \\ nil) do
     base_url = URI.merge(URI.parse(adapter_url), "/api/v1") |> to_string()
 
-    middleware = [
-      {Tesla.Middleware.BaseUrl, base_url},
-      {Middleware.BearerAuth, access_token: access_token},
-      {Tesla.Middleware.JSON, engine: Phoenix.json_library()},
-      Tesla.Middleware.Logger
-    ]
+    middleware =
+      []
+      |> then(&[Tesla.Middleware.Logger | &1])
+      |> then(&[{Tesla.Middleware.JSON, engine: Phoenix.json_library()} | &1])
+      |> then(fn
+        m when is_nil(tenant_id) -> m
+        m -> [{Tesla.Middleware.Headers, [{"X-WebTrit-Tenant-ID", tenant_id}]} | m]
+      end)
+      |> then(fn
+        m when is_nil(access_token) -> m
+        m -> [{Tesla.Middleware.BearerAuth, token: access_token} | m]
+      end)
+      |> then(&[{Tesla.Middleware.BaseUrl, base_url} | &1])
 
     Tesla.client(middleware)
   end
@@ -44,8 +32,8 @@ defmodule WebtritAdapterClient do
     request(client, options)
   end
 
-  @spec create_session_otp(Tesla.Client.t(), String.t(), String.t() | nil) :: result()
-  def create_session_otp(client, user_ref, tenant_id \\ nil) do
+  @spec create_session_otp(Tesla.Client.t(), String.t()) :: result()
+  def create_session_otp(client, user_ref) do
     options = [
       method: :post,
       url: "/session/otp-create",
@@ -53,8 +41,6 @@ defmodule WebtritAdapterClient do
         user_ref: user_ref
       }
     ]
-
-    options = put_header_tenant_id(options, tenant_id)
 
     request(client, options)
   end
@@ -73,8 +59,8 @@ defmodule WebtritAdapterClient do
     request(client, options)
   end
 
-  @spec create_session(Tesla.Client.t(), String.t(), String.t(), String.t() | nil) :: result()
-  def create_session(client, login, password, tenant_id \\ nil) do
+  @spec create_session(Tesla.Client.t(), String.t(), String.t()) :: result()
+  def create_session(client, login, password) do
     options = [
       method: :post,
       url: "/session",
@@ -83,8 +69,6 @@ defmodule WebtritAdapterClient do
         password: password
       }
     ]
-
-    options = put_header_tenant_id(options, tenant_id)
 
     request(client, options)
   end
@@ -162,12 +146,6 @@ defmodule WebtritAdapterClient do
     ]
 
     request(client, options)
-  end
-
-  defp put_header_tenant_id(options, nil), do: options
-
-  defp put_header_tenant_id(options, tenant_id) do
-    options ++ [headers: [{"X-WebTrit-Tenant-ID", tenant_id}]]
   end
 
   defp request(client, options) do

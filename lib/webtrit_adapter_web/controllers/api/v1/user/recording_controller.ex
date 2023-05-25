@@ -1,8 +1,7 @@
 defmodule WebtritAdapterWeb.Api.V1.User.RecordingController do
   use WebtritAdapterWeb, :controller
   use OpenApiSpex.ControllerSpecs
-
-  require OpenApiSpexExt
+  use OpenApiSpexExt
 
   alias Portabilling.Api
   alias WebtritAdapterWeb.Api.V1.CastAndValidateRenderError
@@ -16,6 +15,7 @@ defmodule WebtritAdapterWeb.Api.V1.User.RecordingController do
 
   tags ["user"]
   security [%{"bearerAuth" => []}]
+  OpenApiSpexExt.parameters("$ref": "#/components/parameters/TenantID")
 
   def action(%{assigns: %{i_account: i_account}} = conn, _) do
     apply(__MODULE__, action_name(conn), [conn, conn.params, i_account])

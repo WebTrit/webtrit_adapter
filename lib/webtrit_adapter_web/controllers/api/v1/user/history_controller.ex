@@ -1,8 +1,7 @@
 defmodule WebtritAdapterWeb.Api.V1.User.HistoryController do
   use WebtritAdapterWeb, :controller
   use OpenApiSpex.ControllerSpecs
-
-  require OpenApiSpexExt
+  use OpenApiSpexExt
 
   alias Portabilling.Api
   alias OpenApiSpex.Schema
@@ -17,6 +16,7 @@ defmodule WebtritAdapterWeb.Api.V1.User.HistoryController do
 
   tags ["user"]
   security [%{"bearerAuth" => []}]
+  OpenApiSpexExt.parameters("$ref": "#/components/parameters/TenantID")
 
   def action(%{assigns: %{i_account: i_account}} = conn, _) do
     apply(__MODULE__, action_name(conn), [conn, conn.params, i_account])
