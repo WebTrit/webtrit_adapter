@@ -189,7 +189,7 @@ defmodule WebtritAdapterWeb.Api.V1.CommonSchema do
             :error
           ]
         },
-        disconnected_reason: %Schema{
+        disconnect_reason: %Schema{
           type: :string,
           description: "Describes the reason for the call disconnection.",
           example: "Caller hangup"
