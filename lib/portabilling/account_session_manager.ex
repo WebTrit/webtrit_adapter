@@ -9,11 +9,11 @@ defmodule Portabilling.AccountSessionManager do
     @type t :: %__MODULE__{
             administrator_url: URI.t() | nil,
             account_url: URI.t() | nil,
-            session_regenerate_period: non_neg_integer() | nil
+            session_invalidate_period: non_neg_integer() | nil
           }
     defstruct administrator_url: nil,
               account_url: nil,
-              session_regenerate_period: nil
+              session_invalidate_period: nil
   end
 
   defmodule State do
@@ -74,7 +74,7 @@ defmodule Portabilling.AccountSessionManager do
                   "login to account realm with login [#{login}] (retrieved by i_account [#{i_account}}]) success"
                 )
 
-                schedule_session_invalidate(config.session_regenerate_period, i_account)
+                schedule_session_invalidate(config.session_invalidate_period, i_account)
 
                 session_ids = Map.put(session_ids, i_account, session_id)
 
@@ -143,7 +143,7 @@ defmodule Portabilling.AccountSessionManager do
     :ok
   end
 
-  defp schedule_session_invalidate(session_regenerate_period, i_account) do
-    Process.send_after(self(), {:session_invalidate, i_account}, session_regenerate_period)
+  defp schedule_session_invalidate(session_invalidate_period, i_account) do
+    Process.send_after(self(), {:session_invalidate, i_account}, session_invalidate_period)
   end
 end

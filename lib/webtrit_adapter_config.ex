@@ -29,9 +29,9 @@ defmodule WebtritAdapterConfig do
     Application.get_env(:webtrit_adapter, :portabilling_account_url)
   end
 
-  @spec portabilling_account_session_regenerate_period :: non_neg_integer() | nil
-  def portabilling_account_session_regenerate_period do
-    Application.get_env(:webtrit_adapter, :portabilling_account_session_regenerate_period)
+  @spec portabilling_account_session_invalidate_period :: non_neg_integer() | nil
+  def portabilling_account_session_invalidate_period do
+    Application.get_env(:webtrit_adapter, :portabilling_account_session_invalidate_period)
   end
 
   @spec portabilling_signin_credentials :: :self_care | :sip

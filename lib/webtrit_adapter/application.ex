@@ -25,7 +25,7 @@ defmodule WebtritAdapter.Application do
     account_config = %AccountSessionManager.Config{
       administrator_url: WebtritAdapterConfig.portabilling_administrator_url(),
       account_url: WebtritAdapterConfig.portabilling_account_url(),
-      session_regenerate_period: WebtritAdapterConfig.portabilling_account_session_regenerate_period()
+      session_invalidate_period: WebtritAdapterConfig.portabilling_account_session_invalidate_period()
     }
 
     demo_config = %DemoAccountManager.Config{

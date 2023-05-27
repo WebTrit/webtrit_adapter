@@ -26,7 +26,7 @@ Environment variables descriptions:
   * `PORTABILLING_ADMINISTRATOR_SESSION_REGENERATE_PERIOD` - PortaBilling
     administrator session regenerate period in milliseconds
   * `PORTABILLING_ACCOUNT_URL` - PortaBilling JSON API URL for accounts
-  * `PORTABILLING_ACCOUNT_SESSION_REGENERATE_PERIOD` - PortaBilling account
+  * `PORTABILLING_ACCOUNT_SESSION_INVALIDATE_PERIOD` - PortaBilling account
     session invalidate period in milliseconds
   * `PORTABILLING_SIGNIN_CREDENTIALS` - defines the type of account properties
     used for login, with the following possible values (optional):

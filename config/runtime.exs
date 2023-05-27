@@ -160,11 +160,11 @@ RuntimeConfig.config_env_try do
 end
 
 RuntimeConfig.config_env_try do
-  case RuntimeConfig.get_env_as_non_neg_integer!("PORTABILLING_ACCOUNT_SESSION_REGENERATE_PERIOD", "43200000") do
-    portabilling_account_session_regenerate_period ->
+  case RuntimeConfig.get_env_as_non_neg_integer!("PORTABILLING_ACCOUNT_SESSION_INVALIDATE_PERIOD", "43200000") do
+    portabilling_account_session_invalidate_period ->
       config :webtrit_adapter,
-             :portabilling_account_session_regenerate_period,
-             portabilling_account_session_regenerate_period
+             :portabilling_account_session_invalidate_period,
+             portabilling_account_session_invalidate_period
   end
 end
 
