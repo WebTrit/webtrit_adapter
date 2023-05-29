@@ -31,7 +31,7 @@ defmodule WebtritAdapterWeb.Api.V1.User.HistorySchema do
             },
             items_total: %Schema{
               type: :integer,
-              minimum: 1,
+              minimum: 0,
               description: """
               Total number of CDRs within the selected time period
               or within the entire history if no time period is provided.
