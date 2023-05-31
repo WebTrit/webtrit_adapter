@@ -70,6 +70,37 @@ defmodule WebtritAdapterWeb.Api.V1.CommonSchema do
     })
   end
 
+  defmodule Pagination do
+    OpenApiSpex.schema(%{
+      type: :object,
+      description: "Information about pagination of results.",
+      properties: %{
+        page: %Schema{
+          type: :integer,
+          minimum: 1,
+          description: "Current page number.",
+          example: 1
+        },
+        items_per_page: %Schema{
+          type: :integer,
+          minimum: 1,
+          description: "Number of items presented per page.",
+          example: 100
+        },
+        items_total: %Schema{
+          type: :integer,
+          minimum: 0,
+          description: """
+          Total number of items found in filtered result set.
+          If no filters are provided, this represents total number
+          of items available.
+          """,
+          example: 1000
+        }
+      }
+    })
+  end
+
   defmodule UserId do
     OpenApiSpex.schema(%{
       type: :string,

@@ -7,6 +7,7 @@ defmodule WebtritAdapterWeb.Api.V1.User.HistoryController do
   alias OpenApiSpex.Schema
   alias WebtritAdapterWeb.Api.V1.CastAndValidateRenderError
   alias WebtritAdapterWeb.Api.V1.FallbackController
+  alias WebtritAdapterWeb.Api.V1.CommonParameter
   alias WebtritAdapterWeb.Api.V1.CommonResponse
   alias WebtritAdapterWeb.Api.V1.User.HistorySchema
 
@@ -28,14 +29,8 @@ defmodule WebtritAdapterWeb.Api.V1.User.HistoryController do
     Retrieve the user's CDRs from the **Adaptee**.
     """,
     parameters: [
-      page: [
-        in: :query,
-        schema: %Schema{type: :integer, minimum: 1, default: 1}
-      ],
-      items_per_page: [
-        in: :query,
-        schema: %Schema{type: :integer, minimum: 1, default: 100}
-      ],
+      CommonParameter.page(),
+      CommonParameter.items_per_page(),
       time_from: [
         in: :query,
         description: "Filter CDRs by start time (inclusive)",
