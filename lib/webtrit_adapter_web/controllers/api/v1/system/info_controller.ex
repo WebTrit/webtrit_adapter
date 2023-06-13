@@ -39,7 +39,13 @@ defmodule WebtritAdapterWeb.Api.V1.System.InfoController do
   def show(conn, _params) do
     name = Application.spec(:webtrit_adapter, :description) |> to_string()
     version = Application.spec(:webtrit_adapter, :vsn) |> to_string()
-    supported = SupportedFunctionality.all_values()
+
+    disabled =
+      WebtritAdapterConfig.disabled_functionalities()
+      |> Enum.map(&SupportedFunctionality.parse/1)
+      |> Enum.reject(&is_nil/1)
+
+    supported = SupportedFunctionality.all_values() -- disabled
 
     case Api.Administrator.Generic.get_version(conn.assigns.administrator_client) do
       {200, %{"version" => portabilling_version}} ->

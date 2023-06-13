@@ -250,3 +250,18 @@ case RuntimeConfig.get_env("OTP_IGNORE_ACCOUNTS") do
            :otp_ignore_accounts,
            otp_ignore_accounts_list
 end
+
+case RuntimeConfig.get_env("DISABLED_FUNCTIONALITIES") do
+  nil ->
+    config :webtrit_adapter,
+           :disabled_functionalities,
+           []
+
+  disabled_functionalities ->
+    disabled_functionalities_list =
+      disabled_functionalities |> String.split(~r/[,;]/, trim: true) |> Enum.map(&String.trim/1)
+
+    config :webtrit_adapter,
+           :disabled_functionalities,
+           disabled_functionalities_list
+end

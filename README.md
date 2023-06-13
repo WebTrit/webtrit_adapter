@@ -46,3 +46,13 @@ Environment variables descriptions:
     OTP verification code for authentication - usually used for demo purpose;
     accounts are delimited by *commas* or *semicolon*, for example: `"12345,67890"`
     (optional, default value is an empty list)
+  * `DISABLED_FUNCTIONALITIES` - a list of supported functionalities that are manually disabled -
+    usually used for signup/signin app's form control;
+    functionalities are delimited by *commas* or *semicolon* with following possible values
+    (optional, default value is an empty list):
+    * `signup` - supports the creation of new customer accounts
+    * `otpSignin` - allows user authorization via One-Time Password (OTP)
+    * `passwordSignin` - allows user authorization using login and password
+    * `recordings` - provides access to call recordings
+    * `callHistory` - provides access to call history
+    * `extensions` - retrieves the list of other users (contacts)

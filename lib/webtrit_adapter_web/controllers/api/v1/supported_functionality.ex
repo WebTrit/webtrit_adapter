@@ -1,4 +1,6 @@
 defmodule WebtritAdapterWeb.Api.V1.SupportedFunctionality do
+  @type t :: :signup | :otpSignin | :passwordSignin | :recordings | :callHistory | :extensions
+
   def all_values do
     [
       :signup,
@@ -16,4 +18,12 @@ defmodule WebtritAdapterWeb.Api.V1.SupportedFunctionality do
   def value_description(:recordings), do: "provides access to call recordings"
   def value_description(:callHistory), do: "provides access to call history"
   def value_description(:extensions), do: "retrieves the list of other users (contacts)"
+
+  def parse("signup"), do: :signup
+  def parse("otpSignin"), do: :otpSignin
+  def parse("passwordSignin"), do: :passwordSignin
+  def parse("recordings"), do: :recordings
+  def parse("callHistory"), do: :callHistory
+  def parse("extensions"), do: :extensions
+  def parse(_), do: nil
 end

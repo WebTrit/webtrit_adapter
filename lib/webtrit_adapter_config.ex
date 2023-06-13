@@ -85,4 +85,9 @@ defmodule WebtritAdapterConfig do
   def otp_ignore_account?(id) do
     Enum.member?(otp_ignore_accounts(), id)
   end
+
+  @spec disabled_functionalities :: [String.t()]
+  def disabled_functionalities do
+    Application.get_env(:webtrit_adapter, :disabled_functionalities)
+  end
 end
