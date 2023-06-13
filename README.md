@@ -44,5 +44,5 @@ Environment variables descriptions:
   * `OTP_VERIFICATION_ATTEMPTS_LIMIT` - maximum attempts to enter a valid OTP verification code
   * `OTP_IGNORE_ACCOUNTS` - a list of account's phone (aka account `id`) which can use any
     OTP verification code for authentication - usually used for demo purpose;
-    accounts are delimited by *commas* or *semicolumn*, for example: `"12345,67890"`
+    accounts are delimited by *commas* or *semicolon*, for example: `"12345,67890"`
     (optional, default value is an empty list)
