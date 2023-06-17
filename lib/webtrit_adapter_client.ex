@@ -3,7 +3,7 @@ defmodule WebtritAdapterClient do
 
   @spec new(URI.t() | String.t(), String.t() | nil, String.t() | nil) :: Tesla.Client.t()
   def new(adapter_url, tenant_id \\ nil, access_token \\ nil) do
-    base_url = URI.merge(URI.parse(adapter_url), "/api/v1") |> to_string()
+    base_url = URI.merge(URI.parse(adapter_url), "." <> "/api/v1") |> to_string()
 
     middleware =
       []
