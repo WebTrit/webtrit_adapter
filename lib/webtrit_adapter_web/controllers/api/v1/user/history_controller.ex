@@ -96,6 +96,6 @@ defmodule WebtritAdapterWeb.Api.V1.User.HistoryController do
   end
 
   defp to_naive!(datetime, time_zone) do
-    datetime |> DateTime.shift_zone!(time_zone) |> DateTime.to_naive() |> NaiveDateTime.to_string()
+    datetime |> DateTime.shift_zone!(time_zone) |> DateTime.truncate(:second) |> DateTime.to_naive() |> NaiveDateTime.to_string()
   end
 end
