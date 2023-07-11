@@ -69,8 +69,8 @@ defmodule WebtritAdapterWeb.Api.V1.User.HistoryController do
            %{
              "limit" => params[:items_per_page],
              "offset" => (params[:page] - 1) * params[:items_per_page],
-             "from_date" => to_naive!(params[:time_from], time_zone),
-             "to_date" => to_naive!(params[:time_to], time_zone)
+             "from_date" => to_portabilling_date_string!(params[:time_from], time_zone),
+             "to_date" => to_portabilling_date_string!(params[:time_to], time_zone)
            }
            |> Utils.Map.deep_filter_blank_values()
          ) do
@@ -91,11 +91,16 @@ defmodule WebtritAdapterWeb.Api.V1.User.HistoryController do
     end
   end
 
-  defp to_naive!(nil, _) do
+  defp to_portabilling_date_string!(nil, _) do
     nil
   end
 
-  defp to_naive!(datetime, time_zone) do
-    datetime |> DateTime.shift_zone!(time_zone) |> DateTime.truncate(:second) |> DateTime.to_naive() |> NaiveDateTime.to_string()
+  defp to_portabilling_date_string!(datetime, time_zone) do
+    datetime
+    |> DateTime.shift_zone!(time_zone)
+    # PortaBilling cannot parse dates with millisecond precision, trunc it
+    |> DateTime.truncate(:second)
+    |> DateTime.to_naive()
+    |> NaiveDateTime.to_string()
   end
 end
