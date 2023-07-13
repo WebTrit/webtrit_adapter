@@ -57,7 +57,7 @@ defmodule WebtritAdapterWeb.Api.V1.SessionSchema do
           type: :string,
           description: """
           Code (one-time-password) that the end-user receives from
-          the hosted PBX system or BSS via email/SMS and then uses in
+          the **Adaptee** via email/SMS and then uses in
           application to confirm his/her identity and login.
           """
         }
@@ -72,11 +72,11 @@ defmodule WebtritAdapterWeb.Api.V1.SessionSchema do
       properties: %{
         login: %Schema{
           type: :string,
-          description: "User's `login` on the hosted PBX system / BSS."
+          description: "User's `login` on the **Adaptee**."
         },
         password: %Schema{
           type: :string,
-          description: "User's `password` on the hosted PBX system / BSS."
+          description: "User's `password` on the **Adaptee**."
         }
       },
       required: [:login, :password]
