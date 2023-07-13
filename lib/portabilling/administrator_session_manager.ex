@@ -110,7 +110,7 @@ defmodule Portabilling.AdministratorSessionManager do
 
   @impl true
   def terminate({:login_error, fault}, _state) do
-    Logger.warn("terminate with fault [#{inspect(fault)}]")
+    Logger.warning("terminate with fault [#{inspect(fault)}]")
     :ok
   end
 
@@ -130,7 +130,7 @@ defmodule Portabilling.AdministratorSessionManager do
         :ok
 
       {_, fault} ->
-        Logger.warn("logout with fault [#{inspect(fault)}]")
+        Logger.warning("logout with fault [#{inspect(fault)}]")
         :error
     end
   end

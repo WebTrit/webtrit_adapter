@@ -81,20 +81,20 @@ defmodule Portabilling.AccountSessionManager do
                 {:reply, session_id, %{state | session_ids: session_ids}}
 
               {_, fault} ->
-                Logger.warn("login to account realm with fault [#{inspect(fault)}]")
+                Logger.warning("login to account realm with fault [#{inspect(fault)}]")
 
                 {:reply, nil, state}
             end
 
           {200, %{"account_info" => _}} ->
-            Logger.warn(
+            Logger.warning(
               "can't login to account realm without login and/or password (retrieved by i_account [#{i_account}}])"
             )
 
             {:reply, nil, state}
 
           {_, fault} ->
-            Logger.warn("get account info with fault [#{inspect(fault)}]")
+            Logger.warning("get account info with fault [#{inspect(fault)}]")
             {:reply, nil, state}
         end
     end
@@ -136,9 +136,7 @@ defmodule Portabilling.AccountSessionManager do
 
   @impl true
   def terminate(reason, %State{session_ids: session_ids}) do
-    Logger.debug(
-      "terminate with reason [#{inspect(reason)}] and with session ids [#{inspect(session_ids)}]"
-    )
+    Logger.debug("terminate with reason [#{inspect(reason)}] and with session ids [#{inspect(session_ids)}]")
 
     :ok
   end
