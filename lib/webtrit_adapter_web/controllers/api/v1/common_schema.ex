@@ -192,6 +192,11 @@ defmodule WebtritAdapterWeb.Api.V1.CommonSchema do
     OpenApiSpex.schema(%{
       type: :object,
       properties: %{
+        call_id: %Schema{
+          type: :string,
+          description: "The field serves as the unique identifier for each call record.",
+          example: "b2YBUVAUT27eW4QmAd2yBSqG"
+        },
         callee: %Schema{
           type: :string,
           description: "The phone number of the called party (recipient of the call, CLD).",
