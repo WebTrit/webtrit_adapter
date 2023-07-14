@@ -18,7 +18,7 @@ defmodule WebtritAdapterClient do
         m -> [{Tesla.Middleware.BearerAuth, token: access_token} | m]
       end)
       |> then(&[{Tesla.Middleware.BaseUrl, base_url} | &1])
-      |> then(&[Tesla.Middleware.RequestId | &1])
+      |> then(&[{WebtritAdapter.Tesla.Middleware.RequestId, prefix: "WAC/"} | &1])
 
     Tesla.client(middleware)
   end
