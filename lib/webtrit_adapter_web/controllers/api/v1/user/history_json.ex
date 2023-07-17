@@ -20,6 +20,7 @@ defmodule WebtritAdapterWeb.Api.V1.User.HistoryJSON do
 
   defp data(xdr, time_zone) do
     %{
+      call_id: xdr["call_id"],
       callee: xdr["CLD"],
       caller: xdr["CLI"],
       direction: Mapping.direction(xdr),
