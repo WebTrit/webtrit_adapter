@@ -8,7 +8,8 @@ ARG RUNNER_IMAGE="ubuntu:${UBUNTU_VERSION}"
 FROM ${BUILDER_IMAGE} AS builder
 
 # install build dependencies
-RUN apt-get update && \
+RUN apt-get update \
+    && \
     apt-get -y install \
             build-essential \
             git
@@ -50,6 +51,14 @@ RUN mix release
 # start a new build stage so that the final image will only contain
 # the compiled release and other runtime necessities
 FROM ${RUNNER_IMAGE} AS runner
+
+RUN apt-get update \
+    && \
+    apt-get -y install \
+            # required for HEALTHCHECK command
+            curl \
+    && \
+    apt-get clean
 
 WORKDIR "/app"
 RUN chown nobody /app
