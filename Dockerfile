@@ -1,16 +1,17 @@
 ARG ELIXIR_VERSION=1.15.2
 ARG OTP_VERSION=26.0.2
-ARG ALPINE_VERSION=3.18.2
+ARG UBUNTU_VERSION=jammy-20230126
 
-ARG BUILDER_IMAGE="hexpm/elixir:${ELIXIR_VERSION}-erlang-${OTP_VERSION}-alpine-${ALPINE_VERSION}"
-ARG RUNNER_IMAGE="alpine:${ALPINE_VERSION}"
+ARG BUILDER_IMAGE="hexpm/elixir:${ELIXIR_VERSION}-erlang-${OTP_VERSION}-ubuntu-${UBUNTU_VERSION}"
+ARG RUNNER_IMAGE="ubuntu:${UBUNTU_VERSION}"
 
 FROM ${BUILDER_IMAGE} AS builder
 
 # install build dependencies
-RUN apk add --no-cache \
-    build-base \
-    git
+RUN apt-get update && \
+    apt-get -y install \
+            build-essential \
+            git
 
 # prepare build dir
 WORKDIR /app
@@ -49,12 +50,6 @@ RUN mix release
 # start a new build stage so that the final image will only contain
 # the compiled release and other runtime necessities
 FROM ${RUNNER_IMAGE} AS runner
-
-RUN apk add --no-cache \
-    libstdc++ \
-    openssl \
-    ncurses-libs \
-    curl
 
 WORKDIR "/app"
 RUN chown nobody /app
