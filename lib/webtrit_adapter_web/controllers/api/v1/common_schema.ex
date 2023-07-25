@@ -326,7 +326,7 @@ defmodule WebtritAdapterWeb.Api.V1.CommonSchema do
           ]
         }
       },
-      required: [:display_name, :status]
+      required: [:status]
     })
   end
 
