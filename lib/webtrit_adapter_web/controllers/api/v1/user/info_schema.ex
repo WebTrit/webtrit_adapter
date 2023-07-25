@@ -68,7 +68,7 @@ defmodule WebtritAdapterWeb.Api.V1.User.InfoSchema do
           example: "Europe/Kyiv"
         }
       },
-      required: [:sip]
+      required: [:sip, :numbers]
     })
   end
 end
