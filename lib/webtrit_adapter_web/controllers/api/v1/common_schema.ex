@@ -443,7 +443,8 @@ defmodule WebtritAdapterWeb.Api.V1.CommonSchema do
           description: "The name of the company the user is associated with.",
           example: "Matrix"
         }
-      }
+      },
+      required: [:numbers]
     })
   end
 end
