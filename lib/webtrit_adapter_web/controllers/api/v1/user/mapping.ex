@@ -66,12 +66,12 @@ defmodule WebtritAdapterWeb.Api.V1.User.Mapping do
     sip_status_to_sip_status(account["sip_status"])
   end
 
-  @spec sip_status_to_sip_status(integer) :: :unknown | :registered | :notregistered
+  @spec sip_status_to_sip_status(integer) :: nil | :registered | :notregistered
   defp sip_status_to_sip_status(v)
 
   defp sip_status_to_sip_status(1), do: :registered
   defp sip_status_to_sip_status(0), do: :notregistered
-  defp sip_status_to_sip_status(_), do: :unknown
+  defp sip_status_to_sip_status(_), do: nil
 
   def direction(cdr) do
     bit_flags = cdr["bit_flags"]

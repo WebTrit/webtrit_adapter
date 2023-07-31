@@ -37,6 +37,12 @@ defmodule WebtritAdapterWeb.Api.V1.User.InfoSchema do
         sip: CommonSchema.SipInfo,
         balance: CommonSchema.Balance,
         numbers: CommonSchema.Numbers,
+        email: %Schema{
+          type: :string,
+          format: :email,
+          description: "The user's email address.",
+          example: "neo@matrix.com"
+        },
         first_name: %Schema{
           type: :string,
           description: "The user's first name.",
@@ -47,11 +53,10 @@ defmodule WebtritAdapterWeb.Api.V1.User.InfoSchema do
           description: "The user's last name.",
           example: "Anderson"
         },
-        email: %Schema{
+        alias_name: %Schema{
           type: :string,
-          format: :email,
-          description: "The user's email address.",
-          example: "neo@matrix.com"
+          description: "The user's alternative name. May be used for indicate role or position.",
+          example: "CTO"
         },
         company_name: %Schema{
           type: :string,

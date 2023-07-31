@@ -307,29 +307,6 @@ defmodule WebtritAdapterWeb.Api.V1.CommonSchema do
     })
   end
 
-  defmodule SipStatus do
-    OpenApiSpex.schema(%{
-      type: :object,
-      properties: %{
-        display_name: %Schema{
-          type: :string,
-          description: "The user's display name for SIP calls.",
-          example: "Annabelle Black"
-        },
-        status: %Schema{
-          type: :string,
-          description: "The current registration status of the user on the SIP server.",
-          enum: [
-            :unknown,
-            :registered,
-            :notregistered
-          ]
-        }
-      },
-      required: [:status]
-    })
-  end
-
   defmodule Balance do
     OpenApiSpex.schema(%{
       type: :object,
@@ -420,8 +397,21 @@ defmodule WebtritAdapterWeb.Api.V1.CommonSchema do
     OpenApiSpex.schema(%{
       type: :object,
       properties: %{
-        sip: SipStatus,
+        sip_status: %Schema{
+          type: :string,
+          description: "The current registration status of the user on the SIP server.",
+          enum: [
+            :registered,
+            :notregistered
+          ]
+        },
         numbers: Numbers,
+        email: %Schema{
+          type: :string,
+          format: :email,
+          description: "The user's email address.",
+          example: "a.black@matrix.com"
+        },
         first_name: %Schema{
           type: :string,
           description: "The user's first name.",
@@ -432,11 +422,10 @@ defmodule WebtritAdapterWeb.Api.V1.CommonSchema do
           description: "The user's last name.",
           example: "Black"
         },
-        email: %Schema{
+        alias_name: %Schema{
           type: :string,
-          format: :email,
-          description: "The user's email address.",
-          example: "a.black@matrix.com"
+          description: "The user's alternative name. May be used for indicate role or position.",
+          example: "Receptionist"
         },
         company_name: %Schema{
           type: :string,

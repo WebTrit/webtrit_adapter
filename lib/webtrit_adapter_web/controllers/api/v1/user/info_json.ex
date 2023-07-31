@@ -26,9 +26,10 @@ defmodule WebtritAdapterWeb.Api.V1.User.InfoJSON do
         ext: account_info["extension_id"],
         additional: Mapping.alias_list_to_numbers(alias_list)
       },
+      email: account_info["email"],
       first_name: account_info["firstname"],
       last_name: account_info["lastname"],
-      email: account_info["email"],
+      alias_name: account_info["extension_name"],
       company_name: account_info["companyname"],
       time_zone: account_info["time_zone_name"]
     }

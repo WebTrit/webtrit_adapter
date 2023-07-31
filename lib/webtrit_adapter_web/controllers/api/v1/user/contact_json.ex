@@ -9,10 +9,7 @@ defmodule WebtritAdapterWeb.Api.V1.User.ContactJSON do
 
   defp data(account) do
     %{
-      sip: %{
-        display_name: Mapping.display_name(account),
-        status: Mapping.sip_status(account)
-      },
+      sip_status: Mapping.sip_status(account),
       numbers: %{
         main: account["id"],
         ext: account["extension_id"],
@@ -20,6 +17,7 @@ defmodule WebtritAdapterWeb.Api.V1.User.ContactJSON do
       },
       first_name: account["firstname"],
       last_name: account["lastname"],
+      alias_name: account["extension_name"],
       email: account["email"],
       company_name: account["companyname"]
     }
