@@ -43,8 +43,7 @@ defmodule WebtritAdapterWeb.Api.V1.SessionController do
     },
     responses: [
       CommonResponse.unprocessable([
-        :delivery_channel_unspecified,
-        :signup_limit_reached
+        :delivery_channel_unspecified
       ]),
       CommonResponse.external_api_issue(),
       ok: {
@@ -132,7 +131,7 @@ defmodule WebtritAdapterWeb.Api.V1.SessionController do
       },
       not_found: {
         """
-        Not Found. `opt_id` was not found.
+        Not Found. The `opt_id` was not found.
         """,
         "application/json",
         CommonSchema.error_response([
