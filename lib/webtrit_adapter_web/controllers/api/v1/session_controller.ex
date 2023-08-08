@@ -58,7 +58,7 @@ defmodule WebtritAdapterWeb.Api.V1.SessionController do
       },
       not_found: {
         """
-        Not Found. The user was not found.
+        Not Found: The user was not found.
         """,
         "application/json",
         CommonSchema.error_response([
@@ -115,12 +115,7 @@ defmodule WebtritAdapterWeb.Api.V1.SessionController do
       required: true
     },
     responses: [
-      CommonResponse.unprocessable([
-        :otp_id_verified,
-        :otp_id_verification_attempts_exceeded,
-        :otp_id_timeout,
-        :code_incorrect
-      ]),
+      CommonResponse.unprocessable(),
       CommonResponse.external_api_issue(),
       ok: {
         """
@@ -129,13 +124,25 @@ defmodule WebtritAdapterWeb.Api.V1.SessionController do
         "application/json",
         SessionSchema.Response
       },
-      not_found: {
+      unauthorized: {
         """
-        Not Found. The `opt_id` was not found.
+        Unauthorized: Incorrect OTP `code` or other related OTP errors.
         """,
         "application/json",
         CommonSchema.error_response([
-          :otp_id_not_found
+          :otp_already_verified,
+          :otp_verification_attempts_exceeded,
+          :otp_expired,
+          :incorrect_otp_code
+        ])
+      },
+      not_found: {
+        """
+        Not Found: The OTP was not found.
+        """,
+        "application/json",
+        CommonSchema.error_response([
+          :otp_not_found
         ])
       }
     ]
@@ -146,14 +153,14 @@ defmodule WebtritAdapterWeb.Api.V1.SessionController do
 
     case Session.inc_attempts_count_and_get_otp!(otp_id) do
       %Otp{verified: true} ->
-        {:error, :unprocessable_entity, :otp_id_verified}
+        {:error, :unauthorized, :otp_already_verified}
 
       %Otp{attempts_count: attempts_count} when attempts_count > attempts_limit ->
-        {:error, :unprocessable_entity, :otp_id_verification_attempts_exceeded}
+        {:error, :unauthorized, :otp_verification_attempts_exceeded}
 
       %Otp{i_account: i_account, ignore: ignore, demo: demo, inserted_at: inserted_at} = otp ->
-        if otp_id_timeout?(inserted_at) do
-          {:error, :unprocessable_entity, :otp_id_timeout}
+        if otp_expired?(inserted_at) do
+          {:error, :unauthorized, :otp_expired}
         else
           case skip_verify_otp(ignore) ||
                  Api.Administrator.AccessControl.verify_otp(
@@ -174,7 +181,7 @@ defmodule WebtritAdapterWeb.Api.V1.SessionController do
               end
 
             {200, %{"success" => 0}} ->
-              {:error, :unprocessable_entity, :code_incorrect}
+              {:error, :unauthorized, :incorrect_otp_code}
 
             _ ->
               {:error, :internal_server_error, :external_api_issue}
@@ -182,7 +189,7 @@ defmodule WebtritAdapterWeb.Api.V1.SessionController do
         end
     end
   rescue
-    Ecto.NoResultsError -> {:error, :not_found, :otp_id_not_found}
+    Ecto.NoResultsError -> {:error, :not_found, :otp_not_found}
   end
 
   OpenApiSpexExt.operation(:create,
@@ -215,7 +222,7 @@ defmodule WebtritAdapterWeb.Api.V1.SessionController do
         """,
         "application/json",
         CommonSchema.error_response([
-          :invalid_credentials
+          :incorrect_credentials
         ])
       }
     ]
@@ -348,7 +355,7 @@ defmodule WebtritAdapterWeb.Api.V1.SessionController do
     nil
   end
 
-  defp otp_id_timeout?(inserted_at, now \\ NaiveDateTime.utc_now()) do
+  defp otp_expired?(inserted_at, now \\ NaiveDateTime.utc_now()) do
     valid_until = NaiveDateTime.add(inserted_at, WebtritAdapterConfig.otp_timeout(), :millisecond)
     NaiveDateTime.compare(valid_until, now) == :lt
   end
