@@ -281,10 +281,18 @@ defmodule WebtritAdapterWeb.Api.V1.CommonSchema do
     OpenApiSpex.schema(%{
       type: :object,
       properties: %{
-        login: %Schema{
+        username: %Schema{
           type: :string,
           description: "The username to be used in SIP requests.",
           example: "14155551234"
+        },
+        auth_username: %Schema{
+          type: :string,
+          description: """
+          The username to be used in the Authorization header field.
+          If not provided, the `auth_username` will be populated with the `username`.
+          """,
+          example: "thomas"
         },
         password: %Schema{
           type: :string,
@@ -303,7 +311,7 @@ defmodule WebtritAdapterWeb.Api.V1.CommonSchema do
           example: "Thomas A. Anderson"
         }
       },
-      required: [:login, :password, :sip_server]
+      required: [:username, :password, :sip_server]
     })
   end
 

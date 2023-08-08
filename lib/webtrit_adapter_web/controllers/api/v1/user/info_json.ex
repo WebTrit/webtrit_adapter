@@ -5,7 +5,7 @@ defmodule WebtritAdapterWeb.Api.V1.User.InfoJSON do
     %{
       status: Mapping.status(account_info),
       sip: %{
-        login: account_info["id"],
+        username: account_info["id"],
         password: account_info["h323_password"],
         sip_server: %{
           host: WebtritAdapterConfig.portasip_host(),
