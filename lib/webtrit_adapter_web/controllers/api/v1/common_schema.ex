@@ -283,14 +283,20 @@ defmodule WebtritAdapterWeb.Api.V1.CommonSchema do
       properties: %{
         username: %Schema{
           type: :string,
-          description: "The username to be used in SIP requests.",
+          description: """
+          The identity (typically a phone number but can be some other alphanumeric ID)
+          that should be registered to SIP server to receive incoming calls.
+          Usually it is also used as a username for SIP authorization of registrations (SIP REGISTER)
+          and outgoing calls (SIP INVITE).
+          """,
           example: "14155551234"
         },
         auth_username: %Schema{
           type: :string,
           description: """
-          The username to be used in the Authorization header field.
-          If not provided, the `auth_username` will be populated with the `username`.
+          The username for SIP authorization;
+          only needs to be populated if for a user it differs
+          from his/her registration ID (which is normally a phone number) supplied in the `username` attribute.
           """,
           example: "thomas"
         },
@@ -306,7 +312,7 @@ defmodule WebtritAdapterWeb.Api.V1.CommonSchema do
           description: """
           The visible identification of the caller to be included in the SIP request.
           This will be shown to the called party as the caller's name. If not provided,
-          the `display_name` will be populated with the `login`.
+          the `display_name` will be populated with the `username`.
           """,
           example: "Thomas A. Anderson"
         }
