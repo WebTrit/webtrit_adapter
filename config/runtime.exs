@@ -265,3 +265,18 @@ case RuntimeConfig.get_env("DISABLED_FUNCTIONALITIES") do
            :disabled_functionalities,
            disabled_functionalities_list
 end
+
+case RuntimeConfig.get_env_from_allowed_values("HTTP_CLIENT_SSL_VERIFY_TYPE", [
+       "verify_none",
+       "verify_peer"
+     ]) do
+  nil ->
+    config :webtrit_adapter,
+           :http_client_ssl_verify_type,
+           :verify_peer
+
+  value ->
+    config :webtrit_adapter,
+           :http_client_ssl_verify_type,
+           String.to_atom(value)
+end
