@@ -90,4 +90,9 @@ defmodule WebtritAdapterConfig do
   def disabled_functionalities do
     Application.get_env(:webtrit_adapter, :disabled_functionalities)
   end
+
+  @spec http_client_ssl_verify_type :: :verify_none | :verify_peer
+  def http_client_ssl_verify_type do
+    Application.get_env(:webtrit_adapter, :http_client_ssl_verify_type)
+  end
 end

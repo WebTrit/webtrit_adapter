@@ -42,7 +42,11 @@ defmodule WebtritAdapter.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: WebtritAdapter.PubSub},
       # Start the Finch
-      {Finch, name: WebtritAdapter.Finch},
+      {Finch,
+       name: WebtritAdapter.Finch,
+       pools: [
+         default: [conn_opts: [transport_opts: [verify: WebtritAdapterConfig.http_client_ssl_verify_type()]]]
+       ]},
       # Start the Portabilling AdministratorSessionManager
       {AdministratorSessionManager, administrator_config},
       # Start the Portabilling AccountSessionManager
