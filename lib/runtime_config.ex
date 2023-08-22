@@ -127,6 +127,36 @@ defmodule RuntimeConfig do
     end
   end
 
+  @spec get_env_as_array_map(String.t(), nil | String.t() | non_neg_integer()) :: nil | map
+  def get_env_as_array_map(name, suffix \\ nil) do
+    regex_string = "^#{name}_" <> if is_nil(suffix), do: "([[:digit:]]+)$", else: "(.*)_#{suffix}$"
+    {:ok, regex} = Regex.compile(regex_string)
+
+    System.get_env()
+    |> Enum.filter(fn {key, _val} -> String.match?(key, regex) end)
+    |> Enum.map(fn {key, val} ->
+      [_match, group] = Regex.run(regex, key)
+
+      if is_number(group) do
+        {group, val}
+      else
+        {
+          group
+          |> String.downcase()
+          |> String.to_atom(),
+          val
+        }
+      end
+    end)
+    |> case do
+      [] ->
+        nil
+
+      array ->
+        Map.new(array)
+    end
+  end
+
   defmodule EnvError do
     @enforce_keys [:name]
     defexception [:name, :example]
