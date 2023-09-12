@@ -1,4 +1,6 @@
 defmodule RuntimeConfig do
+  @maximum_sequentialy_index 1000
+
   defmodule EnvValueError do
     @enforce_keys [:name]
     defexception [:name, :explanation]
@@ -127,34 +129,17 @@ defmodule RuntimeConfig do
     end
   end
 
-  @spec get_env_as_array_map(String.t(), nil | String.t() | non_neg_integer()) :: nil | map
-  def get_env_as_array_map(name, suffix \\ nil) do
-    regex_string = "^#{name}_" <> if is_nil(suffix), do: "([[:digit:]]+)$", else: "(.*)_#{suffix}$"
-    {:ok, regex} = Regex.compile(regex_string)
+  @spec get_env_as_sequentialy_indexed_list(String.t(), integer) :: list()
+  def get_env_as_sequentialy_indexed_list(name, first_index \\ 1) do
+    Enum.reduce_while(first_index..@maximum_sequentialy_index, [], fn index, acc ->
+      case System.get_env("#{name}__#{index}") do
+        nil ->
+          {:halt, acc}
 
-    System.get_env()
-    |> Enum.filter(fn {key, _val} -> String.match?(key, regex) end)
-    |> Enum.map(fn {key, val} ->
-      [_match, group] = Regex.run(regex, key)
-
-      if is_number(group) do
-        {group, val}
-      else
-        {
-          group
-          |> String.downcase()
-          |> String.to_atom(),
-          val
-        }
+        value ->
+          {:cont, acc ++ [value]}
       end
     end)
-    |> case do
-      [] ->
-        nil
-
-      array ->
-        Map.new(array)
-    end
   end
 
   defmodule EnvError do
