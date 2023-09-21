@@ -8,4 +8,8 @@ defmodule Portabilling.Api.Account.Session do
   def logout(client, %{} = params) do
     perform_contextual(client, params)
   end
+
+  def change_password(client, %{} = params) do
+    perform_contextual(client, params)
+  end
 end
