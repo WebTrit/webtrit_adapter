@@ -81,8 +81,6 @@ defmodule Portabilling.AccountSessionManager do
                 {:reply, session_id, %{state | session_ids: session_ids}}
 
               {500, %{"faultcode" => "Server.Session.alert_You_must_change_password"}} ->
-                Logger.debug("need password reset for account realm with login [#{login}]")
-
                 case Api.Account.Session.change_password(account_client, %{
                        "login" => login,
                        "password" => password,
@@ -91,7 +89,7 @@ defmodule Portabilling.AccountSessionManager do
                      }) do
                   {200, %{"session_id" => session_id}} ->
                     Logger.debug(
-                      "changed password for account realm with login [#{login}] (i_account [#{i_account}}]) success"
+                      "login via changed password to account realm with login [#{login}] (retrieved by i_account [#{i_account}}]) success"
                     )
 
                     schedule_session_invalidate(config.session_invalidate_period, i_account)
@@ -101,7 +99,7 @@ defmodule Portabilling.AccountSessionManager do
                     {:reply, session_id, %{state | session_ids: session_ids}}
 
                   {_, fault} ->
-                    Logger.warning("changed password to account realm with fault [#{inspect(fault)}]")
+                    Logger.warning("login via changed password to account realm with fault [#{inspect(fault)}]")
 
                     {:reply, nil, state}
                 end
