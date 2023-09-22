@@ -80,6 +80,30 @@ defmodule Portabilling.AccountSessionManager do
 
                 {:reply, session_id, %{state | session_ids: session_ids}}
 
+              {500, %{"faultcode" => "Server.Session.alert_You_must_change_password"}} ->
+                case Api.Account.Session.change_password(account_client, %{
+                       "login" => login,
+                       "password" => password,
+                       "new_password" => generate_new_password(6),
+                       "establish_new_session" => 1
+                     }) do
+                  {200, %{"session_id" => session_id}} ->
+                    Logger.debug(
+                      "login via changed password to account realm with login [#{login}] (retrieved by i_account [#{i_account}}]) success"
+                    )
+
+                    schedule_session_invalidate(config.session_invalidate_period, i_account)
+
+                    session_ids = Map.put(session_ids, i_account, session_id)
+
+                    {:reply, session_id, %{state | session_ids: session_ids}}
+
+                  {_, fault} ->
+                    Logger.warning("login via changed password to account realm with fault [#{inspect(fault)}]")
+
+                    {:reply, nil, state}
+                end
+
               {_, fault} ->
                 Logger.warning("login to account realm with fault [#{inspect(fault)}]")
 
@@ -143,5 +167,12 @@ defmodule Portabilling.AccountSessionManager do
 
   defp schedule_session_invalidate(session_invalidate_period, i_account) do
     Process.send_after(self(), {:session_invalidate, i_account}, session_invalidate_period)
+  end
+
+  @new_password_chars Enum.concat([?a..?z, ?A..?Z, ?0..?9])
+  defp generate_new_password(length) when is_integer(length) and length >= 0 do
+    1..length
+      |> Enum.map(fn _ -> Enum.random(@new_password_chars) end)
+      |> List.to_string()
   end
 end
