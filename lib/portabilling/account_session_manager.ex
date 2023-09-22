@@ -86,7 +86,7 @@ defmodule Portabilling.AccountSessionManager do
                 case Api.Account.Session.change_password(account_client, %{
                        "login" => login,
                        "password" => password,
-                       "new_password" => generate_password(6),
+                       "new_password" => generate_new_password(6),
                        "establish_new_session" => 1
                      }) do
                   {200, %{"session_id" => session_id}} ->
@@ -171,8 +171,10 @@ defmodule Portabilling.AccountSessionManager do
     Process.send_after(self(), {:session_invalidate, i_account}, session_invalidate_period)
   end
 
-  defp generate_password(length) do
-    random_list = Ecto.UUID.generate() |> String.graphemes() |> Enum.filter(fn x -> x != "-" end)
-    for _ <- 1..length, into: "", do: Enum.random(random_list)
+  @new_password_chars Enum.concat([?a..?z, ?A..?Z, ?0..?9])
+  defp generate_new_password(length) when is_integer(length) and length >= 0 do
+    1..length
+      |> Enum.map(fn _ -> Enum.random(@new_password_chars) end)
+      |> List.to_string()
   end
 end
