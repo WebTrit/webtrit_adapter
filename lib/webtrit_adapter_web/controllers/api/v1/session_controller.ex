@@ -248,7 +248,7 @@ defmodule WebtritAdapterWeb.Api.V1.SessionController do
         render(conn, :create_or_update, refresh_token: refresh_token)
 
       {200, %{}} ->
-        {:error, :unauthorized, :invalid_credentials}
+        {:error, :unauthorized, :incorrect_credentials}
 
       _ ->
         {:error, :internal_server_error, :external_api_issue}
