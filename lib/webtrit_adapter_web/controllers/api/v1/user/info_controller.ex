@@ -4,6 +4,7 @@ defmodule WebtritAdapterWeb.Api.V1.User.InfoController do
   use OpenApiSpexExt
 
   alias Portabilling.Api
+  alias WebtritAdapter.Session
   alias WebtritAdapterWeb.Api.V1.CastAndValidateRenderError
   alias WebtritAdapterWeb.Api.V1.FallbackController
   alias WebtritAdapterWeb.Api.V1.CommonResponse
@@ -76,5 +77,26 @@ defmodule WebtritAdapterWeb.Api.V1.User.InfoController do
       _ ->
         {:error, :internal_server_error, :external_api_issue}
     end
+  end
+
+  OpenApiSpexExt.operation(:delete,
+    summary: "Delete user",
+    description: """
+    Delete the user and user's data with associated information included sessions.
+    """,
+    responses: [
+      CommonResponse.unauthorized(),
+      CommonResponse.session_and_user_not_found(),
+      CommonResponse.external_api_issue(),
+      no_content: "Deleted successfully."
+    ]
+  )
+
+  def delete(conn, _params, i_account) do
+    # TODO: delete/deactivate account with Portabilling.Api
+
+    {_, nil} = Session.delete_all_refresh_token(i_account)
+
+    send_resp(conn, :no_content, "")
   end
 end

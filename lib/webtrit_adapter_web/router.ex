@@ -62,7 +62,7 @@ defmodule WebtritAdapterWeb.Router do
       end
 
       scope "/user", User do
-        resources "/", InfoController, only: [:show], singleton: true
+        resources "/", InfoController, only: [:show, :delete], singleton: true
         resources "/contacts", ContactController, only: [:index]
         resources "/history", HistoryController, only: [:index]
         resources "/recordings", RecordingController, only: [:show], param: "recording_id"

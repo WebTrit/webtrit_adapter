@@ -147,5 +147,14 @@ defmodule WebtritAdapter.SessionTest do
       assert {:ok, %RefreshToken{}} = Session.delete_refresh_token(refresh_token.id)
       assert_raise Ecto.NoResultsError, fn -> Session.get_refresh_token!(refresh_token.id) end
     end
+
+    test "delete_all_refresh_token/1 deletes a refresh_tokens by i_account" do
+      assert 0 == Repo.aggregate(RefreshToken, :count)
+      refresh_token_fixture()
+      refresh_token_fixture()
+      assert 2 == Repo.aggregate(RefreshToken, :count)
+      assert {2, nil} = Session.delete_all_refresh_token(1)
+      assert 0 == Repo.aggregate(RefreshToken, :count)
+    end
   end
 end

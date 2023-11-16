@@ -211,4 +211,11 @@ defmodule WebtritAdapter.Session do
     %RefreshToken{id: refresh_token_id}
     |> Repo.delete()
   end
+
+  def delete_all_refresh_token(i_account) do
+    from(rt in RefreshToken,
+      where: rt.i_account == ^i_account
+    )
+    |> Repo.delete_all()
+  end
 end
