@@ -118,6 +118,16 @@ defmodule WebtritAdapterClient do
     request(client, options)
   end
 
+  @spec delete_user(Tesla.Client.t()) :: result()
+  def delete_user(client) do
+    options = [
+      method: :delete,
+      url: "/user"
+    ]
+
+    request(client, options)
+  end
+
   @spec get_user_contact_list(Tesla.Client.t()) :: result()
   def get_user_contact_list(client) do
     options = [
