@@ -100,4 +100,19 @@ defmodule WebtritAdapterWeb.Api.V1.CommonResponse do
       }
     }
   end
+
+  def not_implemented() do
+    {
+      :not_implemented,
+      {
+        """
+        The server does not support the functionality required to fulfill the request.
+        """,
+        "application/json",
+        CommonSchema.error_response([
+          :functionality_not_implemented
+        ])
+      }
+    }
+  end
 end
