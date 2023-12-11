@@ -74,6 +74,19 @@ defmodule WebtritAdapterClient do
     request(client, options)
   end
 
+  @spec autoprovision_session(Tesla.Client.t(), String.t()) :: result()
+  def autoprovision_session(client, config_token) do
+    options = [
+      method: :post,
+      url: "/session/autoprovision",
+      body: %{
+        config_token: config_token
+      }
+    ]
+
+    request(client, options)
+  end
+
   @spec update_session(Tesla.Client.t(), String.t()) :: result()
   def update_session(client, refresh_token) do
     options = [
