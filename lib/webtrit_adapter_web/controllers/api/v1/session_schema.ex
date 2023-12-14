@@ -83,7 +83,7 @@ defmodule WebtritAdapterWeb.Api.V1.SessionSchema do
     })
   end
 
-  defmodule AutoprovisionRequest do
+  defmodule AutoProvisionRequest do
     OpenApiSpexExt.schema(%{
       type: :object,
       properties: %{
@@ -91,7 +91,7 @@ defmodule WebtritAdapterWeb.Api.V1.SessionSchema do
           type: :string,
           description: "URL encoded unique token to identify user on the **Adaptee**.",
           example: "YKnra0qV3FHeOeMNwotRoP0955gHHHy7y7BWeb"
-        },
+        }
       },
       required: [:config_token]
     })

@@ -255,20 +255,20 @@ defmodule WebtritAdapterWeb.Api.V1.SessionController do
     end
   end
 
-  OpenApiSpexExt.operation(:autoprovision,
-    summary: "Sign in the user",
+  OpenApiSpexExt.operation(:auto_provision,
+    summary: "Auto provision the user",
     description: """
     This is an alternative sign-in method for the **Adaptee** that support token-based provision.
 
-    The configure token for autoprovision is transferred to the user in any alternative way.
+    The configure token for auto provision is transferred to the user in any alternative way.
     The **Adaptee** side verifies the transferred provisioning token and returns data for
     user authorization.
     """,
     request_body: {
-      "Configure token for autoprovision.",
+      "Configure token for auto provision.",
       "application/json",
-      SessionSchema.AutoprovisionRequest,
-      required: false
+      SessionSchema.AutoProvisionRequest,
+      required: true
     },
     responses: [
       CommonResponse.unprocessable(),
@@ -289,11 +289,11 @@ defmodule WebtritAdapterWeb.Api.V1.SessionController do
         CommonSchema.error_response([
           :incorrect_credentials
         ])
-      },
+      }
     ]
   )
 
-  def autoprovision(_conn, _params, _body_params) do
+  def auto_provision(_conn, _params, _body_params) do
     {:error, :not_implemented, :functionality_not_implemented}
   end
 
