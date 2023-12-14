@@ -49,6 +49,7 @@ defmodule WebtritAdapterWeb.Router do
         patch "/", SessionController, :update
         post "/otp-create", SessionController, :otp_create
         post "/otp-verify", SessionController, :otp_verify
+        post "/auto-provision", SessionController, :auto_provision
       end
 
       resources "/user", UserController, only: [:create], singleton: true

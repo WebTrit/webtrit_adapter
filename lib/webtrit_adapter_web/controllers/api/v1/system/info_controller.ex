@@ -46,6 +46,8 @@ defmodule WebtritAdapterWeb.Api.V1.System.InfoController do
       |> Enum.reject(&is_nil/1)
 
     supported = SupportedFunctionality.all_values() -- disabled
+    # Currently, the Portabilling does not support sign in with a token for autoprovision
+    supported = supported -- [:autoProvision]
 
     case Api.Administrator.Generic.get_version(conn.assigns.administrator_client) do
       {200, %{"version" => portabilling_version}} ->
