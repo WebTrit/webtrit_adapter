@@ -273,7 +273,7 @@ defmodule WebtritAdapterWeb.Api.V1.SessionController do
     responses: [
       CommonResponse.unprocessable(),
       CommonResponse.external_api_issue(),
-      CommonResponse.not_implemented(),
+      CommonResponse.functionality_not_implemented(),
       ok: {
         """
         User is verified, an API session is created, and API tokens are provided.
