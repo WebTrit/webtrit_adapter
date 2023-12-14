@@ -24,7 +24,7 @@ defmodule WebtritAdapterWeb.Api.V1.SupportedFunctionality do
   def parse("signup"), do: :signup
   def parse("otpSignin"), do: :otpSignin
   def parse("passwordSignin"), do: :passwordSignin
-  def parse("provision"), do: :autoProvision
+  def parse("autoProvision"), do: :autoProvision
   def parse("recordings"), do: :recordings
   def parse("callHistory"), do: :callHistory
   def parse("extensions"), do: :extensions
