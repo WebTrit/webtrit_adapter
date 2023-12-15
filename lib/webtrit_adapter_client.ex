@@ -1,5 +1,7 @@
 defmodule WebtritAdapterClient do
   @type result() :: {Tesla.Env.status(), Tesla.Env.body()} | {:error, any()}
+  @type headers_map() :: map()
+  @type result_with_headers() :: {Tesla.Env.status(), headers_map(), Tesla.Env.body()} | {:error, any()}
 
   @spec new(URI.t() | String.t(), String.t() | nil, String.t() | nil) :: Tesla.Client.t()
   def new(adapter_url, tenant_id \\ nil, access_token \\ nil) do
@@ -163,20 +165,24 @@ defmodule WebtritAdapterClient do
     request(client, options)
   end
 
-  @spec get_user_recording(Tesla.Client.t(), String.t()) :: result()
+  @spec get_user_recording(Tesla.Client.t(), String.t()) :: result_with_headers()
   def get_user_recording(client, recording_id) do
     options = [
       method: :get,
       url: "/user/recordings/#{recording_id}"
     ]
 
-    request(client, options)
+    request(client, options, true)
   end
 
-  defp request(client, options) do
+  defp request(client, options, return_headers \\ false) do
     case Tesla.request(client, options) do
-      {:ok, %Tesla.Env{status: code, body: body}} ->
-        {code, body}
+      {:ok, %Tesla.Env{status: code, headers: headers, body: body}} ->
+        if return_headers do
+          {code, Enum.into(headers, %{}), body}
+        else
+          {code, body}
+        end
 
       {:error, reason} ->
         {:error, reason}
