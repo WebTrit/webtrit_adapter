@@ -54,8 +54,8 @@ defmodule WebtritAdapterWeb.Api.V1.User.RecordingController do
            i_account,
            %{i_xdr: i_xdr}
          ) do
-      {200, data} ->
-        send_download(conn, {:binary, data}, filename: "#{i_xdr}.mp3", disposition: :inline)
+      {200, %{"content-type" => type}, data} ->
+        send_download(conn, {:binary, data}, filename: "#{i_xdr}", disposition: :inline, content_type: type)
 
       {:error, :missing_session_id} ->
         {:error, :not_found, :session_not_found}

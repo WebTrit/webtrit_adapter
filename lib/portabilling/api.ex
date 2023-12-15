@@ -19,30 +19,30 @@ defmodule Portabilling.Api do
     Tesla.client(middleware)
   end
 
-  def perform(client, {"Administrator", nil}, "Session" = service, method, params) do
-    request(client, service, method, params, nil)
+  def perform(client, {"Administrator", nil}, "Session" = service, method, params, return_headers) do
+    request(client, service, method, params, nil, return_headers)
   end
 
-  def perform(client, {"Administrator", nil}, service, method, params) do
+  def perform(client, {"Administrator", nil}, service, method, params, return_headers) do
     session_id = AdministratorSessionManager.get_session_id()
-    request(client, service, method, params, session_id)
+    request(client, service, method, params, session_id, return_headers)
   end
 
-  def perform(client, {"Account", nil}, "Session" = service, method, params) do
-    request(client, service, method, params, nil)
+  def perform(client, {"Account", nil}, "Session" = service, method, params, return_headers) do
+    request(client, service, method, params, nil, return_headers)
   end
 
-  def perform(client, {"Account", i_account}, service, method, params) do
+  def perform(client, {"Account", i_account}, service, method, params, return_headers) do
     case AccountSessionManager.get_session_id(i_account) do
       nil ->
         {:error, :missing_session_id}
 
       session_id ->
-        request(client, service, method, params, session_id)
+        request(client, service, method, params, session_id, return_headers)
     end
   end
 
-  defp request(client, service, method, params, session_id) do
+  defp request(client, service, method, params, session_id, return_headers) do
     request_body =
       %{
         "params" => params,
@@ -56,15 +56,19 @@ defmodule Portabilling.Api do
       |> Enum.map(fn {k, v} -> {k, @json_library.encode!(v)} end)
 
     case Tesla.post(client, "/#{service}/#{method}/", request_body) do
-      {:ok, %Tesla.Env{status: code, body: response_body}} ->
-        {code, response_body}
+      {:ok, %Tesla.Env{status: code, headers: response_headers, body: response_body}} ->
+        if return_headers do
+          {code, Enum.into(response_headers, %{}), response_body}
+        else
+          {code, response_body}
+        end
 
       {:error, reason} ->
         {:error, reason}
     end
   end
 
-  defmacro perform_contextual(client, unique_id \\ nil, params) do
+  defmacro perform_contextual(client, unique_id \\ nil, params, return_headers \\ false) do
     [service, realm | _] =
       __CALLER__.module
       |> to_string()
@@ -82,7 +86,8 @@ defmodule Portabilling.Api do
         unquote({realm, unique_id}),
         unquote(service),
         unquote(method),
-        unquote(params)
+        unquote(params),
+        unquote(return_headers)
       )
     end
   end
