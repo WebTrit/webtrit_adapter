@@ -1,5 +1,9 @@
 defmodule WebtritAdapterClient do
-  @type result() :: {Tesla.Env.status(), Tesla.Env.body()} | {:error, any()}
+  @type content_type() :: binary()
+  @type result() ::
+          {Tesla.Env.status(), Tesla.Env.body()}
+          | {Tesla.Env.status(), content_type(), Tesla.Env.body()}
+          | {:error, any()}
 
   @spec new(URI.t() | String.t(), String.t() | nil, String.t() | nil) :: Tesla.Client.t()
   def new(adapter_url, tenant_id \\ nil, access_token \\ nil) do
@@ -175,8 +179,14 @@ defmodule WebtritAdapterClient do
 
   defp request(client, options) do
     case Tesla.request(client, options) do
-      {:ok, %Tesla.Env{status: code, body: body}} ->
+      # response is JSON content type and processed by Tesla.Middleware.JSON
+      {:ok, %Tesla.Env{status: code, body: body}} when is_map(body) ->
         {code, body}
+
+      # response is not JSON content type - add actual content type to response tuple
+      {:ok, env, %Tesla.Env{status: code, body: body}} ->
+        content_type = Tesla.get_header(env, "content-type")
+        {code, content_type, body}
 
       {:error, reason} ->
         {:error, reason}

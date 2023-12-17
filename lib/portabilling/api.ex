@@ -56,8 +56,14 @@ defmodule Portabilling.Api do
       |> Enum.map(fn {k, v} -> {k, @json_library.encode!(v)} end)
 
     case Tesla.post(client, "/#{service}/#{method}/", request_body) do
-      {:ok, %Tesla.Env{status: code, body: response_body}} ->
+      # response is JSON content type and processed by Tesla.Middleware.DecodeJson
+      {:ok, %Tesla.Env{status: code, body: response_body}} when is_map(response_body) ->
         {code, response_body}
+
+      # response is not JSON content type - add actual content type to response tuple
+      {:ok, env = %Tesla.Env{status: code, body: response_body}} ->
+        content_type = Tesla.get_header(env, "content-type")
+        {code, content_type, response_body}
 
       {:error, reason} ->
         {:error, reason}
