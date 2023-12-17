@@ -1,7 +1,9 @@
 defmodule WebtritAdapterClient do
-  @type result() :: {Tesla.Env.status(), Tesla.Env.body()} | {:error, any()}
-  @type headers_map() :: map()
-  @type result_with_headers() :: {Tesla.Env.status(), headers_map(), Tesla.Env.body()} | {:error, any()}
+  @type content_type() :: binary()
+  @type result() ::
+          {Tesla.Env.status(), Tesla.Env.body()}
+          | {Tesla.Env.status(), content_type(), Tesla.Env.body()}
+          | {:error, any()}
 
   @spec new(URI.t() | String.t(), String.t() | nil, String.t() | nil) :: Tesla.Client.t()
   def new(adapter_url, tenant_id \\ nil, access_token \\ nil) do
@@ -165,24 +167,26 @@ defmodule WebtritAdapterClient do
     request(client, options)
   end
 
-  @spec get_user_recording(Tesla.Client.t(), String.t()) :: result_with_headers()
+  @spec get_user_recording(Tesla.Client.t(), String.t()) :: result()
   def get_user_recording(client, recording_id) do
     options = [
       method: :get,
       url: "/user/recordings/#{recording_id}"
     ]
 
-    request(client, options, true)
+    request(client, options)
   end
 
-  defp request(client, options, return_headers \\ false) do
+  defp request(client, options) do
     case Tesla.request(client, options) do
-      {:ok, %Tesla.Env{status: code, headers: headers, body: body}} ->
-        if return_headers do
-          {code, Enum.into(headers, %{}), body}
-        else
-          {code, body}
-        end
+      # response is JSON content type and processed by Tesla.Middleware.JSON
+      {:ok, %Tesla.Env{status: code, body: body}} when is_map(body) ->
+        {code, body}
+
+      # response is not JSON content type - add actual content type to response tuple
+      {:ok, env, %Tesla.Env{status: code, body: body}} ->
+        content_type = Tesla.get_header(env, "content-type")
+        {code, content_type, body}
 
       {:error, reason} ->
         {:error, reason}
