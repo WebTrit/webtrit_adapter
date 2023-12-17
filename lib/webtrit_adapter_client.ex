@@ -184,7 +184,7 @@ defmodule WebtritAdapterClient do
         {code, body}
 
       # response is not JSON content type - add actual content type to response tuple
-      {:ok, env, %Tesla.Env{status: code, body: body}} ->
+      {:ok, env = %Tesla.Env{status: code, body: body}} ->
         content_type = Tesla.get_header(env, "content-type")
         {code, content_type, body}
 
