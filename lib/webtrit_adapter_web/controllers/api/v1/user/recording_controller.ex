@@ -42,7 +42,10 @@ defmodule WebtritAdapterWeb.Api.V1.User.RecordingController do
         """
         Media data containing the call recording.
         """,
-        "audio/mpeg",
+        %{
+          "audio/mpeg" => [],
+          "application/zip" => []
+        },
         CommonSchema.BinaryResponse
       }
     ]
