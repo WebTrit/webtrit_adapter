@@ -16,6 +16,9 @@ import Config
 #
 # Alternatively, you can use `mix phx.gen.release` to generate a `bin/server`
 # script that automatically sets the env var above.
+
+@default_account_password_length 12
+
 if System.get_env("PHX_SERVER") do
   config :webtrit_adapter, WebtritAdapterWeb.Endpoint, server: true
 end
@@ -197,6 +200,11 @@ RuntimeConfig.config_env_try do
 end
 
 case RuntimeConfig.get_env_as_non_neg_integer("PORTABILLING_ACCOUNT_PASSWORD_LENGTH") do
+  nil ->
+    config :webtrit_adapter,
+           :portabilling_account_password_length,
+           @default_account_password_length
+
   portabilling_account_password_length ->
     config :webtrit_adapter,
            :portabilling_account_password_length,
