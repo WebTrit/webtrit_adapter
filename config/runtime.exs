@@ -196,6 +196,13 @@ RuntimeConfig.config_env_try do
   end
 end
 
+case RuntimeConfig.get_env_as_non_neg_integer("PORTABILLING_ACCOUNT_PASSWORD_LENGTH") do
+  account_password_length ->
+    config :webtrit_adapter,
+           :portabilling_account_password_length,
+           account_password_length
+end
+
 RuntimeConfig.config_env_try do
   case RuntimeConfig.get_env!("PORTASIP_HOST", "sip.webtrit.com") do
     portasip_host ->
