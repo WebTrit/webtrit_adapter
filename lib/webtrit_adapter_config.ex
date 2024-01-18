@@ -49,6 +49,11 @@ defmodule WebtritAdapterConfig do
     Application.get_env(:webtrit_adapter, :portabilling_demo_i_custom_field)
   end
 
+  @spec portabilling_account_password_length :: non_neg_integer()
+  def portabilling_account_password_length do
+    Application.get_env(:webtrit_adapter, :portabilling_account_password_length)
+  end
+
   @spec portasip_host :: String.t()
   def portasip_host do
     Application.get_env(:webtrit_adapter, :portasip_host)
