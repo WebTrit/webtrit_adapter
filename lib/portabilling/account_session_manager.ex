@@ -172,9 +172,10 @@ defmodule Portabilling.AccountSessionManager do
   @new_password_chars Enum.concat([?a..?z, ?A..?Z, ?0..?9])
   defp generate_new_password(length) when is_integer(length) and length >= 0 do
     1..length
-      |> Enum.map(fn _ -> Enum.random(@new_password_chars) end)
-      |> List.to_string()
+    |> Enum.map(fn _ -> Enum.random(@new_password_chars) end)
+    |> List.to_string()
   end
+
   defp generate_new_password() do
     generate_new_password(WebtritAdapterConfig.portabilling_account_password_length())
   end
