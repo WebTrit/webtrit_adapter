@@ -179,8 +179,12 @@ defmodule WebtritAdapterClient do
 
   defp request(client, options) do
     case Tesla.request(client, options) do
-      # response is JSON content type and processed by Tesla.Middleware.JSON
-      {:ok, %Tesla.Env{status: code, body: body}} when is_map(body) ->
+      {:ok, %Tesla.Env{status: 204, body: body}} ->
+        {204, body}
+
+      # response is JSON content type and processed by Tesla.Middleware.JSON or
+      # insurance in case of receiving incorrect data
+      {:ok, %Tesla.Env{status: code, body: body}} when is_map(body) or bit_size(body) == 0 ->
         {code, body}
 
       # response is not JSON content type - add actual content type to response tuple
