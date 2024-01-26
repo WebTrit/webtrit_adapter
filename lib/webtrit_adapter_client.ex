@@ -179,6 +179,13 @@ defmodule WebtritAdapterClient do
 
   defp request(client, options) do
     case Tesla.request(client, options) do
+      {:ok, %Tesla.Env{status: 204}} ->
+        {204, %{}}
+
+      # response is empty string and skipped by Tesla.Middleware.JSON
+      {:ok, %Tesla.Env{status: code, body: body}} when body == "" ->
+        {code, %{}}
+
       # response is JSON content type and processed by Tesla.Middleware.JSON
       {:ok, %Tesla.Env{status: code, body: body}} when is_map(body) ->
         {code, body}
