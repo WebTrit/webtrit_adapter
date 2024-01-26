@@ -54,21 +54,10 @@ defmodule WebtritAdapterWeb.Api.V1.User.ContactController do
                %{i_customer: i_customer}
              ) do
           {200, %{"account_list" => account_list}} ->
-            ip_centrex_account_list = Enum.filter(account_list, fn account ->
-              cond do
-                !!account["extension_id"] == false ->
-                  false
-
-                !!account["dual_version_system"] == false ->
-                  true
-
-                account["dual_version_system"] == "target" ->
-                  true
-
-                true ->
-                  false
-              end
-            end)
+            ip_centrex_account_list =
+              Enum.filter(account_list, fn account ->
+                account["extension_id"] != nil or account["dual_version_system"] in [nil, "target"]
+              end)
 
             render(conn, account_list: ip_centrex_account_list)
 
