@@ -38,7 +38,18 @@ defmodule Portabilling.Api do
         {:error, :missing_session_id}
 
       session_id ->
-        request(client, service, method, params, session_id)
+        case request(client, service, method, params, session_id) do
+          {500, %{"faultcode" => "Server.Session.check_auth.auth_failed"}} ->
+            AccountSessionManager.del_session_id(i_account)
+            {:error, :missing_session_id}
+
+          {500, _content_type, %{"faultcode" => "Server.Session.check_auth.auth_failed"}} ->
+            AccountSessionManager.del_session_id(i_account)
+            {:error, :missing_session_id}
+
+          response ->
+            response
+        end
     end
   end
 
