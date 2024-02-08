@@ -43,6 +43,11 @@ defmodule Portabilling.AccountSessionManager do
     GenServer.call(__MODULE__, {:get_session_id, i_account})
   end
 
+  @spec pop_session_id(integer()) :: binary() | nil
+  def pop_session_id(i_account) do
+    GenServer.call(__MODULE__, {:pop_session_id, i_account})
+  end
+
   # Server
 
   @impl true
@@ -122,6 +127,17 @@ defmodule Portabilling.AccountSessionManager do
             {:reply, nil, state}
         end
     end
+  end
+
+  @impl true
+  def handle_call(
+        {:pop_session_id, i_account},
+        _from,
+        %State{session_ids: session_ids} = state
+      ) do
+    {session_id, session_ids} = Map.pop(session_ids, i_account)
+
+    {:reply, session_id, %{state | session_ids: session_ids}}
   end
 
   @impl true
