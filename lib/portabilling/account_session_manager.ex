@@ -43,9 +43,9 @@ defmodule Portabilling.AccountSessionManager do
     GenServer.call(__MODULE__, {:get_session_id, i_account})
   end
 
-  @spec del_session_id(integer()) :: :ok
+  @spec del_session_id(integer()) :: :ok | nil
   def del_session_id(i_account) do
-    GenServer.cast(__MODULE__, {:del_session_id, i_account})
+    GenServer.call(__MODULE__, {:del_session_id, i_account})
   end
 
   # Server
@@ -130,13 +130,18 @@ defmodule Portabilling.AccountSessionManager do
   end
 
   @impl true
-  def handle_cast(
+  def handle_call(
         {:del_session_id, i_account},
+        _from,
         %State{session_ids: session_ids} = state
       ) do
-    session_ids = Map.delete(session_ids, i_account)
+    if Map.has_key?(session_ids, i_account) do
+      session_ids = Map.delete(session_ids, i_account)
 
-    {:noreply, %{state | session_ids: session_ids}}
+      {:reply, :ok, %{state | session_ids: session_ids}}
+    else
+      {:reply, nil, state}
+    end
   end
 
   @impl true
