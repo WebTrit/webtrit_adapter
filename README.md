@@ -37,8 +37,6 @@ Environment variables descriptions:
   * `PORTABILLING_DEMO_I_CUSTOM_FIELD` - the ID of the custom field in PortaBilling
     of a demo account's activated state (the custom field must be a number type
     with `0` default value) (optional, can be defined only with `PORTABILLING_DEMO_I_CUSTOMER`)
-  * `PORTABILLING_ACCOUNT_PASSWORD_LENGTH` - which minimum length of the account password can be 
-    accessible for the internal Portabilling security checker (optional, default value is `12`)
   * `PORTASIP_HOST` - PortaSIP host
   * `PORTASIP_PORT` - PortaSIP port (optional)
   * `JANUS_SIP_FORCE_TCP` - forces TCP for the SIP messaging (optional, default value is `true`)

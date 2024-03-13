@@ -10,6 +10,7 @@ defmodule WebtritAdapterWeb.Api.V1.User.HistoryController do
   alias WebtritAdapterWeb.Api.V1.CommonParameter
   alias WebtritAdapterWeb.Api.V1.CommonResponse
   alias WebtritAdapterWeb.Api.V1.User.HistorySchema
+  alias WebtritAdapterWeb.Api.V1.User.ControllerMapping
 
   plug OpenApiSpex.Plug.CastAndValidate, render_error: CastAndValidateRenderError
 
@@ -44,6 +45,7 @@ defmodule WebtritAdapterWeb.Api.V1.User.HistoryController do
     ],
     responses: [
       CommonResponse.unauthorized(),
+      CommonResponse.forbidden(),
       CommonResponse.session_and_user_not_found(),
       CommonResponse.unprocessable(),
       CommonResponse.external_api_issue(),
@@ -78,8 +80,8 @@ defmodule WebtritAdapterWeb.Api.V1.User.HistoryController do
           items_total: total
         )
 
-      {:error, :missing_session_id} ->
-        {:error, :not_found, :session_not_found}
+      {:error, error} ->
+        ControllerMapping.api_account_error_to_action_error(error)
 
       _ ->
         {:error, :internal_server_error, :external_api_issue}

@@ -38,7 +38,7 @@ defmodule Portabilling.AccountSessionManager do
     GenServer.start_link(__MODULE__, config, name: __MODULE__)
   end
 
-  @spec get_session_id(integer()) :: binary() | nil
+  @spec get_session_id(integer()) :: binary() | nil | :login_and_password_required | :password_change_required
   def get_session_id(i_account) do
     GenServer.call(__MODULE__, {:get_session_id, i_account})
   end
@@ -86,28 +86,11 @@ defmodule Portabilling.AccountSessionManager do
                 {:reply, session_id, %{state | session_ids: session_ids}}
 
               {500, %{"faultcode" => "Server.Session.alert_You_must_change_password"}} ->
-                case Api.Account.Session.change_password(account_client, %{
-                       "login" => login,
-                       "password" => password,
-                       "new_password" => generate_new_password(),
-                       "establish_new_session" => 1
-                     }) do
-                  {200, %{"session_id" => session_id}} ->
-                    Logger.debug(
-                      "login via changed password to account realm with login [#{login}] (retrieved by i_account [#{i_account}}]) success"
-                    )
+                Logger.warning(
+                  "login to account realm with login [#{login}] (retrieved by i_account [#{i_account}}]) required to change password"
+                )
 
-                    schedule_session_invalidate(config.session_invalidate_period, i_account)
-
-                    session_ids = Map.put(session_ids, i_account, session_id)
-
-                    {:reply, session_id, %{state | session_ids: session_ids}}
-
-                  {_, fault} ->
-                    Logger.warning("login via changed password to account realm with fault [#{inspect(fault)}]")
-
-                    {:reply, nil, state}
-                end
+                {:reply, :password_change_required, state}
 
               {_, fault} ->
                 Logger.warning("login to account realm with fault [#{inspect(fault)}]")
@@ -120,7 +103,7 @@ defmodule Portabilling.AccountSessionManager do
               "can't login to account realm without login and/or password (retrieved by i_account [#{i_account}}])"
             )
 
-            {:reply, nil, state}
+            {:reply, :login_and_password_required, state}
 
           {_, fault} ->
             Logger.warning("get account info with fault [#{inspect(fault)}]")
@@ -183,16 +166,5 @@ defmodule Portabilling.AccountSessionManager do
 
   defp schedule_session_invalidate(session_invalidate_period, i_account) do
     Process.send_after(self(), {:session_invalidate, i_account}, session_invalidate_period)
-  end
-
-  @new_password_chars Enum.concat([?a..?z, ?A..?Z, ?0..?9])
-  defp generate_new_password(length) when is_integer(length) and length >= 0 do
-    1..length
-    |> Enum.map(fn _ -> Enum.random(@new_password_chars) end)
-    |> List.to_string()
-  end
-
-  defp generate_new_password() do
-    generate_new_password(WebtritAdapterConfig.portabilling_account_password_length())
   end
 end

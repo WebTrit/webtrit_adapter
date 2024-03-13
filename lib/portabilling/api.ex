@@ -35,13 +35,19 @@ defmodule Portabilling.Api do
   def perform(client, {"Account", i_account}, service, method, params) do
     case AccountSessionManager.get_session_id(i_account) do
       nil ->
-        {:error, :missing_session_id}
+        {:error, :session_id_missed}
+
+      :login_and_password_required ->
+        {:error, :login_and_password_required}
+
+      :password_change_required ->
+        {:error, :password_change_required}
 
       session_id ->
         case request(client, service, method, params, session_id) do
           {500, %{"faultcode" => "Server.Session.check_auth.auth_failed"}} ->
             AccountSessionManager.pop_session_id(i_account)
-            {:error, :missing_session_id}
+            {:error, :session_id_auth_failed}
 
           response ->
             response

@@ -9,6 +9,7 @@ defmodule WebtritAdapterWeb.Api.V1.User.InfoController do
   alias WebtritAdapterWeb.Api.V1.FallbackController
   alias WebtritAdapterWeb.Api.V1.CommonResponse
   alias WebtritAdapterWeb.Api.V1.User.InfoSchema
+  alias WebtritAdapterWeb.Api.V1.User.ControllerMapping
 
   plug OpenApiSpex.Plug.CastAndValidate, render_error: CastAndValidateRenderError
 
@@ -31,6 +32,7 @@ defmodule WebtritAdapterWeb.Api.V1.User.InfoController do
     """,
     responses: [
       CommonResponse.unauthorized(),
+      CommonResponse.forbidden(),
       CommonResponse.session_and_user_not_found(),
       CommonResponse.unprocessable(),
       CommonResponse.external_api_issue(),
@@ -61,8 +63,8 @@ defmodule WebtritAdapterWeb.Api.V1.User.InfoController do
           {200, %{"alias_list" => alias_list}} ->
             render(conn, account_info: account_info, alias_list: alias_list)
 
-          {:error, :missing_session_id} ->
-            {:error, :not_found, :session_not_found}
+          {:error, error} ->
+            ControllerMapping.api_account_error_to_action_error(error)
 
           _ ->
             {:error, :internal_server_error, :external_api_issue}
@@ -71,8 +73,8 @@ defmodule WebtritAdapterWeb.Api.V1.User.InfoController do
       {200, %{}} ->
         {:error, :not_found, :user_not_found}
 
-      {:error, :missing_session_id} ->
-        {:error, :not_found, :session_not_found}
+      {:error, error} ->
+        ControllerMapping.api_account_error_to_action_error(error)
 
       _ ->
         {:error, :internal_server_error, :external_api_issue}

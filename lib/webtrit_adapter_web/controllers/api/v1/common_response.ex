@@ -23,6 +23,24 @@ defmodule WebtritAdapterWeb.Api.V1.CommonResponse do
     }
   end
 
+  def forbidden() do
+    {
+      :forbidden,
+      {
+        """
+        Forbidden: The request was forbidden for one of the following reasons:
+        - login to the account realm requires both login and password (PortaBilling specific)
+        - login to the account realm requires a password change (PortaBilling specific)
+        """,
+        "application/json",
+        CommonSchema.error_response([
+          :login_and_password_required,
+          :password_change_required
+        ])
+      }
+    }
+  end
+
   def session_not_found() do
     {
       :not_found,
