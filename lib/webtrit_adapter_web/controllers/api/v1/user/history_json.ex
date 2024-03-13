@@ -1,5 +1,5 @@
 defmodule WebtritAdapterWeb.Api.V1.User.HistoryJSON do
-  alias WebtritAdapterWeb.Api.V1.User.Mapping
+  alias WebtritAdapterWeb.Api.V1.User.JSONMapping
 
   def index(%{
         xdr_list: xdr_list,
@@ -23,13 +23,13 @@ defmodule WebtritAdapterWeb.Api.V1.User.HistoryJSON do
       call_id: xdr["call_id"],
       callee: xdr["CLD"],
       caller: xdr["CLI"],
-      direction: Mapping.direction(xdr),
-      status: Mapping.call_status(xdr),
+      direction: JSONMapping.direction(xdr),
+      status: JSONMapping.call_status(xdr),
       disconnect_reason: xdr["disconnect_reason"],
-      connect_time: Mapping.connect_time(xdr, time_zone),
-      disconnect_time: Mapping.disconnect_time(xdr, time_zone),
+      connect_time: JSONMapping.connect_time(xdr, time_zone),
+      disconnect_time: JSONMapping.disconnect_time(xdr, time_zone),
       duration: xdr["charged_quantity"],
-      recording_id: if(Mapping.call_recording_exist(xdr), do: xdr["i_xdr"], else: nil)
+      recording_id: if(JSONMapping.call_recording_exist(xdr), do: xdr["i_xdr"], else: nil)
     }
     |> Utils.Map.deep_filter_blank_values()
   end

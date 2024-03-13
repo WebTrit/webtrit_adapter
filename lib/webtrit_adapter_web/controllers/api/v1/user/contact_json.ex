@@ -1,5 +1,5 @@
 defmodule WebtritAdapterWeb.Api.V1.User.ContactJSON do
-  alias WebtritAdapterWeb.Api.V1.User.Mapping
+  alias WebtritAdapterWeb.Api.V1.User.JSONMapping
 
   def index(%{account_list: account_list}) do
     %{
@@ -9,7 +9,7 @@ defmodule WebtritAdapterWeb.Api.V1.User.ContactJSON do
 
   defp data(account) do
     %{
-      sip_status: Mapping.sip_status(account),
+      sip_status: JSONMapping.sip_status(account),
       numbers: %{
         main: account["id"],
         ext: account["extension_id"],

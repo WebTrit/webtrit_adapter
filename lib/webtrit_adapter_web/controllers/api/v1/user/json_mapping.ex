@@ -1,4 +1,4 @@
-defmodule WebtritAdapterWeb.Api.V1.User.Mapping do
+defmodule WebtritAdapterWeb.Api.V1.User.JSONMapping do
   import Bitwise
 
   def status(account_info) do

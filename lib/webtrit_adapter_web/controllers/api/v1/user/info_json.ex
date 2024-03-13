@@ -1,9 +1,9 @@
 defmodule WebtritAdapterWeb.Api.V1.User.InfoJSON do
-  alias WebtritAdapterWeb.Api.V1.User.Mapping
+  alias WebtritAdapterWeb.Api.V1.User.JSONMapping
 
   def show(%{account_info: account_info, alias_list: alias_list}) do
     %{
-      status: Mapping.status(account_info),
+      status: JSONMapping.status(account_info),
       sip: %{
         username: account_info["id"],
         password: account_info["h323_password"],
@@ -13,10 +13,10 @@ defmodule WebtritAdapterWeb.Api.V1.User.InfoJSON do
           force_tcp: WebtritAdapterConfig.janus_sip_force_tcp()
         },
         registration_server: nil,
-        display_name: Mapping.display_name(account_info)
+        display_name: JSONMapping.display_name(account_info)
       },
       balance: %{
-        balance_type: Mapping.balance_type(account_info),
+        balance_type: JSONMapping.balance_type(account_info),
         amount: account_info["balance"],
         credit_limit: account_info["credit_limit"],
         currency: account_info["iso_4217"] || "$"
@@ -24,7 +24,7 @@ defmodule WebtritAdapterWeb.Api.V1.User.InfoJSON do
       numbers: %{
         main: account_info["id"],
         ext: account_info["extension_id"],
-        additional: Mapping.alias_list_to_numbers(alias_list)
+        additional: JSONMapping.alias_list_to_numbers(alias_list)
       },
       email: account_info["email"],
       first_name: account_info["firstname"],
