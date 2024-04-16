@@ -40,19 +40,19 @@ defmodule WebtritAdapter.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, "~> 1.7.4"},
-      {:phoenix_ecto, "~> 4.4"},
-      {:ecto_sql, "~> 3.6"},
+      {:phoenix, "~> 1.7.12"},
+      {:phoenix_ecto, "~> 4.5"},
+      {:ecto_sql, "~> 3.11"},
       {:postgrex, ">= 0.0.0"},
-      {:phoenix_live_dashboard, "~> 0.8.0"},
-      {:telemetry_metrics, "~> 0.6"},
-      {:telemetry_poller, "~> 1.0"},
+      {:phoenix_live_dashboard, "~> 0.8.3"},
+      {:telemetry_metrics, "~> 1.0"},
+      {:telemetry_poller, "~> 1.1"},
       {:jason, "~> 1.2"},
-      {:plug_cowboy, "~> 2.5"},
+      {:plug_cowboy, "~> 2.7"},
       {:tz, "~> 0.26"},
-      {:open_api_spex, "~> 3.17"},
-      {:finch, "~> 0.16"},
-      {:tesla, "~> 1.7"}
+      {:open_api_spex, "~> 3.18"},
+      {:finch, "~> 0.18"},
+      {:tesla, "~> 1.8"}
     ]
   end
 
