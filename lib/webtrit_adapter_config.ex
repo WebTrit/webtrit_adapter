@@ -95,4 +95,9 @@ defmodule WebtritAdapterConfig do
   def http_client_ssl_verify_type do
     Application.get_env(:webtrit_adapter, :http_client_ssl_verify_type)
   end
+
+  @spec skip_contacts_without_extension :: boolean()
+  def skip_contacts_without_extension do
+    Application.get_env(:webtrit_adapter, :skip_contacts_without_extension)
+  end
 end

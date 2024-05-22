@@ -280,3 +280,15 @@ case RuntimeConfig.get_env_from_allowed_values("HTTP_CLIENT_SSL_VERIFY_TYPE", [
            :http_client_ssl_verify_type,
            String.to_atom(value)
 end
+
+case RuntimeConfig.get_env_as_boolean("SKIP_CONTACTS_WITHOUT_EXTENSION") do
+  nil ->
+    config :webtrit_adapter,
+           :skip_contacts_without_extension,
+           true
+
+  skip_contacts_without_extension ->
+    config :webtrit_adapter,
+           :skip_contacts_without_extension,
+           skip_contacts_without_extension
+end
