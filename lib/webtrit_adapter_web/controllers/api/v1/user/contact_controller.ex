@@ -61,7 +61,7 @@ defmodule WebtritAdapterWeb.Api.V1.User.ContactController do
                 account["extension_id"] != nil or account["dual_version_system"] in [nil, "target"]
               end)
 
-            render(conn, account_list: ip_centrex_account_list, owner: i_account)
+            render(conn, account_list: ip_centrex_account_list, current_user: i_account)
 
           _ ->
             {:error, :internal_server_error, :external_api_issue}

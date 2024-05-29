@@ -446,7 +446,7 @@ defmodule WebtritAdapterWeb.Api.V1.CommonSchema do
           description: "The name of the company the user is associated with.",
           example: "Matrix"
         },
-        is_owner: %Schema{
+        is_current_user: %Schema{
           type: :boolean,
           description: "Indicates whether the contact is associated with the same user who making the request.",
           example: false
