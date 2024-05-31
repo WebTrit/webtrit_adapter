@@ -49,6 +49,11 @@ defmodule WebtritAdapterConfig do
     Application.get_env(:webtrit_adapter, :portabilling_demo_i_custom_field)
   end
 
+  @spec portabilling_filter_contacts_without_extension :: boolean()
+  def portabilling_filter_contacts_without_extension do
+    Application.get_env(:webtrit_adapter, :portabilling_filter_contacts_without_extension)
+  end
+
   @spec portasip_host :: String.t()
   def portasip_host do
     Application.get_env(:webtrit_adapter, :portasip_host)
@@ -94,10 +99,5 @@ defmodule WebtritAdapterConfig do
   @spec http_client_ssl_verify_type :: :verify_none | :verify_peer
   def http_client_ssl_verify_type do
     Application.get_env(:webtrit_adapter, :http_client_ssl_verify_type)
-  end
-
-  @spec skip_contacts_without_extension :: boolean()
-  def skip_contacts_without_extension do
-    Application.get_env(:webtrit_adapter, :skip_contacts_without_extension)
   end
 end

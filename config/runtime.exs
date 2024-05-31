@@ -196,6 +196,18 @@ RuntimeConfig.config_env_try do
   end
 end
 
+case RuntimeConfig.get_env_as_boolean("PORTABILLING_FILTER_CONTACTS_WITHOUT_EXTENSION") do
+  nil ->
+    config :webtrit_adapter,
+           :portabilling_filter_contacts_without_extension,
+           true
+
+  portabilling_filter_contacts_without_extension ->
+    config :webtrit_adapter,
+           :portabilling_filter_contacts_without_extension,
+           portabilling_filter_contacts_without_extension
+end
+
 RuntimeConfig.config_env_try do
   case RuntimeConfig.get_env!("PORTASIP_HOST", "sip.webtrit.com") do
     portasip_host ->
@@ -279,16 +291,4 @@ case RuntimeConfig.get_env_from_allowed_values("HTTP_CLIENT_SSL_VERIFY_TYPE", [
     config :webtrit_adapter,
            :http_client_ssl_verify_type,
            String.to_atom(value)
-end
-
-case RuntimeConfig.get_env_as_boolean("SKIP_CONTACTS_WITHOUT_EXTENSION") do
-  nil ->
-    config :webtrit_adapter,
-           :skip_contacts_without_extension,
-           true
-
-  skip_contacts_without_extension ->
-    config :webtrit_adapter,
-           :skip_contacts_without_extension,
-           skip_contacts_without_extension
 end

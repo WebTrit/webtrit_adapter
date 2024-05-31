@@ -59,11 +59,8 @@ defmodule WebtritAdapterWeb.Api.V1.User.ContactController do
             ip_centrex_account_list =
               Enum.filter(account_list, fn account ->
                 if account["dual_version_system"] in [nil, "target"] do
-                  if WebtritAdapterConfig.skip_contacts_without_extension() and is_nil(account["extension_id"]) do
-                    false
-                  else
-                    true
-                  end
+                  !WebtritAdapterConfig.portabilling_filter_contacts_without_extension() or
+                    account["extension_id"] != nil
                 else
                   false
                 end
