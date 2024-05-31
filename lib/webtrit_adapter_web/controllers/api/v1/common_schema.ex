@@ -450,7 +450,7 @@ defmodule WebtritAdapterWeb.Api.V1.CommonSchema do
           type: :boolean,
           description: "Indicates whether the contact is associated with the same user who making the request.",
           example: false
-        },
+        }
       },
       required: [:numbers]
     })
