@@ -66,7 +66,7 @@ defmodule WebtritAdapterWeb.Api.V1.User.ContactController do
                 end
               end)
 
-            render(conn, account_list: ip_centrex_account_list)
+            render(conn, account_list: ip_centrex_account_list, current_user_i_account: i_account)
 
           _ ->
             {:error, :internal_server_error, :external_api_issue}

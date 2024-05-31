@@ -445,6 +445,11 @@ defmodule WebtritAdapterWeb.Api.V1.CommonSchema do
           type: :string,
           description: "The name of the company the user is associated with.",
           example: "Matrix"
+        },
+        is_current_user: %Schema{
+          type: :boolean,
+          description: "Indicates whether the contact is associated with the same user who making the request.",
+          example: false
         }
       },
       required: [:numbers]
