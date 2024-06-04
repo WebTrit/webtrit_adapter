@@ -17,6 +17,7 @@ defmodule WebtritAdapterWeb.Api.V1.User.ContactController do
   tags ["user"]
   security [%{"bearerAuth" => []}]
   OpenApiSpexExt.parameters("$ref": "#/components/parameters/TenantID")
+  OpenApiSpexExt.parameters("$ref": "#/components/parameters/AcceptLanguage")
 
   def action(%{assigns: %{i_account: i_account}} = conn, _) do
     apply(__MODULE__, action_name(conn), [conn, conn.params, i_account])

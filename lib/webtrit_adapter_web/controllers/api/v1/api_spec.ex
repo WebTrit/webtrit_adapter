@@ -114,6 +114,18 @@ defmodule WebtritAdapterWeb.Api.V1.ApiSpec do
           Note that not all adapter implementations may support this functionality.
           """,
           schema: %Schema{type: :string}
+        },
+        "AcceptLanguage" => %Parameter{
+          name: :"Accept-Language",
+          in: :header,
+          description: """
+          Specifies the preferred languages for the response, ordered by priority.
+
+          The server will attempt to serve content in one of the preferred languages, if available. See RFC-3282
+          """,
+          schema: %Schema{
+            type: :string
+          }
         }
       }
     }

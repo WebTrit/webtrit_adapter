@@ -16,6 +16,7 @@ defmodule WebtritAdapterWeb.Api.V1.System.InfoController do
 
   tags ["system"]
   OpenApiSpexExt.parameters("$ref": "#/components/parameters/TenantID")
+  OpenApiSpexExt.parameters("$ref": "#/components/parameters/AcceptLanguage")
 
   OpenApiSpexExt.operation(:show,
     summary: "Retrieve system and Adaptee information",
