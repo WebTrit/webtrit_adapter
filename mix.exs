@@ -52,7 +52,9 @@ defmodule WebtritAdapter.MixProject do
       {:tz, "~> 0.26"},
       {:open_api_spex, "~> 3.18"},
       {:finch, "~> 0.18"},
-      {:tesla, "~> 1.8"}
+      {:tesla, "~> 1.8"},
+      {:ex_cldr, "~> 2.37"},
+      {:ex_cldr_plugs, "~> 1.3"}
     ]
   end
 
