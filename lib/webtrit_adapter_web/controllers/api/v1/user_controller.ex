@@ -20,6 +20,7 @@ defmodule WebtritAdapterWeb.Api.V1.UserController do
 
   tags ["user", "session"]
   OpenApiSpexExt.parameters("$ref": "#/components/parameters/TenantID")
+  OpenApiSpexExt.parameters("$ref": "#/components/parameters/AcceptLanguage")
 
   def action(conn, _) do
     apply(__MODULE__, action_name(conn), [conn, conn.params, conn.body_params])

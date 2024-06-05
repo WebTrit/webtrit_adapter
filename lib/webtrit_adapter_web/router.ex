@@ -12,6 +12,11 @@ defmodule WebtritAdapterWeb.Router do
   pipeline :api_v1 do
     plug OpenApiSpex.Plug.PutApiSpec, module: WebtritAdapterWeb.Api.V1.ApiSpec
     plug WebtritAdapterWeb.Api.V1.Plug.AssignPortabillingApiClients
+
+    plug Cldr.Plug.PutLocale,
+      apps: [:cldr],
+      from: [:accept_language],
+      cldr: WebtritAdapter.Cldr
   end
 
   pipeline :api_v1_auth do
