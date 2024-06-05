@@ -10,14 +10,14 @@ defmodule WebtritAdapter.Plug.MetadataAcceptLanguageHeader do
 
   @impl true
   def call(conn, _) do
-    accept_language = conn |> fetch_accept_language()
+    accept_language = conn |> fetch_accept_language_header()
 
     Logger.metadata(accept_language: accept_language)
 
     conn
   end
 
-  defp fetch_accept_language(conn) do
+  defp fetch_accept_language_header(conn) do
     conn |> get_req_header("accept-language") |> List.first()
   end
 end
