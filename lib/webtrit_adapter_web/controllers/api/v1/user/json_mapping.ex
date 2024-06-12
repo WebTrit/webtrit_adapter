@@ -42,6 +42,7 @@ defmodule WebtritAdapterWeb.Api.V1.User.JSONMapping do
 
   defp billing_model_to_balance_type(-1, _, _), do: :prepaid
   defp billing_model_to_balance_type(0, _, _), do: :inapplicable
+  defp billing_model_to_balance_type(1, _, 2), do: :postpaid
   defp billing_model_to_balance_type(1, _, 3), do: :postpaid
   defp billing_model_to_balance_type(2, _, _), do: :inapplicable
   defp billing_model_to_balance_type(4, -1, _), do: :prepaid
