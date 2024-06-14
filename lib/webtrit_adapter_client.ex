@@ -208,6 +208,17 @@ defmodule WebtritAdapterClient do
     request(client, options)
   end
 
+  @spec mark_user_voicemail_message_as_seen(Tesla.Client.t(), String.t(), map()) :: result()
+  def mark_user_voicemail_message_as_seen(client, message_id, data) do
+    options = [
+      method: :patch,
+      url: "/user/voicemail/#{message_id}/seen",
+      body: data
+    ]
+
+    request(client, options)
+  end
+
   defp request(client, options) do
     case Tesla.request(client, options) do
       {:ok, %Tesla.Env{status: 204}} ->
