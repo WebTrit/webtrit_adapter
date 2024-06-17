@@ -182,7 +182,7 @@ defmodule WebtritAdapterClient do
   def get_user_voicemail_messages(client) do
     options = [
       method: :get,
-      url: "/user/voicemail"
+      url: "/user/voicemails"
     ]
 
     request(client, options)
@@ -192,28 +192,39 @@ defmodule WebtritAdapterClient do
   def get_user_voicemail_message_details(client, message_id) do
     options = [
       method: :get,
-      url: "/user/voicemail/#{message_id}"
+      url: "/user/voicemails/#{message_id}"
     ]
 
     request(client, options)
   end
 
-  @spec get_user_voicemail_message_attachment(Tesla.Client.t(), String.t()) :: result()
-  def get_user_voicemail_message_attachment(client, message_id) do
+  @spec get_user_voicemail_message_attachment(Tesla.Client.t(), String.t(), Tesla.Env.query() | nil) :: result()
+  def get_user_voicemail_message_attachment(client, message_id, query \\ []) do
     options = [
       method: :get,
-      url: "/user/voicemail/#{message_id}/attachment"
+      url: "/user/voicemails/#{message_id}/attachment",
+      query: query
     ]
 
     request(client, options)
   end
 
-  @spec mark_user_voicemail_message_as_seen(Tesla.Client.t(), String.t(), map()) :: result()
-  def mark_user_voicemail_message_as_seen(client, message_id, data) do
+  @spec patch_user_voicemail_message(Tesla.Client.t(), String.t(), map()) :: result()
+  def patch_user_voicemail_message(client, message_id, data) do
     options = [
       method: :patch,
-      url: "/user/voicemail/#{message_id}/seen",
+      url: "/user/voicemails/#{message_id}",
       body: data
+    ]
+
+    request(client, options)
+  end
+
+  @spec delete_user_voicemail_message(Tesla.Client.t(), String.t()) :: result()
+  def delete_user_voicemail_message(client, message_id) do
+    options = [
+      method: :delete,
+      url: "/user/voicemails/#{message_id}"
     ]
 
     request(client, options)
