@@ -2,7 +2,7 @@ defmodule WebtritAdapterWeb.Api.V1.User.VoicemailController do
   use WebtritAdapterWeb, :controller
   use OpenApiSpex.ControllerSpecs
 
-  require OpenApiSpexExt
+  use OpenApiSpexExt
 
   alias WebtritAdapterWeb.Api.V1.CastAndValidateRenderError
   alias WebtritAdapterWeb.Api.V1.FallbackController
@@ -16,6 +16,7 @@ defmodule WebtritAdapterWeb.Api.V1.User.VoicemailController do
 
   tags ["user"]
   security [%{"bearerAuth" => []}]
+  OpenApiSpexExt.parameters("$ref": "#/components/parameters/TenantID")
   OpenApiSpexExt.parameters("$ref": "#/components/parameters/AcceptLanguage")
 
   def action(%{assigns: %{i_account: i_account}} = conn, _) do
