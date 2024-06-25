@@ -38,10 +38,6 @@ defmodule WebtritAdapterWeb.Api.V1.User.VoicemailSchema do
           description: "The duration of the voice message in seconds.",
           example: 3.45
         },
-        fax_pages: %Schema{
-          type: :integer,
-          description: "The number of fax pages in the message."
-        },
         size: %Schema{
           type: :integer,
           description: "The total size of all attachments in the message in KB.",
