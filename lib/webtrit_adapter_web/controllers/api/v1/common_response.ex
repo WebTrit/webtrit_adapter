@@ -87,6 +87,19 @@ defmodule WebtritAdapterWeb.Api.V1.CommonResponse do
     }
   end
 
+  def not_found(codes_enum \\ []) do
+    {
+      :not_found,
+      {
+        """
+        Not Found: The requested resource could not be located.
+        """,
+        "application/json",
+        CommonSchema.error_response(codes_enum)
+      }
+    }
+  end
+
   def unprocessable(additional_codes_enum \\ []) do
     {
       :unprocessable_entity,

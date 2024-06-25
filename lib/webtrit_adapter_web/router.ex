@@ -72,6 +72,12 @@ defmodule WebtritAdapterWeb.Router do
         resources "/contacts", ContactController, only: [:index]
         resources "/history", HistoryController, only: [:index]
         resources "/recordings", RecordingController, only: [:show], param: "recording_id"
+
+        scope "/voicemails" do
+          resources "/", VoicemailController, only: [:index, :show, :delete], param: "message_id"
+          patch "/:message_id", VoicemailController, :update, param: "message_id"
+          get "/:message_id/attachment", VoicemailController, :show_attachment, param: "message_id"
+        end
       end
     end
   end

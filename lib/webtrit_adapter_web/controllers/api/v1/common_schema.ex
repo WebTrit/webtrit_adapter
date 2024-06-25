@@ -455,4 +455,86 @@ defmodule WebtritAdapterWeb.Api.V1.CommonSchema do
       required: [:numbers]
     })
   end
+
+  defmodule VoicemailMessageId do
+    OpenApiSpex.schema(%{
+      type: :string,
+      description: """
+      A unique identifier for a voicemail message.
+      """
+    })
+  end
+
+  defmodule VoicemailMessage do
+    OpenApiSpex.schema(%{
+      type: :object,
+      properties: %{
+        id: VoicemailMessageId,
+        type: %Schema{
+          type: :string,
+          description: "The type of the message.",
+          enum: [
+            :voice,
+            :fax
+          ]
+        },
+        duration: %Schema{
+          type: :number,
+          description: "The duration of the voice message in seconds.",
+          example: 3.45
+        },
+        size: %Schema{
+          type: :integer,
+          description: "The total size of all attachments in the message in KB.",
+          example: 5
+        },
+        date: %Schema{
+          type: :string,
+          format: "date-time",
+          description: "The delivery date of the message."
+        },
+        seen: %Schema{
+          type: :boolean,
+          description: "Indicates whether this message has been seen.",
+          example: false
+        }
+      },
+      required: [:id, :type]
+    })
+  end
+
+  defmodule VoicemailMessageAttachment do
+    OpenApiSpex.schema(%{
+      type: :object,
+      properties: %{
+        type: %Schema{
+          type: :string,
+          description: "The MIME type of the body.",
+          example: "audio"
+        },
+        subtype: %Schema{
+          type: :string,
+          description: "The MIME subtype of the body.",
+          example: "basic"
+        },
+        size: %Schema{
+          type: :integer,
+          description: "The size of the body in KB.",
+          example: 5
+        },
+        filename: %Schema{
+          type: :string,
+          description: "The name of the attached file.",
+          example: "voice_message_2024-06-07_12-32-03.au"
+        }
+      }
+    })
+  end
+
+  defmodule VoicemailMessageAttachmentFileFormat do
+    OpenApiSpex.schema(%{
+      type: :string,
+      description: "The file format of the message attachment."
+    })
+  end
 end
