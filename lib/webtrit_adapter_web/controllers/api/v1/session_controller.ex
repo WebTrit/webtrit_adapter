@@ -219,7 +219,7 @@ defmodule WebtritAdapterWeb.Api.V1.SessionController do
       },
       unauthorized: {
         """
-        Unauthorized: Incorrect `login` and/or `password`.
+        Unauthorized: Incorrect `user_ref` and/or `password`.
         """,
         "application/json",
         CommonSchema.error_response([
@@ -229,7 +229,7 @@ defmodule WebtritAdapterWeb.Api.V1.SessionController do
     ]
   )
 
-  def create(conn, _params, %{login: login, password: password} = _body_params) do
+  def create(conn, _params, %{user_ref: user_ref, password: password} = _body_params) do
     {login_key, password_key} =
       case WebtritAdapterConfig.portabilling_signin_credentials() do
         :self_care ->
@@ -241,7 +241,7 @@ defmodule WebtritAdapterWeb.Api.V1.SessionController do
 
     case Api.Administrator.Account.get_account_info(
            conn.assigns.administrator_client,
-           %{login_key => login}
+           %{login_key => user_ref}
          ) do
       {200, %{"account_info" => %{^password_key => ^password, "i_account" => i_account}}} ->
         {:ok, refresh_token} = Session.create_refresh_token(%{i_account: i_account})
