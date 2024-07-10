@@ -63,7 +63,7 @@ defmodule WebtritAdapterWeb.Api.V1.ApiSpec do
         url: "https://webtrit.com",
         email: "contact-dev@webtrit.com"
       },
-      version: "1.1.0"
+      version: "1.2.0"
     }
   end
 
