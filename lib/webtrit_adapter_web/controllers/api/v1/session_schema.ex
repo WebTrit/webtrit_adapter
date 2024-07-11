@@ -70,16 +70,13 @@ defmodule WebtritAdapterWeb.Api.V1.SessionSchema do
     OpenApiSpexExt.schema(%{
       type: :object,
       properties: %{
-        login: %Schema{
-          type: :string,
-          description: "User's `login` on the **Adaptee**."
-        },
+        user_ref: CommonSchema.UserRef,
         password: %Schema{
           type: :string,
           description: "User's `password` on the **Adaptee**."
         }
       },
-      required: [:login, :password]
+      required: [:user_ref, :password]
     })
   end
 

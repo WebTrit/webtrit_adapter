@@ -67,12 +67,12 @@ defmodule WebtritAdapterClient do
   end
 
   @spec create_session(Tesla.Client.t(), String.t(), String.t()) :: result()
-  def create_session(client, login, password) do
+  def create_session(client, user_ref, password) do
     options = [
       method: :post,
       url: "/session",
       body: %{
-        login: login,
+        user_ref: user_ref,
         password: password
       }
     ]
