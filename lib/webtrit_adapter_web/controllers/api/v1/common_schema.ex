@@ -420,6 +420,7 @@ defmodule WebtritAdapterWeb.Api.V1.CommonSchema do
           ]
         },
         numbers: Numbers,
+        user_id: UserId,
         email: %Schema{
           type: :string,
           format: :email,
