@@ -10,19 +10,19 @@ alias WebtritAdapter.Mapper
 
   defp data(account, current_user_i_account) do
     %{
+      user_id: Mapper.i_account_to_user_id(account["i_account"]),
+      is_current_user: account["i_account"] == current_user_i_account,
       sip_status: JSONMapping.sip_status(account),
       numbers: %{
         main: account["id"],
         ext: account["extension_id"],
         additional: nil
       },
-      user_id: Mapper.i_account_to_user_id(account["i_account"]),
       first_name: account["firstname"],
       last_name: account["lastname"],
       alias_name: account["extension_name"],
       email: account["email"],
-      company_name: account["companyname"],
-      is_current_user: account["i_account"] == current_user_i_account
+      company_name: account["companyname"]
     }
     |> Utils.Map.deep_filter_blank_values()
   end
