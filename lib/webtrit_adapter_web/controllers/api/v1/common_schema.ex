@@ -411,6 +411,12 @@ defmodule WebtritAdapterWeb.Api.V1.CommonSchema do
     OpenApiSpex.schema(%{
       type: :object,
       properties: %{
+        user_id: UserId,
+        is_current_user: %Schema{
+          type: :boolean,
+          description: "Indicates whether the contact is associated with the same user who making the request.",
+          example: false
+        },
         sip_status: %Schema{
           type: :string,
           description: "The current registration status of the user on the SIP server.",
@@ -420,7 +426,6 @@ defmodule WebtritAdapterWeb.Api.V1.CommonSchema do
           ]
         },
         numbers: Numbers,
-        user_id: UserId,
         email: %Schema{
           type: :string,
           format: :email,
@@ -446,11 +451,6 @@ defmodule WebtritAdapterWeb.Api.V1.CommonSchema do
           type: :string,
           description: "The name of the company the user is associated with.",
           example: "Matrix"
-        },
-        is_current_user: %Schema{
-          type: :boolean,
-          description: "Indicates whether the contact is associated with the same user who making the request.",
-          example: false
         }
       },
       required: [:numbers]
