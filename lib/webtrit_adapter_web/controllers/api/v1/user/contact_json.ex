@@ -1,5 +1,5 @@
 defmodule WebtritAdapterWeb.Api.V1.User.ContactJSON do
-alias WebtritAdapter.Mapper
+  alias WebtritAdapter.Mapper
   alias WebtritAdapterWeb.Api.V1.User.JSONMapping
 
   def index(%{account_list: account_list, current_user_i_account: current_user_i_account}) do
