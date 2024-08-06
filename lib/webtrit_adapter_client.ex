@@ -230,6 +230,28 @@ defmodule WebtritAdapterClient do
     request(client, options)
   end
 
+  @spec invoke_custom_public_method(Tesla.Client.t(), String.t(), String.t(), map()) :: result()
+  def invoke_custom_public_method(client, method_name, extra_params, data) do
+    options = [
+      method: :post,
+      url: "/custom/public/#{method_name}/#{extra_params}",
+      body: data
+    ]
+
+    request(client, options)
+  end
+
+  @spec invoke_custom_private_method(Tesla.Client.t(), String.t(), String.t(), map()) :: result()
+  def invoke_custom_private_method(client, method_name, extra_params, data) do
+    options = [
+      method: :post,
+      url: "/custom/private/#{method_name}/#{extra_params}",
+      body: data
+    ]
+
+    request(client, options)
+  end
+
   defp request(client, options) do
     case Tesla.request(client, options) do
       {:ok, %Tesla.Env{status: 204}} ->
