@@ -100,4 +100,9 @@ defmodule WebtritAdapterConfig do
   def http_client_ssl_verify_type do
     Application.get_env(:webtrit_adapter, :http_client_ssl_verify_type)
   end
+
+  @spec hide_balance_in_user_info?() :: boolean()
+  def hide_balance_in_user_info?() do
+    Application.get_env(:webtrit_adapter, :hide_balance_in_user_info)
+  end
 end
