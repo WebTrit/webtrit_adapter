@@ -62,7 +62,9 @@ defmodule WebtritAdapterWeb.Api.V1.User.InfoController do
                }
              ) do
           {200, %{"alias_list" => alias_list}} ->
-            render(conn, account_info: account_info, alias_list: alias_list)
+            hide_balance = WebtritAdapterConfig.hide_balance_in_user_info?()
+
+            render(conn, account_info: account_info, alias_list: alias_list, hide_balance?: hide_balance)
 
           {:error, error} ->
             ControllerMapping.api_account_error_to_action_error(error)

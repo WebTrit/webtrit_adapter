@@ -292,3 +292,15 @@ case RuntimeConfig.get_env_from_allowed_values("HTTP_CLIENT_SSL_VERIFY_TYPE", [
            :http_client_ssl_verify_type,
            String.to_atom(value)
 end
+
+case RuntimeConfig.get_env_as_boolean("HIDE_BALANCE_IN_USER_INFO") do
+  nil ->
+    config :webtrit_adapter,
+           :hide_balance_in_user_info,
+           false
+
+  hide_balance_in_user_info ->
+    config :webtrit_adapter,
+           :hide_balance_in_user_info,
+           hide_balance_in_user_info
+end

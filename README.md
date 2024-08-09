@@ -60,3 +60,4 @@ Environment variables descriptions:
     * `extensions` - retrieves the list of other users (contacts)
   * `HTTP_CLIENT_SSL_VERIFY_TYPE` - configures the SSL verification type for HTTP client requests that utilize HTTPS schema; acceptable values include: `verify_none`, `verify_peer`
     (optional, default value is `verify_peer`)
+  * `HIDE_BALANCE_IN_USER_INFO` - controls whether to hide balance in user info (optional, default value is `false`)
