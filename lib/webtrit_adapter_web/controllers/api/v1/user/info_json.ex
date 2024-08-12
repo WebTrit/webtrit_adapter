@@ -35,12 +35,16 @@ defmodule WebtritAdapterWeb.Api.V1.User.InfoJSON do
         info_without_balance
 
       false ->
-        Map.put(info_without_balance, :balance, %{
-          balance_type: JSONMapping.balance_type(account_info),
-          amount: account_info["balance"],
-          credit_limit: account_info["credit_limit"],
-          currency: account_info["iso_4217"] || "$"
-        })
+        balance =
+          %{
+            balance_type: JSONMapping.balance_type(account_info),
+            amount: account_info["balance"],
+            credit_limit: account_info["credit_limit"],
+            currency: account_info["iso_4217"] || "$"
+          }
+          |> Utils.Map.deep_filter_blank_values()
+
+        Map.put(info_without_balance, :balance, balance)
     end
   end
 end

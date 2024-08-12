@@ -54,6 +54,11 @@ defmodule WebtritAdapterConfig do
     Application.get_env(:webtrit_adapter, :portabilling_filter_contacts_without_extension)
   end
 
+  @spec portabilling_hide_balance_in_user_info?() :: boolean()
+  def portabilling_hide_balance_in_user_info?() do
+    Application.get_env(:webtrit_adapter, :portabilling_hide_balance_in_user_info)
+  end
+
   @spec portasip_host :: String.t()
   def portasip_host do
     Application.get_env(:webtrit_adapter, :portasip_host)
@@ -99,10 +104,5 @@ defmodule WebtritAdapterConfig do
   @spec http_client_ssl_verify_type :: :verify_none | :verify_peer
   def http_client_ssl_verify_type do
     Application.get_env(:webtrit_adapter, :http_client_ssl_verify_type)
-  end
-
-  @spec hide_balance_in_user_info?() :: boolean()
-  def hide_balance_in_user_info?() do
-    Application.get_env(:webtrit_adapter, :hide_balance_in_user_info)
   end
 end

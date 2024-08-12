@@ -39,6 +39,7 @@ Environment variables descriptions:
     with `0` default value) (optional, can be defined only with `PORTABILLING_DEMO_I_CUSTOMER`)
   * `PORTABILLING_FILTER_CONTACTS_WITHOUT_EXTENSION` - controls whether to filter out contacts 
     that do not have an extension (optional, default value is `true`)
+  * `PORTABILLING_HIDE_BALANCE_IN_USER_INFO` - controls whether to hide balance in user info (optional, default value is `false`)
   * `PORTASIP_HOST` - PortaSIP host
   * `PORTASIP_PORT` - PortaSIP port (optional)
   * `JANUS_SIP_FORCE_TCP` - forces TCP for the SIP messaging (optional, default value is `true`)
@@ -60,4 +61,3 @@ Environment variables descriptions:
     * `extensions` - retrieves the list of other users (contacts)
   * `HTTP_CLIENT_SSL_VERIFY_TYPE` - configures the SSL verification type for HTTP client requests that utilize HTTPS schema; acceptable values include: `verify_none`, `verify_peer`
     (optional, default value is `verify_peer`)
-  * `HIDE_BALANCE_IN_USER_INFO` - controls whether to hide balance in user info (optional, default value is `false`)
