@@ -208,6 +208,18 @@ case RuntimeConfig.get_env_as_boolean("PORTABILLING_FILTER_CONTACTS_WITHOUT_EXTE
            portabilling_filter_contacts_without_extension
 end
 
+case RuntimeConfig.get_env_as_boolean("PORTABILLING_HIDE_BALANCE_IN_USER_INFO") do
+  nil ->
+    config :webtrit_adapter,
+           :portabilling_hide_balance_in_user_info,
+           false
+
+  portabilling_hide_balance_in_user_info ->
+    config :webtrit_adapter,
+           :portabilling_hide_balance_in_user_info,
+           portabilling_hide_balance_in_user_info
+end
+
 RuntimeConfig.config_env_try do
   case RuntimeConfig.get_env!("PORTASIP_HOST", "sip.webtrit.com") do
     portasip_host ->
