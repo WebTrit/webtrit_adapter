@@ -63,6 +63,17 @@ defmodule WebtritAdapterWeb.Api.V1.User.JSONMapping do
     |> Enum.sort()
   end
 
+  @spec alias_did_number_list_to_numbers(list() | nil) :: list() | nil
+  def alias_did_number_list_to_numbers(alias_did_number_list)
+
+  def alias_did_number_list_to_numbers([]), do: nil
+
+  def alias_did_number_list_to_numbers(alias_did_number_list) when is_list(alias_did_number_list) do
+    dbg(alias_did_number_list)
+    alias_did_number_list
+    |> Enum.map(& &1["did_number"])
+  end
+
   def sip_status(account) do
     sip_status_to_sip_status(account["sip_status"])
   end

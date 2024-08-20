@@ -27,7 +27,8 @@ defmodule Portabilling.Api.Account.Account do
       Map.merge(
         %{
           "detailed_info" => 1,
-          "without_service_features" => 1
+          "without_service_features" => 1,
+          "limit_alias_did_number_list" => 100
         },
         params
       )

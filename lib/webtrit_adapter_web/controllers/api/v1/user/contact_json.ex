@@ -16,7 +16,8 @@ defmodule WebtritAdapterWeb.Api.V1.User.ContactJSON do
       numbers: %{
         main: account["id"],
         ext: account["extension_id"],
-        additional: nil
+        additional: nil,
+        sms: JSONMapping.alias_did_number_list_to_numbers(account["alias_did_number_list"])
       },
       first_name: account["firstname"],
       last_name: account["lastname"],
