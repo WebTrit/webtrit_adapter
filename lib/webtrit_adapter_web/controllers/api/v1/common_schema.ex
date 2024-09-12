@@ -401,6 +401,18 @@ defmodule WebtritAdapterWeb.Api.V1.CommonSchema do
             type: :string
           },
           example: ["380441234567", "34911234567"]
+        },
+        sms: %Schema{
+          type: :array,
+          description: """
+          A list of phone sms phone numbers associated with the user.
+          These numbers may be associated with third-party SMS services, such as Twilio,
+          and can include mobile numbers capable of receiving text messages.
+          """,
+          items: %Schema{
+            type: :string
+          },
+          example: ["380441234567", "+1-212-456-7890"]
         }
       },
       required: [:main]

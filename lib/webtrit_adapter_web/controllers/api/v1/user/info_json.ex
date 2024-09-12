@@ -19,7 +19,8 @@ defmodule WebtritAdapterWeb.Api.V1.User.InfoJSON do
         numbers: %{
           main: account_info["id"],
           ext: account_info["extension_id"],
-          additional: JSONMapping.alias_list_to_numbers(alias_list)
+          additional: JSONMapping.alias_list_to_numbers(alias_list),
+          sms: JSONMapping.alias_did_number_list_to_numbers(account_info["alias_did_number_list"])
         },
         email: account_info["email"],
         first_name: account_info["firstname"],
