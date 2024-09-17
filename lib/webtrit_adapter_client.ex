@@ -230,22 +230,22 @@ defmodule WebtritAdapterClient do
     request(client, options)
   end
 
-  @spec invoke_custom_public_method(Tesla.Client.t(), String.t(), String.t(), map()) :: result()
-  def invoke_custom_public_method(client, method_name, extra_params, data) do
+  @spec invoke_custom_public_method(Tesla.Client.t(), String.t(), map()) :: result()
+  def invoke_custom_public_method(client, method_name, data) do
     options = [
       method: :post,
-      url: "/custom/public/#{method_name}/#{extra_params}",
+      url: "/custom/public/#{method_name}",
       body: data
     ]
 
     request(client, options)
   end
 
-  @spec invoke_custom_private_method(Tesla.Client.t(), String.t(), String.t(), map()) :: result()
-  def invoke_custom_private_method(client, method_name, extra_params, data) do
+  @spec invoke_custom_private_method(Tesla.Client.t(), String.t(), map()) :: result()
+  def invoke_custom_private_method(client, method_name, data) do
     options = [
       method: :post,
-      url: "/custom/private/#{method_name}/#{extra_params}",
+      url: "/custom/private/#{method_name}",
       body: data
     ]
 
