@@ -266,11 +266,6 @@ defmodule WebtritAdapterWeb.Api.V1.CommonSchema do
           type: :integer,
           description: "The port on which the SIP server listens for incoming requests.",
           example: 5060
-        },
-        force_tcp: %Schema{
-          type: :boolean,
-          description: "If set to true, forces the use of TCP for SIP messaging.",
-          example: false
         }
       },
       required: [:host]
@@ -279,6 +274,13 @@ defmodule WebtritAdapterWeb.Api.V1.CommonSchema do
 
   defmodule SipInfo do
     OpenApiSpex.schema(%{
+      description: """
+      The SIP information, where:
+      * `sip_server` is the SIP server used to compose the SIP identity based on the `username`
+      * `registrar_server` is the server where registration occurs; if not provided, the standard procedure defined by
+        [RFC3263](https://tools.ietf.org/html/rfc3263) will be followed to locate the registrar
+      * `outbound_proxy_server` is the outbound proxy to use; if provided, all future SIP requests will be routed through this proxy
+      """,
       type: :object,
       properties: %{
         username: %Schema{
@@ -305,8 +307,18 @@ defmodule WebtritAdapterWeb.Api.V1.CommonSchema do
           description: "The password for the SIP account.",
           example: "strong_password"
         },
+        transport: %Schema{
+          type: :string,
+          description: "The transport protocol for SIP communication.",
+          enum: [
+            :UDP,
+            :TCP,
+            :TLS
+          ]
+        },
         sip_server: SipServer,
-        registration_server: SipServer,
+        registrar_server: SipServer,
+        outbound_proxy_server: SipServer,
         display_name: %Schema{
           type: :string,
           description: """
