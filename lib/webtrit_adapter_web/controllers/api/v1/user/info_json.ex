@@ -8,13 +8,13 @@ defmodule WebtritAdapterWeb.Api.V1.User.InfoJSON do
         sip: %{
           username: account_info["id"],
           password: account_info["h323_password"],
-          force_tcp: WebtritAdapterConfig.janus_sip_force_tcp(),
+          transport: sip_transport(),
           sip_server: %{
             host: WebtritAdapterConfig.portasip_host(),
             port: WebtritAdapterConfig.portasip_port()
           },
           registrar_server: nil,
-          proxy_server: nil,
+          outbound_proxy_server: nil,
           display_name: JSONMapping.display_name(account_info)
         },
         numbers: %{
@@ -49,4 +49,6 @@ defmodule WebtritAdapterWeb.Api.V1.User.InfoJSON do
         Map.put(info_without_balance, :balance, balance)
     end
   end
+
+  defp sip_transport(), do: if(WebtritAdapterConfig.janus_sip_force_tcp(), do: :TCP, else: :UDP)
 end

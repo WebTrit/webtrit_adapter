@@ -300,14 +300,18 @@ defmodule WebtritAdapterWeb.Api.V1.CommonSchema do
           description: "The password for the SIP account.",
           example: "strong_password"
         },
-        force_tcp: %Schema{
-          type: :boolean,
-          description: "If set to true, forces the use of TCP for SIP messaging.",
-          example: false
+        transport: %Schema{
+          type: :string,
+          description: "The transport protocol for SIP communication.",
+          enum: [
+            :UDP,
+            :TCP,
+            :TLS
+          ]
         },
         sip_server: SipServer,
         registrar_server: SipServer,
-        proxy_server: SipServer,
+        outbound_proxy_server: SipServer,
         display_name: %Schema{
           type: :string,
           description: """
