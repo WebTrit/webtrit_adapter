@@ -266,11 +266,6 @@ defmodule WebtritAdapterWeb.Api.V1.CommonSchema do
           type: :integer,
           description: "The port on which the SIP server listens for incoming requests.",
           example: 5060
-        },
-        force_tcp: %Schema{
-          type: :boolean,
-          description: "If set to true, forces the use of TCP for SIP messaging.",
-          example: false
         }
       },
       required: [:host]
@@ -305,8 +300,13 @@ defmodule WebtritAdapterWeb.Api.V1.CommonSchema do
           description: "The password for the SIP account.",
           example: "strong_password"
         },
+        force_tcp: %Schema{
+          type: :boolean,
+          description: "If set to true, forces the use of TCP for SIP messaging.",
+          example: false
+        },
         sip_server: SipServer,
-        registration_server: SipServer,
+        registrar_server: SipServer,
         proxy_server: SipServer,
         display_name: %Schema{
           type: :string,

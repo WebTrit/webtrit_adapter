@@ -8,12 +8,12 @@ defmodule WebtritAdapterWeb.Api.V1.User.InfoJSON do
         sip: %{
           username: account_info["id"],
           password: account_info["h323_password"],
+          force_tcp: WebtritAdapterConfig.janus_sip_force_tcp(),
           sip_server: %{
             host: WebtritAdapterConfig.portasip_host(),
-            port: WebtritAdapterConfig.portasip_port(),
-            force_tcp: WebtritAdapterConfig.janus_sip_force_tcp()
+            port: WebtritAdapterConfig.portasip_port()
           },
-          registration_server: nil,
+          registrar_server: nil,
           proxy_server: nil,
           display_name: JSONMapping.display_name(account_info)
         },
