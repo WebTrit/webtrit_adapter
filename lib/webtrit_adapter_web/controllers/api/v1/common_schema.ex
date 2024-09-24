@@ -307,6 +307,7 @@ defmodule WebtritAdapterWeb.Api.V1.CommonSchema do
         },
         sip_server: SipServer,
         registration_server: SipServer,
+        proxy_server: SipServer,
         display_name: %Schema{
           type: :string,
           description: """

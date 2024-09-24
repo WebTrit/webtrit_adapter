@@ -14,6 +14,7 @@ defmodule WebtritAdapterWeb.Api.V1.User.InfoJSON do
             force_tcp: WebtritAdapterConfig.janus_sip_force_tcp()
           },
           registration_server: nil,
+          proxy_server: nil,
           display_name: JSONMapping.display_name(account_info)
         },
         numbers: %{
