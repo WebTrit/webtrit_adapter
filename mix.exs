@@ -4,7 +4,7 @@ defmodule WebtritAdapter.MixProject do
   def project do
     [
       app: :webtrit_adapter,
-      version: "0.9.0",
+      version: "0.10.0-alpha.1",
       elixir: "~> 1.16",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
