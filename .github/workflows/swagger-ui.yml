@@ -27,6 +27,7 @@ jobs:
         with:
           output: _site
           swagger-config-file: swagger-config.json
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Generate OpenAPI specification
         uses: addnab/docker-run-action@v3
