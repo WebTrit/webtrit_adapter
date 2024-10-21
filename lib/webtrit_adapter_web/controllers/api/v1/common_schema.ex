@@ -212,7 +212,8 @@ defmodule WebtritAdapterWeb.Api.V1.CommonSchema do
           description: "Indicates the call direction.",
           enum: [
             :incoming,
-            :outgoing
+            :outgoing,
+            :forwarded
           ]
         },
         status: %Schema{
