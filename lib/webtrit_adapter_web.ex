@@ -38,7 +38,7 @@ defmodule WebtritAdapterWeb do
   def controller do
     quote do
       use Phoenix.Controller,
-        formats: [:html, :json, :mp3],
+        formats: [:html, :json, :mp3, :wav, :zip],
         layouts: [html: WebtritAdapterWeb.Layouts]
 
       import Plug.Conn
