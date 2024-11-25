@@ -1,6 +1,5 @@
 defmodule WebtritAdapterToken do
   @access_token_max_age_seconds 24 * 60 * 60
-  @refresh_token_max_age_seconds 14 * 24 * 60 * 60
   @access_token_secret "access_token_salt"
   @refresh_token_secret "refresh_token_salt"
 
@@ -17,7 +16,7 @@ defmodule WebtritAdapterToken do
 
   def decrypt(:refresh, token) do
     Phoenix.Token.decrypt(WebtritAdapterWeb.Endpoint, @refresh_token_secret, token,
-      max_age: @refresh_token_max_age_seconds
+      max_age: WebtritAdapterConfig.refresh_token_max_age_seconds()
     )
   end
 

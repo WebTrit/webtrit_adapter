@@ -304,3 +304,15 @@ case RuntimeConfig.get_env_from_allowed_values("HTTP_CLIENT_SSL_VERIFY_TYPE", [
            :http_client_ssl_verify_type,
            String.to_atom(value)
 end
+
+case RuntimeConfig.get_env_as_non_neg_integer("REFRESH_TOKEN_MAX_AGE_SECONDS") do
+  nil ->
+    config :webtrit_adapter,
+           :refresh_token_max_age_seconds,
+           14 * 24 * 60 * 60
+
+  refresh_token_max_age_seconds ->
+    config :webtrit_adapter,
+           :refresh_token_max_age_seconds,
+           refresh_token_max_age_seconds
+end

@@ -105,4 +105,9 @@ defmodule WebtritAdapterConfig do
   def http_client_ssl_verify_type do
     Application.get_env(:webtrit_adapter, :http_client_ssl_verify_type)
   end
+
+  @spec refresh_token_max_age_seconds :: non_neg_integer()
+  def refresh_token_max_age_seconds do
+    Application.get_env(:webtrit_adapter, :refresh_token_max_age_seconds)
+  end
 end
