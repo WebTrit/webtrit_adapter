@@ -61,3 +61,5 @@ Environment variables descriptions:
     * `extensions` - retrieves the list of other users (contacts)
   * `HTTP_CLIENT_SSL_VERIFY_TYPE` - configures the SSL verification type for HTTP client requests that utilize HTTPS schema; acceptable values include: `verify_none`, `verify_peer`
     (optional, default value is `verify_peer`)
+  * `REFRESH_TOKEN_MAX_AGE_SECONDS` - maximum lifetime of a refresh token in seconds 
+    (optional, default value is 1,209,600 seconds, equivalent to 14 days)
