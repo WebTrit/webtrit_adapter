@@ -38,7 +38,11 @@ defmodule WebtritAdapterWeb.Api.V1.User.RecordingController do
     responses: [
       CommonResponse.unauthorized(),
       CommonResponse.forbidden(),
-      CommonResponse.session_and_user_not_found(),
+      CommonResponse.not_found([
+        :session_not_found,
+        :user_not_found,
+        :recording_not_found
+      ]),
       CommonResponse.unprocessable(),
       CommonResponse.external_api_issue(),
       ok: {
@@ -47,6 +51,7 @@ defmodule WebtritAdapterWeb.Api.V1.User.RecordingController do
         """,
         %{
           "audio/mpeg" => [],
+          "audio/wav" => [],
           "application/zip" => []
         },
         CommonSchema.BinaryResponse
@@ -65,6 +70,9 @@ defmodule WebtritAdapterWeb.Api.V1.User.RecordingController do
 
       {:error, error} ->
         ControllerMapping.api_account_error_to_action_error(error)
+
+      {500, %{"faultcode" => "Server.CDR.xdr_not_found"}} ->
+        {:error, :not_found, :recording_not_found}
 
       _ ->
         {:error, :internal_server_error, :external_api_issue}

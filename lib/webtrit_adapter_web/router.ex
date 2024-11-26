@@ -6,7 +6,7 @@ defmodule WebtritAdapterWeb.Router do
   end
 
   pipeline :api do
-    plug :accepts, ["json", "mp3"]
+    plug :accepts, ["json", "mp3", "wav", "zip"]
   end
 
   pipeline :api_v1 do
