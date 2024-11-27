@@ -9,7 +9,8 @@ defmodule WebtritAdapterWeb.Api.V1.SupportedFunctionality do
       :autoProvision,
       :recordings,
       :callHistory,
-      :extensions
+      :extensions,
+      :messaging
     ]
   end
 
@@ -20,6 +21,7 @@ defmodule WebtritAdapterWeb.Api.V1.SupportedFunctionality do
   def value_description(:recordings), do: "provides access to call recordings"
   def value_description(:callHistory), do: "provides access to call history"
   def value_description(:extensions), do: "retrieves the list of other users (contacts)"
+  def value_description(:messaging), do: "provides access to sending and receiving messages"
 
   def parse("signup"), do: :signup
   def parse("otpSignin"), do: :otpSignin
@@ -28,5 +30,6 @@ defmodule WebtritAdapterWeb.Api.V1.SupportedFunctionality do
   def parse("recordings"), do: :recordings
   def parse("callHistory"), do: :callHistory
   def parse("extensions"), do: :extensions
+  def parse("messaging"), do: :messaging
   def parse(_), do: nil
 end
