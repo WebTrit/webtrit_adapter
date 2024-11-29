@@ -59,6 +59,7 @@ Environment variables descriptions:
     * `recordings` - provides access to call recordings
     * `callHistory` - provides access to call history
     * `extensions` - retrieves the list of other users (contacts)
+    * `messaging` - provides access to sending and receiving messages
   * `HTTP_CLIENT_SSL_VERIFY_TYPE` - configures the SSL verification type for HTTP client requests that utilize HTTPS schema; acceptable values include: `verify_none`, `verify_peer`
     (optional, default value is `verify_peer`)
   * `REFRESH_TOKEN_MAX_AGE_SECONDS` - maximum lifetime of a refresh token in seconds 
