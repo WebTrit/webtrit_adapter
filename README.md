@@ -59,7 +59,8 @@ Environment variables descriptions:
     * `recordings` - provides access to call recordings
     * `callHistory` - provides access to call history
     * `extensions` - retrieves the list of other users (contacts)
-    * `messaging` - provides access to sending and receiving messages
+    * `internalMessaging` - provides the ability to send and receive instant messages within the system (among system users)
+    * `smsMessaging` - provides the ability to send and receive text messages using the Short Message Service (SMS)
   * `HTTP_CLIENT_SSL_VERIFY_TYPE` - configures the SSL verification type for HTTP client requests that utilize HTTPS schema; acceptable values include: `verify_none`, `verify_peer`
     (optional, default value is `verify_peer`)
   * `REFRESH_TOKEN_MAX_AGE_SECONDS` - maximum lifetime of a refresh token in seconds 
