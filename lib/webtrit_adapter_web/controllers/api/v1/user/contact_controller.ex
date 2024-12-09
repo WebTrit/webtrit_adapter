@@ -51,23 +51,37 @@ defmodule WebtritAdapterWeb.Api.V1.User.ContactController do
            i_account,
            %{i_account: i_account}
          ) do
-      {200, %{"account_info" => %{"i_customer" => i_customer}}} ->
-        case Api.Administrator.Account.get_account_list(
+      {200, %{"account_info" => %{"i_customer" => i_customer, "customer_name" => customer_name}}} ->
+        case Api.Administrator.Customer.get_customer_list(
                conn.assigns.administrator_client,
-               %{i_customer: i_customer}
+               %{name: customer_name}
              ) do
-          {200, %{"account_list" => account_list}} ->
-            ip_centrex_account_list =
-              Enum.filter(account_list, fn account ->
-                if account["dual_version_system"] in [nil, "target"] do
-                  !WebtritAdapterConfig.portabilling_filter_contacts_without_extension() or
-                    account["extension_id"] != nil
-                else
-                  false
-                end
-              end)
+          {200, %{"customer_list" => customer_list}} ->
+            customer_dual_version_system =
+              customer_list
+              |> Enum.find(fn customer -> customer["bill_status"] == "O" end)
+              |> Map.get("dual_version_system")
 
-            render(conn, account_list: ip_centrex_account_list, current_user_i_account: i_account)
+            case Api.Administrator.Account.get_account_list(
+                   conn.assigns.administrator_client,
+                   %{i_customer: i_customer}
+                 ) do
+              {200, %{"account_list" => account_list}} ->
+                ip_centrex_account_list =
+                  Enum.filter(account_list, fn account ->
+                    if account["dual_version_system"] in [nil, customer_dual_version_system] do
+                      !WebtritAdapterConfig.portabilling_filter_contacts_without_extension() or
+                        account["extension_id"] != nil
+                    else
+                      false
+                    end
+                  end)
+
+                render(conn, account_list: ip_centrex_account_list, current_user_i_account: i_account)
+
+              _ ->
+                {:error, :internal_server_error, :external_api_issue}
+            end
 
           _ ->
             {:error, :internal_server_error, :external_api_issue}
