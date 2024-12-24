@@ -230,6 +230,26 @@ defmodule WebtritAdapterClient do
     request(client, options)
   end
 
+  @spec submit_sip_registration_status(Tesla.Client.t(), String.t(), any(), String.t() | nil) :: result()
+  def submit_sip_registration_status(client, status, timestamp, reason \\ nil) do
+    body =
+      %{
+        status: status,
+        timestamp: timestamp
+      }
+      |> then(fn map ->
+        if reason, do: Map.put(map, :reason, reason), else: map
+      end)
+
+    options = [
+      method: :post,
+      url: "/user/sip-registration-status",
+      body: body
+    ]
+
+    request(client, options)
+  end
+
   @spec invoke_custom_public_method(Tesla.Client.t(), String.t(), map()) :: result()
   def invoke_custom_public_method(client, method_name, data) do
     options = [
