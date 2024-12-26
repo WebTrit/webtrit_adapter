@@ -230,21 +230,17 @@ defmodule WebtritAdapterClient do
     request(client, options)
   end
 
-  @spec submit_sip_registration_status(Tesla.Client.t(), String.t(), any(), String.t() | nil) :: result()
-  def submit_sip_registration_status(client, status, timestamp, reason \\ nil) do
-    body =
-      %{
-        status: status,
-        timestamp: timestamp
-      }
-      |> then(fn map ->
-        if reason, do: Map.put(map, :reason, reason), else: map
-      end)
-
+  @spec create_user_event(Tesla.Client.t(), atom(), atom(), DateTime.t(), map()) :: result()
+  def create_user_event(client, group, type, timestamp, data \\ %{}) do
     options = [
       method: :post,
-      url: "/user/sip-registration-status",
-      body: body
+      url: "/user/core-events",
+      body: %{
+        group: group,
+        type: type,
+        timestamp: timestamp,
+        data: data
+      }
     ]
 
     request(client, options)
