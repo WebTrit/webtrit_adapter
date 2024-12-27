@@ -230,6 +230,22 @@ defmodule WebtritAdapterClient do
     request(client, options)
   end
 
+  @spec report_user_event(Tesla.Client.t(), DateTime.t(), atom(), atom(), map()) :: result()
+  def report_user_event(client, timestamp, group, type, data \\ %{}) do
+    options = [
+      method: :post,
+      url: "/user/events",
+      body: %{
+        timestamp: timestamp,
+        group: group,
+        type: type,
+        data: data
+      }
+    ]
+
+    request(client, options)
+  end
+
   @spec invoke_custom_public_method(Tesla.Client.t(), String.t(), map()) :: result()
   def invoke_custom_public_method(client, method_name, data) do
     options = [
