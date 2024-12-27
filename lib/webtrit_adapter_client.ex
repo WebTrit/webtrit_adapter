@@ -230,8 +230,8 @@ defmodule WebtritAdapterClient do
     request(client, options)
   end
 
-  @spec create_user_event(Tesla.Client.t(), DateTime.t(), atom(), atom(), map()) :: result()
-  def create_user_event(client, timestamp, group, type, data \\ %{}) do
+  @spec report_user_event(Tesla.Client.t(), DateTime.t(), atom(), atom(), map()) :: result()
+  def report_user_event(client, timestamp, group, type, data \\ %{}) do
     options = [
       method: :post,
       url: "/user/core-events",
