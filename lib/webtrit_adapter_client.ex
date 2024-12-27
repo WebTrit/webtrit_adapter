@@ -234,7 +234,7 @@ defmodule WebtritAdapterClient do
   def report_user_event(client, timestamp, group, type, data \\ %{}) do
     options = [
       method: :post,
-      url: "/user/core-events",
+      url: "/user/events",
       body: %{
         timestamp: timestamp,
         group: group,
