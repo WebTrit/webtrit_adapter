@@ -52,6 +52,7 @@ defmodule WebtritAdapterWeb.Api.V1.User.RecordingController do
         %{
           "audio/mpeg" => [],
           "audio/wav" => [],
+          "audio/vnd.dts" => [],
           "application/zip" => []
         },
         CommonSchema.BinaryResponse
