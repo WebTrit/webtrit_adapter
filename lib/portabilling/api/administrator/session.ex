@@ -5,6 +5,10 @@ defmodule Portabilling.Api.Administrator.Session do
     perform_contextual(client, params)
   end
 
+  def login_to_realm(client, %{} = params) do
+    perform_contextual(client, params)
+  end
+
   def logout(client, %{} = params) do
     perform_contextual(client, params)
   end
