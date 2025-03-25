@@ -19,7 +19,7 @@ defmodule Portabilling.Api do
     Tesla.client(middleware)
   end
 
-  def perform(client, {"Administrator", nil}, "Session" = service, method, params) do
+  def perform(client, {"Administrator", nil}, "Session" = service, "login" = method, params) do
     request(client, service, method, params, nil)
   end
 

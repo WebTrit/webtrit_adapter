@@ -57,7 +57,6 @@ defmodule Portabilling.AccountSessionManager do
         %State{
           config: config,
           administrator_client: administrator_client,
-          account_client: account_client,
           session_ids: session_ids
         } = state
       ) do
@@ -69,10 +68,10 @@ defmodule Portabilling.AccountSessionManager do
         case Api.Administrator.Account.get_account_info(administrator_client, %{
                "i_account" => i_account
              }) do
-          {200, %{"account_info" => %{"login" => login, "password" => password}}} ->
-            case Api.Account.Session.login(account_client, %{
+          {200, %{"account_info" => %{"login" => login}}} ->
+            case Api.Administrator.Session.login_to_realm(administrator_client, %{
                    "login" => login,
-                   "password" => password
+                   "realm" => "accounts"
                  }) do
               {200, %{"session_id" => session_id}} ->
                 Logger.debug(
