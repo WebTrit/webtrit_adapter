@@ -69,11 +69,18 @@ defmodule WebtritAdapterWeb.Api.V1.User.ContactController do
               {200, %{"account_list" => account_list}} ->
                 ip_centrex_account_list =
                   Enum.filter(account_list, fn account ->
-                    if account["dual_version_system"] in [nil, customer_dual_version_system] do
-                      !WebtritAdapterConfig.portabilling_filter_contacts_without_extension() or
-                        account["extension_id"] != nil
-                    else
-                      false
+                    account_status = Map.get(account, "status")
+
+                    cond do
+                      account_status == "blocked" ->
+                        false
+
+                      account["dual_version_system"] in [nil, customer_dual_version_system] ->
+                        !WebtritAdapterConfig.portabilling_filter_contacts_without_extension() or
+                          account["extension_id"] != nil
+
+                      true ->
+                        false
                     end
                   end)
 
