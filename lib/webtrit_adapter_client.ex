@@ -161,7 +161,7 @@ defmodule WebtritAdapterClient do
   def get_user_contact_by_id(client, user_id) do
     options = [
       method: :get,
-      url: "/user/contacts#{user_id}"
+      url: "/user/contacts/#{user_id}"
     ]
 
     request(client, options)
