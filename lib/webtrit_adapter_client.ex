@@ -157,8 +157,8 @@ defmodule WebtritAdapterClient do
     request(client, options)
   end
 
-  @spec get_user_contact_by_id(Tesla.Client.t(), String.t()) :: result()
-  def get_user_contact_by_id(client, user_id) do
+  @spec get_user_contact(Tesla.Client.t(), String.t()) :: result()
+  def get_user_contact(client, user_id) do
     options = [
       method: :get,
       url: "/user/contacts/#{user_id}"
