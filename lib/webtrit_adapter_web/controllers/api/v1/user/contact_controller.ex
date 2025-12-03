@@ -6,7 +6,7 @@ defmodule WebtritAdapterWeb.Api.V1.User.ContactController do
   alias Portabilling.Api
   alias WebtritAdapterWeb.Api.V1.CastAndValidateRenderError
   alias WebtritAdapterWeb.Api.V1.FallbackController
-  alias WebtritAdapterWeb.Api.V1.CommonResponse
+  alias WebtritAdapterWeb.Api.V1.{CommonResponse, CommonSchema}
   alias WebtritAdapterWeb.Api.V1.User.ContactSchema
   alias WebtritAdapterWeb.Api.V1.User.ControllerMapping
 
@@ -103,5 +103,41 @@ defmodule WebtritAdapterWeb.Api.V1.User.ContactController do
       _ ->
         {:error, :internal_server_error, :external_api_issue}
     end
+  end
+
+  OpenApiSpexExt.operation(:show,
+    summary: "Retrieve a contact by UserId",
+    description: """
+    Retrieve extension number and name of a specific user
+    within the same **Adaptee** by their UserId.
+    """,
+    parameters: [
+      user_id: [
+        in: :path,
+        description: "The unique identifier of the user",
+        schema: CommonSchema.UserId
+      ]
+    ],
+    responses: [
+      CommonResponse.unauthorized(),
+      CommonResponse.forbidden(),
+      CommonResponse.not_found([
+        :session_not_found,
+        :user_not_found,
+        :contact_not_found
+      ]),
+      CommonResponse.unprocessable(),
+      CommonResponse.external_api_issue(),
+      CommonResponse.functionality_not_implemented(),
+      ok: {
+        "Ok",
+        "application/json",
+        CommonSchema.Contact
+      }
+    ]
+  )
+
+  def show(_conn, _params, _user_id) do
+    {:error, :not_implemented, :functionality_not_implemented}
   end
 end
