@@ -7,7 +7,7 @@ defmodule WebtritAdapterClient do
 
   @spec new(URI.t() | String.t(), String.t() | nil, String.t() | nil) :: Tesla.Client.t()
   def new(adapter_url, tenant_id \\ nil, access_token \\ nil) do
-    base_url = URI.merge(URI.parse(adapter_url), "." <> "/api/v1") |> to_string()
+    base_url = URI.merge(URI.parse(adapter_url), ".") |> to_string()
 
     middleware =
       []
@@ -33,7 +33,7 @@ defmodule WebtritAdapterClient do
   def get_system_info(client) do
     options = [
       method: :get,
-      url: "/system-info"
+      url: "/api/v1/system-info"
     ]
 
     request(client, options)
@@ -43,7 +43,7 @@ defmodule WebtritAdapterClient do
   def create_session_otp(client, user_ref) do
     options = [
       method: :post,
-      url: "/session/otp-create",
+      url: "/api/v1/session/otp-create",
       body: %{
         user_ref: user_ref
       }
@@ -56,7 +56,7 @@ defmodule WebtritAdapterClient do
   def verify_session_otp(client, otp_id, code) do
     options = [
       method: :post,
-      url: "/session/otp-verify",
+      url: "/api/v1/session/otp-verify",
       body: %{
         otp_id: otp_id,
         code: code
@@ -70,7 +70,7 @@ defmodule WebtritAdapterClient do
   def create_session(client, user_ref, password) do
     options = [
       method: :post,
-      url: "/session",
+      url: "/api/v1/session",
       body: %{
         user_ref: user_ref,
         password: password
@@ -84,7 +84,7 @@ defmodule WebtritAdapterClient do
   def auto_provision_session(client, config_token) do
     options = [
       method: :post,
-      url: "/session/auto-provision",
+      url: "/api/v1/session/auto-provision",
       body: %{
         config_token: config_token
       }
@@ -97,7 +97,7 @@ defmodule WebtritAdapterClient do
   def update_session(client, refresh_token) do
     options = [
       method: :patch,
-      url: "/session",
+      url: "/api/v1/session",
       body: %{
         refresh_token: refresh_token
       }
@@ -110,7 +110,7 @@ defmodule WebtritAdapterClient do
   def delete_session(client) do
     options = [
       method: :delete,
-      url: "/session"
+      url: "/api/v1/session"
     ]
 
     request(client, options)
@@ -120,7 +120,7 @@ defmodule WebtritAdapterClient do
   def create_user(client, data) do
     options = [
       method: :post,
-      url: "/user",
+      url: "/api/v1/user",
       body: data
     ]
 
@@ -131,7 +131,7 @@ defmodule WebtritAdapterClient do
   def get_user_info(client) do
     options = [
       method: :get,
-      url: "/user"
+      url: "/api/v1/user"
     ]
 
     request(client, options)
@@ -141,7 +141,7 @@ defmodule WebtritAdapterClient do
   def delete_user(client) do
     options = [
       method: :delete,
-      url: "/user"
+      url: "/api/v1/user"
     ]
 
     request(client, options)
@@ -151,7 +151,7 @@ defmodule WebtritAdapterClient do
   def get_user_contact_list(client, query \\ []) do
     options = [
       method: :get,
-      url: "/user/contacts",
+      url: "/api/v1/user/contacts",
       query: query
     ]
 
@@ -162,7 +162,7 @@ defmodule WebtritAdapterClient do
   def get_user_contact(client, user_id) do
     options = [
       method: :get,
-      url: "/user/contacts/#{user_id}"
+      url: "/api/v1/user/contacts/#{user_id}"
     ]
 
     request(client, options)
@@ -172,7 +172,7 @@ defmodule WebtritAdapterClient do
   def get_user_history_list(client, query \\ []) do
     options = [
       method: :get,
-      url: "/user/history",
+      url: "/api/v1/user/history",
       query: query
     ]
 
@@ -183,7 +183,7 @@ defmodule WebtritAdapterClient do
   def get_user_recording(client, recording_id) do
     options = [
       method: :get,
-      url: "/user/recordings/#{recording_id}"
+      url: "/api/v1/user/recordings/#{recording_id}"
     ]
 
     request(client, options)
@@ -193,7 +193,7 @@ defmodule WebtritAdapterClient do
   def get_user_voicemail_messages(client) do
     options = [
       method: :get,
-      url: "/user/voicemails"
+      url: "/api/v1/user/voicemails"
     ]
 
     request(client, options)
@@ -203,7 +203,7 @@ defmodule WebtritAdapterClient do
   def get_user_voicemail_message_details(client, message_id) do
     options = [
       method: :get,
-      url: "/user/voicemails/#{message_id}"
+      url: "/api/v1/user/voicemails/#{message_id}"
     ]
 
     request(client, options)
@@ -213,7 +213,7 @@ defmodule WebtritAdapterClient do
   def get_user_voicemail_message_attachment(client, message_id, query \\ []) do
     options = [
       method: :get,
-      url: "/user/voicemails/#{message_id}/attachment",
+      url: "/api/v1/user/voicemails/#{message_id}/attachment",
       query: query
     ]
 
@@ -224,7 +224,7 @@ defmodule WebtritAdapterClient do
   def patch_user_voicemail_message(client, message_id, data) do
     options = [
       method: :patch,
-      url: "/user/voicemails/#{message_id}",
+      url: "/api/v1/user/voicemails/#{message_id}",
       body: data
     ]
 
@@ -235,7 +235,7 @@ defmodule WebtritAdapterClient do
   def delete_user_voicemail_message(client, message_id) do
     options = [
       method: :delete,
-      url: "/user/voicemails/#{message_id}"
+      url: "/api/v1/user/voicemails/#{message_id}"
     ]
 
     request(client, options)
@@ -245,7 +245,7 @@ defmodule WebtritAdapterClient do
   def report_user_event(client, timestamp, group, type, data \\ %{}) do
     options = [
       method: :post,
-      url: "/user/events",
+      url: "/api/v1/user/events",
       body: %{
         timestamp: timestamp,
         group: group,
@@ -261,7 +261,7 @@ defmodule WebtritAdapterClient do
   def invoke_custom_public_method(client, method_name, data) do
     options = [
       method: :post,
-      url: "/custom/public/#{method_name}",
+      url: "/api/v1/custom/public/#{method_name}",
       body: data
     ]
 
@@ -272,7 +272,7 @@ defmodule WebtritAdapterClient do
   def invoke_custom_private_method(client, method_name, data) do
     options = [
       method: :post,
-      url: "/custom/private/#{method_name}",
+      url: "/api/v1/custom/private/#{method_name}",
       body: data
     ]
 
