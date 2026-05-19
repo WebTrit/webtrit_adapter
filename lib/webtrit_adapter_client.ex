@@ -8,10 +8,11 @@ defmodule WebtritAdapterClient do
   @spec new(URI.t() | String.t(), String.t() | nil, String.t() | nil) :: Tesla.Client.t()
   def new(adapter_url, tenant_id \\ nil, access_token \\ nil) do
     base_url = URI.merge(URI.parse(adapter_url), ".") |> to_string()
+    log_level = &log_level/1
 
     middleware =
       []
-      |> then(&[Tesla.Middleware.Logger | &1])
+      |> then(&[{Tesla.Middleware.Logger, log_level: log_level} | &1])
       |> then(&[{Tesla.Middleware.JSON, engine: Phoenix.json_library()} | &1])
       |> then(fn
         m when is_nil(tenant_id) -> m
@@ -288,6 +289,10 @@ defmodule WebtritAdapterClient do
 
     request(client, options)
   end
+
+  defp log_level(%{status: status}) when status >= 500, do: :error
+  defp log_level(%{status: status}) when status >= 400, do: :warning
+  defp log_level(_), do: :info
 
   defp request(client, options) do
     case Tesla.request(client, options) do

@@ -13,7 +13,7 @@ defmodule Portabilling.Api do
       {Tesla.Middleware.BaseUrl, base_url},
       Tesla.Middleware.FormUrlencoded,
       {Tesla.Middleware.DecodeJson, engine: @json_library},
-      Tesla.Middleware.Logger
+      {Tesla.Middleware.Logger, log_level: &log_level/1}
     ]
 
     Tesla.client(middleware)
@@ -82,6 +82,10 @@ defmodule Portabilling.Api do
         {:error, reason}
     end
   end
+
+  defp log_level(%{status: status}) when status >= 500, do: :error
+  defp log_level(%{status: status}) when status >= 400, do: :warning
+  defp log_level(_), do: :info
 
   defmacro perform_contextual(client, unique_id \\ nil, params) do
     [service, realm | _] =
