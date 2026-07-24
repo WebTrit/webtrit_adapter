@@ -200,11 +200,12 @@ defmodule WebtritAdapterClient do
     request(client, options)
   end
 
-  @spec get_user_voicemail_messages(Tesla.Client.t()) :: result()
-  def get_user_voicemail_messages(client) do
+  @spec get_user_voicemail_messages(Tesla.Client.t(), Tesla.Env.query() | nil) :: result()
+  def get_user_voicemail_messages(client, query \\ []) do
     options = [
       method: :get,
-      url: "/api/v1/user/voicemails"
+      url: "/api/v1/user/voicemails",
+      query: query
     ]
 
     request(client, options)

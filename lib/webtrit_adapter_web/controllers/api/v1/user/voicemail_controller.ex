@@ -28,6 +28,18 @@ defmodule WebtritAdapterWeb.Api.V1.User.VoicemailController do
     description: """
     Retrieve the user's voicemail messages from the **Adaptee**.
     """,
+    parameters: [
+      from_date: [
+        in: :query,
+        description: "Filter voicemail messages delivered on or after this date (inclusive).",
+        schema: %OpenApiSpex.Schema{type: :string, format: :date}
+      ],
+      to_date: [
+        in: :query,
+        description: "Filter voicemail messages delivered before this date (exclusive).",
+        schema: %OpenApiSpex.Schema{type: :string, format: :date}
+      ]
+    ],
     responses: [
       CommonResponse.unauthorized(),
       CommonResponse.forbidden(),
